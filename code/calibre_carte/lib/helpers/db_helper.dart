@@ -33,24 +33,20 @@ class DatabaseHelper {
     var exists = await databaseExists(path);
 
     if (!exists) {
-      print("Creating new copt from asset");
-
       //Making sure  the parent directory exists
       try {
         await Directory(dirname(path)).create(recursive: true);
       } catch (_) {}
 
-      print("Doing someting");
-
+      //Copy the metadata file in assets so we can proceed with the
+      // rest of the application development
+      //Copy it to some location that Android like to keep it database files,
+      // that only this application can access
       ByteData data = await rootBundle.load("assets/testing/metadata.db");
-      print("over eerer");
       List<int> bytes =
       data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-      print("Almpost there");
       await File(path).writeAsBytes(bytes, flush: true);
-      print("Finally I htnk it is time");
     } else {
-      print('Print opening part');
     }
 
     return await openDatabase(path);
