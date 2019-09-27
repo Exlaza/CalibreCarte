@@ -28,7 +28,7 @@ class BooksList extends StatelessWidget {
       itemBuilder: (ctx, index) {
         return Card(
           elevation: 10,
-          margin: EdgeInsets.symmetric(
+          margin: const EdgeInsets.symmetric(
             vertical: 7,
             horizontal: 5,
           ),
@@ -39,10 +39,9 @@ class BooksList extends StatelessWidget {
               title: Text(books[index]['title'],style:TextStyle(fontWeight: FontWeight.bold)),
               leading: CircleAvatar(
                 radius: 50,
-                child: ClipOval(child: new Image.asset('lib/assets/images/calibre_logo.png',fit: BoxFit.scaleDown,)),
+                child: ClipOval(child: Image.asset('assets/images/calibre_logo.png',fit: BoxFit.scaleDown,)),
               ),
               subtitle: Column(crossAxisAlignment:CrossAxisAlignment.start ,children:<Widget>[Text(books[index]['author'],style: TextStyle(fontWeight: FontWeight.bold)),Text(books[index]['Genre'])]),
-              //trailing: Text(books[index]['Genre']),
 
             ),
           ),
