@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 void main() async {
   runApp(MyApp());
-  print("ran th!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+  //So, that you can see an output from the database
   print((await BookProvider.getFirstBook()).pubdate);
 
 }
