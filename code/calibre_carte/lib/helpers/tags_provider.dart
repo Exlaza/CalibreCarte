@@ -1,34 +1,34 @@
-import 'package:calibre_carte/models/books.dart';
+import 'package:calibre_carte/models/tags.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'db_helper.dart';
 
-class BooksProvider {
-  static String tableName = 'Books';
+class TagsProvider {
+  static String tableName = 'Tags';
 
-  static Future<Books> getFirstBook() async {
+  static Future<Tags> getFirstTag() async {
     Database db = await DatabaseHelper.instance.db;
     List<Map> maps = await db.query(tableName);
-    return Books.fromMapObject(maps.first);
+    return Tags.fromMapObject(maps.first);
   }
 
-  static Future<Books> getBookByID(int id, cols) async {
+  static Future<Tags> getTagByID(int id, cols) async {
     Database db = await DatabaseHelper.instance.db;
     List<Map> maps = await db.query(tableName,
-        columns: cols ? cols : Books.columns,
-        where: '${Books.columns[0]} = ?',
+        columns: cols ? cols : Tags.columns,
+        where: '${Tags.columns[0]} = ?',
         whereArgs: [id]);
     if (maps.length > 0) {
-      return Books.fromMapObject(maps.first);
+      return Tags.fromMapObject(maps.first);
     }
     return null;
   }
 
-  static Future<List<Books>> getAllBooks() async {
+  static Future<List<Tags>> getAllTags() async {
     Database db = await DatabaseHelper.instance.db;
     List<Map> maps = await db.query(tableName);
     return maps.map((m) {
-      return Books.fromMapObject(m);
+      return Tags.fromMapObject(m);
     }).toList();
   }
 
