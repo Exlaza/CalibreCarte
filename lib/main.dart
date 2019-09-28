@@ -1,3 +1,4 @@
+import 'package:calibre_carte/helpers/authors_provider.dart';
 import 'package:calibre_carte/helpers/books_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:calibre_carte/books_list.dart';
@@ -5,8 +6,8 @@ import 'package:calibre_carte/books_list.dart';
 void main() async {
   runApp(MyApp());
   //So, that you can see an output from the database
-  print((await BooksProvider.getFirstBook()).pubdate);
-
+  print((await BooksProvider.getFirstBook()).path);
+  print((await AuthorsProvider.getFirstAuthor()).name);
 }
 
 class MyApp extends StatefulWidget {
