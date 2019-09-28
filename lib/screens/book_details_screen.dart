@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 
 class BookDetailsScreen extends StatelessWidget {
+  final String title;
+  final String author;
+  final String description
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Book details'),
+        title: Text(title),
       ),
       body: Container(
         margin: EdgeInsets.all(20),
@@ -28,8 +34,8 @@ class BookDetailsScreen extends StatelessWidget {
                           unselectedLabelColor: Colors.black,
                           labelColor: Colors.black,
                           tabs: [
-                            Tab(icon: Icon(Icons.directions_car)),
-                            Tab(icon: Icon(Icons.directions_transit)),
+                            Tab(icon: Icon(Icons.directions_car), text: 'Meta',),
+                            Tab(icon: Icon(Icons.directions_transit), text: 'Description',),
                           ],
                         ),
                       ),
