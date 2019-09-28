@@ -1,6 +1,12 @@
+import 'package:calibre_carte/helpers/books_provider.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  runApp(MyApp());
+  //So, that you can see an output from the database
+  print((await BooksProvider.getFirstBook()).pubdate);
+
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
