@@ -1,19 +1,19 @@
 class Comments {
     int id;
-    int bookId;
+    int book;
     String text;
 
-    Comments({this.id, this.bookId, this.text});
+    Comments({this.id, this.book, this.text});
 
     static final columns = [
       "id",
-      "bookId",
+      "book",
       "text",
     ];
 
     Comments.fromMapObject(Map<String, dynamic> map) {
       this.id = map['id'];
-      this.bookId = map['bookId'];
+      this.book = map['book'];
       this.text = map['text'];
     }
 

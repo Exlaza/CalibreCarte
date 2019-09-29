@@ -15,9 +15,13 @@ class BooksList extends StatefulWidget {
 }
 
 class _BooksListState extends State<BooksList> {
-  void viewBookDetails() {
-    Navigator.of(context).pushNamed(
-        BookDetailsScreen.routeName, arguments: {'id': 1});
+  void viewBookDetails(int bookId) {
+    print(bookId);
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+      return BookDetailsScreen(
+        bookId: bookId,
+      );
+    }));
   }
 
   @override
@@ -28,7 +32,10 @@ class _BooksListState extends State<BooksList> {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
-              return Text('Loading...', style: TextStyle(fontSize: 20),);
+              return Text(
+                'Loading...',
+                style: TextStyle(fontSize: 20),
+              );
             default:
               if (snapshot.hasError)
                 return Text('Error: ${snapshot.error}');
@@ -46,7 +53,6 @@ class _BooksListState extends State<BooksList> {
     return {'books': books, 'authors': authors, 'tags': tags};
   }
 
-
   Widget booksListView(BuildContext context, AsyncSnapshot snapshot) {
     Map bookMap = snapshot.data;
     List<Authors> authors = bookMap['authors'];
@@ -63,18 +69,18 @@ class _BooksListState extends State<BooksList> {
           child: Container(
             decoration: BoxDecoration(
                 gradient:
-                LinearGradient(colors: [Colors.blueGrey, Colors.grey])),
+                    LinearGradient(colors: [Colors.blueGrey, Colors.grey])),
             child: ListTile(
-              onTap: viewBookDetails,
+              onTap: () => viewBookDetails(books[index].id),
               title: Text(books[index].title,
                   style: TextStyle(fontWeight: FontWeight.bold)),
               leading: CircleAvatar(
                 radius: 50,
                 child: ClipOval(
                     child: Image.asset(
-                      'assets/images/calibre_logo.png',
-                      fit: BoxFit.scaleDown,
-                    )),
+                  'assets/images/calibre_logo.png',
+                  fit: BoxFit.scaleDown,
+                )),
               ),
               subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,6 +96,4 @@ class _BooksListState extends State<BooksList> {
       itemCount: books.length,
     );
   }
-
-
 }
