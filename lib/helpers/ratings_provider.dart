@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'db_helper.dart';
 
-class TagsProvider {
+class RatingsProvider {
   static String tableName = 'Tags';
 
   static Future<Ratings> getFirstRating() async {
