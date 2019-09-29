@@ -1,34 +1,57 @@
-import 'package:calibre_carte/screens/book_details_screen.dart';
 import 'package:flutter/material.dart';
 
-class BooksList extends StatelessWidget {
-  final List<Map> books = [
-    {
-      'author': 'Stephen Hawking',
-      'title': 'A Brief History Of Time',
-      'Genre': 'Science'
-    },
-    {'author': 'Chetan Bhagat', 'title': 'Half Girlfriend', 'Genre': 'Crap'},
-    {'author': 'RK Narayan', 'title': 'Malgudi Days', 'Genre': 'Nostalgia'},
-    {'author': 'S Chand', 'title': 'Biology', 'Genre': 'Textbook'},
-    {'author': 'Team Edward', 'title': 'Twilight', 'Genre': 'Teen Crap'},
-    {
-      'author': 'Stephen Hawking',
-      'title': 'A Brief History Of Time',
-      'Genre': 'Science'
-    },
-    {'author': 'Chetan Bhagat', 'title': 'Half Girlfriend', 'Genre': 'Crap'},
-    {'author': 'RK Narayan', 'title': 'Malgudi Days', 'Genre': 'Nostalgia'},
-    {'author': 'S Chand', 'title': 'Biology', 'Genre': 'Textbook'},
-    {'author': 'Team Edward', 'title': 'Twilight', 'Genre': 'Teen Crap'},
-  ];
-  
+import 'package:calibre_carte/helpers/authors_provider.dart';
+import 'package:calibre_carte/helpers/books_provider.dart';
+import 'package:calibre_carte/helpers/tags_provider.dart';
+import 'package:calibre_carte/models/authors.dart';
+import 'package:calibre_carte/models/books.dart';
+import 'package:calibre_carte/models/tags.dart';
+
+import './screens/book_details_screen.dart';
+
+class BooksList extends StatefulWidget {
+  @override
+  _BooksListState createState() => _BooksListState();
+}
+
+class _BooksListState extends State<BooksList> {
   void viewBookDetails() {
-    return Navigator.of(context).pushNamed(BookDetailsScreen.routeName, arguments: {'id': 1}]);
+    Navigator.of(context).pushNamed(
+        BookDetailsScreen.routeName, arguments: {'id': 1});
   }
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: getBooks(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              return Text('Loading...', style: TextStyle(fontSize: 20),);
+            default:
+              if (snapshot.hasError)
+                return Text('Error: ${snapshot.error}');
+              else
+                return booksListView(context, snapshot);
+          }
+        });
+  }
+
+  //aggregates all the data to display
+  Future getBooks() async {
+    var books = await BooksProvider.getAllBooks();
+    var authors = await AuthorsProvider.getAllAuthors();
+    var tags = await TagsProvider.getAllTags();
+    return {'books': books, 'authors': authors, 'tags': tags};
+  }
+
+
+  Widget booksListView(BuildContext context, AsyncSnapshot snapshot) {
+    Map bookMap = snapshot.data;
+    List<Authors> authors = bookMap['authors'];
+    List<Books> books = bookMap['books'];
+    List<Tags> tags = bookMap['tags'];
     return ListView.builder(
       itemBuilder: (ctx, index) {
         return Card(
@@ -38,17 +61,28 @@ class BooksList extends StatelessWidget {
             horizontal: 5,
           ),
           child: Container(
-            decoration: BoxDecoration(gradient: LinearGradient(colors: [Colors.blueGrey,Colors.grey])),
-
+            decoration: BoxDecoration(
+                gradient:
+                LinearGradient(colors: [Colors.blueGrey, Colors.grey])),
             child: ListTile(
-              onTap: ,
-              title: Text(books[index]['title'],style:TextStyle(fontWeight: FontWeight.bold)),
+              onTap: viewBookDetails,
+              title: Text(books[index].title,
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               leading: CircleAvatar(
                 radius: 50,
-                child: ClipOval(child: Image.asset('assets/images/calibre_logo.png',fit: BoxFit.scaleDown,)),
+                child: ClipOval(
+                    child: Image.asset(
+                      'assets/images/calibre_logo.png',
+                      fit: BoxFit.scaleDown,
+                    )),
               ),
-              subtitle: Column(crossAxisAlignment:CrossAxisAlignment.start ,children:<Widget>[Text(books[index]['author'],style: TextStyle(fontWeight: FontWeight.bold)),Text(books[index]['Genre'])]),
-
+              subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(authors[index].name,
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text(tags[index].name)
+                  ]),
             ),
           ),
         );
@@ -56,4 +90,6 @@ class BooksList extends StatelessWidget {
       itemCount: books.length,
     );
   }
+
+
 }
