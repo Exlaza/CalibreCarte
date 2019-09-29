@@ -1,3 +1,4 @@
+import 'package:calibre_carte/screens/book_details_screen.dart';
 import 'package:flutter/material.dart';
 
 class BooksList extends StatelessWidget {
@@ -21,6 +22,10 @@ class BooksList extends StatelessWidget {
     {'author': 'S Chand', 'title': 'Biology', 'Genre': 'Textbook'},
     {'author': 'Team Edward', 'title': 'Twilight', 'Genre': 'Teen Crap'},
   ];
+  
+  void viewBookDetails() {
+    return Navigator.of(context).pushNamed(BookDetailsScreen.routeName, arguments: {'id': 1}]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +41,7 @@ class BooksList extends StatelessWidget {
             decoration: BoxDecoration(gradient: LinearGradient(colors: [Colors.blueGrey,Colors.grey])),
 
             child: ListTile(
+              onTap: ,
               title: Text(books[index]['title'],style:TextStyle(fontWeight: FontWeight.bold)),
               leading: CircleAvatar(
                 radius: 50,
