@@ -1,6 +1,7 @@
 import 'package:calibre_carte/helpers/authors_provider.dart';
 import 'package:calibre_carte/helpers/books_provider.dart';
 import 'package:calibre_carte/screens/book_details_screen.dart';
+import 'package:calibre_carte/screens/settings_screen.dart';
 import 'package:calibre_carte/screens/dropbox_signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:calibre_carte/books_list.dart';
@@ -23,7 +24,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: "Calibre Carte",
       theme: ThemeData(primarySwatch: Colors.blueGrey),
-      home: DropboxSignIn(),
+      home: Settings(),
       routes: {
         BookDetailsScreen.routeName: (ctx) => BookDetailsScreen(),
       },
