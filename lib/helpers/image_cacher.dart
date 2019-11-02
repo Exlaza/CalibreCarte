@@ -5,8 +5,8 @@ import 'package:http/http.dart';
 import 'package:path/path.dart';
 import 'dart:io';
 
-class MetadataCacher {
-  //Should make a shared preferences helper
+class ImageCacher {
+
   Future<String> getTokenFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     return sp.getString('token') ??
@@ -16,10 +16,10 @@ class MetadataCacher {
   Future<String> getSelectedLibPathFromSharedPrefs() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     return sp.getString('selected_calibre_lib_path') ??
-        '/Calibre Library/metadata.db';
+        '/Calibre Library/';
   }
 
-  downloadMetadata(token, path) async {
+  downloadCoverImage(token, path) async {
     String url = "https://content.dropboxapi.com/2/files/download";
     Map<String, String> headers = {
       "Authorization": "Bearer $token",
@@ -33,20 +33,28 @@ class MetadataCacher {
     return response;
   }
 
-  Future<void> downloadAndCacheMetadata() async {
+  Future<void> downloadAndCacheImage(relativePath, bookID) async {
     String token = await getTokenFromPreferences();
-    String path = await getSelectedLibPathFromSharedPrefs();
-    Response response = await downloadMetadata(token, path);
+    String basePath = await getSelectedLibPathFromSharedPrefs();
+    String absPath = basePath + relativePath + '/cover.jpg';
+    Response response = await downloadCoverImage(token, absPath);
     //Get the bytes, get the temp directory and write a file in temp
     List<int> bytes = response.bodyBytes;
     Directory tempDir = await getTemporaryDirectory();
-    String pathMetadata = join(tempDir.path + "metadata.db");
+    String pathMetadata = join(tempDir.path + "/cover_$bookID.jpg");
     await File(pathMetadata).writeAsBytes(bytes, flush: true);
   }
 
-  Future<bool> checkIfCachedFileExists() async {
+  Future<bool> checkIfCachedFileExists(bookID) async {
     Directory tempDir = await getTemporaryDirectory();
-    String pathMetadata = join(tempDir.path + "metadata.db");
+    String pathMetadata = join(tempDir.path + "/cover_$bookID.jpg");
     return await File(pathMetadata).exists();
   }
+
+  Future<String> returnCachedImagePath(bookID) async {
+    Directory tempDir = await getTemporaryDirectory();
+    String pathMetadata = join(tempDir.path + "/cover_$bookID.jpg");
+    return pathMetadata;
+  }
+
 }

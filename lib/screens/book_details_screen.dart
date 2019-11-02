@@ -1,6 +1,7 @@
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:calibre_carte/helpers/comments_provider.dart';
+import 'package:calibre_carte/helpers/image_cacher.dart';
 import 'package:calibre_carte/models/comments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -24,39 +25,22 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
   Books bookDetails;
   Comments bookComments;
   Future myFuture;
-  Map<String, String> imageHttpHeaders;
-  String dropboxDownloadUrl = "https://content.dropboxapi.com/2/files/download";
-
-  Future<String> getTokenFromSharedPreferences() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    return sp.getString('token') ?? "iWMa931y4c4AAAAAAAABG9VeRCMOkBy80ElDs2_2ETwTOf8zgbiIbP2LoZZCe9bY";
-  }
-
-  Future<String> getSelectedCalibreLibPath() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    return sp.getString('selected_calibre_lib_path') ?? '/Calibre Library/';
-  }
-
-  buildImageHeaders(token, path) async {
-    imageHttpHeaders = {
-      "Authorization": "Bearer $token",
-      "Dropbox-API-Arg": jsonEncode({"path": path})
-    };
-  }
+  String localImagePath;
 
   Future<void> getBookDetails() async {
     bookDetails = await BooksProvider.getBookByID(widget.bookId, null);
     bookComments =
         await CommentsProvider.getCommentByBookID(widget.bookId, null);
+    ImageCacher ic = ImageCacher();
 
-    String token = await getTokenFromSharedPreferences();
-    String path = bookDetails.path;
-    //This base path can actually cause problems for you because this would contain the metadata.db stuff. I don't want to store that
-    String basePath = await getSelectedCalibreLibPath();
-    String actualPath = basePath + path + '/cover.jpg';
-    print(actualPath);
+    bool exists = await ic.checkIfCachedFileExists(widget.bookId);
 
-    await buildImageHeaders(token, actualPath);
+    if (!exists){
+        await ic.downloadAndCacheImage(bookDetails.path, widget.bookId);
+    }
+
+    localImagePath = await ic.returnCachedImagePath(widget.bookId);
+
   }
 
   @override
@@ -99,12 +83,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                         child: ClipRRect(
                           borderRadius:
                               BorderRadius.vertical(top: Radius.circular(15)),
-                          child: CachedNetworkImage(
-                            imageUrl: dropboxDownloadUrl,
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(),
-                            httpHeaders: imageHttpHeaders,
-                          ),
+                          child: Image.file(File(localImagePath)),
                         ),
                       ),
                       DefaultTabController(
