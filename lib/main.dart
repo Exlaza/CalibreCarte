@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: "Calibre Carte",
       theme: ThemeData(primarySwatch: Colors.blueGrey),
-      home: Settings(),
+      home: MyHomePage(),
       routes: {
         BookDetailsScreen.routeName: (ctx) => BookDetailsScreen(),
       },
