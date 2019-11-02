@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -44,7 +45,6 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
         headers: headers, body: json); // check the status code for the result
     int statusCode = response
         .statusCode; // this API passes back the id of the new item added to the body
-    print(statusCode);
     String body = response.body;
     // {
     //   "title": "Hello",
@@ -52,7 +52,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     //   "userId": 1,
     //   "id": 101
     // }}
-    print(response.body);
+    return response;
   }
 
   Future<Null> initUniLinks() async {
@@ -112,6 +112,19 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     sp.setString(key, val);
   }
 
+  Future<void> storeIntInSharedPrefs(key, val) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setInt(key, val);
+  }
+
+  selectingCalibreLibrary(key, val) {
+    storeStringInSharedPrefs('selected_calibre_lib_path', key);
+    storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_){
+      Navigator.of(context).pop();
+    });
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,12 +156,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                 var uri = Uri.parse(request.url);
                 // Step 1. Parse the token
                 String token;
-                print(
-                    'Hello there--------------------------------------------------------------');
-                print(uri);
-                print(uri.fragment);
                 var tempUri = Uri.parse('http://test.com?${uri.fragment}');
-                print(tempUri.queryParameters);
                 tempUri.queryParameters.forEach((k, v) {
                   print(k);
                   if (k == "access_token") {
@@ -156,7 +164,101 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                   }
                 });
                 // Step 2: Storing token in shared prefs. Remember this is async so, the next statement would be executed immediately
-                _makePostRequest(token);
+                storeStringInSharedPrefs('token', token);
+                // Step 3 Make a call to search for calibre libs
+                Map<String, String> pathNameMap = Map();
+                _makePostRequest(token).then((response) {
+                  //Make a map Map<String, String> First value is the base path in lower case
+                  // Second Value is the name of the Folder(Library)
+                  // I have to convert string response.body to json
+                  Map<String, dynamic> responseJson = jsonDecode(response.body);
+                  if (responseJson['matches'].length != 0) {
+                    responseJson['matches'].forEach((element) {
+                      if (element["metadata"]["metadata"]["name"] ==
+                          "metadata.db") {
+                        String lowerCasePath =
+                            element["metadata"]["metadata"]["path_lower"];
+                        List<String> directories = element["metadata"]
+                                ["metadata"]["path_display"]
+                            .split('/');
+                        String libName =
+                            directories.elementAt(directories.length - 2);
+                        pathNameMap.putIfAbsent(lowerCasePath, () => libName);
+                        print(pathNameMap);
+                      }
+                    });
+                    storeIntInSharedPrefs(
+                        'noOfCalibreLibs', pathNameMap.length);
+                    pathNameMap.keys.toList().asMap().forEach((index, path) {
+                      String keyName = 'calibre_lib_path_$index';
+                      String libName = 'calibre_lib_name_$index';
+                      storeStringInSharedPrefs(keyName, path);
+                      storeStringInSharedPrefs(libName, pathNameMap[path]);
+                    });
+//                    TODO: Change this to > 1
+                    if (pathNameMap.length == 1) {
+                      // First set the no of libraries in shared prefs
+                      // Show a pop up which displays the list of libraries
+                      print('I have come inside the popup dispaly htingy');
+                      List<Widget> columnChildren =
+                          pathNameMap.keys.toList().map((element) {
+                        return InkWell(
+                            onTap: () {selectingCalibreLibrary(element, pathNameMap[element]);},
+                            child: Text(
+                              pathNameMap[element],
+                              style: TextStyle(fontSize: 30),
+                            ));
+                      }).toList();
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(32),
+                                ),
+                              ),
+                              contentPadding: EdgeInsets.all(10),
+                              content: Container(
+                                width: 300,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Container(
+                                        decoration: BoxDecoration(
+                                            border: Border.all(width: 2)),
+                                        child: Text(
+                                          'Select Library',
+                                          style: TextStyle(
+                                              fontSize: 35,
+                                              fontWeight: FontWeight.bold),
+                                        )),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Column(children: columnChildren)
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                    } else {
+                      // Her we have only one library so we make that the default
+                      storeStringInSharedPrefs(
+                        'selected_calibre_lib_path',
+                        pathNameMap.keys.first,
+                      );
+                      storeStringInSharedPrefs(
+                        'selected_calibre_lib_name',
+                        pathNameMap.values.first,
+                      ).then((_){
+                        Navigator.of(context).pop();
+                      });
+                    }
+                  } else {
+                    // Show the bottom snack bar that no libraries found and Pop out of this context
+                  }
+                });
 //                Navigator.pop(context);
                 return NavigationDecision.prevent;
               }

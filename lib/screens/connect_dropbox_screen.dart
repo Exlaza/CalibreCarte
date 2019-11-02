@@ -36,6 +36,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print('Hitting it');
     myFuture = loadingToken();
   }
 
