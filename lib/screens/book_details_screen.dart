@@ -5,8 +5,6 @@ import 'package:calibre_carte/helpers/image_cacher.dart';
 import 'package:calibre_carte/models/comments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 import '../helpers/books_provider.dart';
 import '../models/books.dart';
