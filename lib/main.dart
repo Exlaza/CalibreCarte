@@ -51,33 +51,3 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
-
-class DropboxSignIn extends StatelessWidget {
-  static const clientID = 'scbqch8rhyaij77';
-  static const redirectUri = 'calibrecarte://dropbox';
-
-  final url =
-      'https://www.dropbox.com/oauth2/authorize?client_id=$clientID&response_type=token&redirect_uri=$redirectUri';
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Testing it ot"),
-      ),
-      body: Center(
-        child: FlatButton(
-          onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (BuildContext context) {
-              return DropboxAuthentication(
-                selectedUrl: url,
-              );
-            }));
-          },
-          child: Text('Sign in to dropbox'),
-        ),
-      ),
-    );
-  }
-}

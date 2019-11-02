@@ -1,3 +1,4 @@
+import 'package:calibre_carte/screens/connect_dropbox_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,7 +40,7 @@ class _SettingsState extends State<Settings> {
 //  One more error that you have to take care of is that a value in switch bool should not be None. There is a possibility that
 //  While returning from shared preferences, you get the yellow screen if that is None
 
-//  I cannot delegate it to a variable above because this will lead to the yellow scren becuse flutter tries to build that before it goes to the return
+//  I cannot delegate it to a variable above the return statement because this will lead to the yellow scren becuse flutter tries to build that before it goes to the return
 //  Part of the
 //  And while the build is definitely called. We don't update the whole page, becuase the future builder know the future returned
 //  Has not changed
@@ -75,18 +76,27 @@ class _SettingsState extends State<Settings> {
                   Card(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30)),
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Icon(Icons.cloud),
-                              Text('Dropbox'),
-                            ],
-                          ),
-                        ],
+                    child: InkWell(
+                      onTap: () {
+                        print('Tap is not working');
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return DropboxSignIn();
+                        }));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Icon(Icons.cloud),
+                                Text('Dropbox'),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -197,7 +207,7 @@ class _SettingsState extends State<Settings> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
                                   Icon(
-                                    Icons.settings_ethernet,
+                                    Icons.wb_sunny,
                                     size: 20,
                                   ),
                                   SizedBox(
