@@ -1,3 +1,4 @@
+import 'package:calibre_carte/helpers/metadata_cacher.dart';
 import 'package:calibre_carte/screens/dropbox_signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,11 +20,11 @@ class _DropboxSignInState extends State<DropboxSignIn> {
 
   Future<bool> loadingToken() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    if (sp.containsKey('token')){
+    if (sp.containsKey('token')) {
       dropboxEmail = sp.getString('dropboxEmail');
       selected_calibre_lib_dir = sp.getString('selected_calibre_lib_dir');
       noOfCalibreLibs = sp.getInt('noOfCalibreLibs');
-      for(int i = 0; i<noOfCalibreLibs; i++){
+      for (int i = 0; i < noOfCalibreLibs; i++) {
         calibre_dirs[i] = sp.getString('calibre_dirs_$i');
       }
       return true;
@@ -63,10 +64,19 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                           return DropboxAuthentication(
                             selectedUrl: url,
                           );
-                        }));
+                        })).then((_) {
+                          setState(() {
+                            myFuture = loadingToken();
+                          });
+                        });
                       }));
             } else {
-              return Text('HulaHoop');
+              return RaisedButton(
+                onPressed: () {
+                  MetadataCacher().downloadAndCacheMetadata().then(() {});
+                },
+                child: Text('Activate download'),
+              );
             }
           } else {
             return Text('Hula hoop');

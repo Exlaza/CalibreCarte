@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:calibre_carte/helpers/metadata_cacher.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
@@ -122,7 +123,10 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_){
       Navigator.of(context).pop();
     });
-    Navigator.of(context).pop();
+    MetadataCacher().downloadAndCacheMetadata().then(() {
+      Navigator.of(context).pop();
+    });
+
   }
 
   @override
@@ -177,7 +181,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                       if (element["metadata"]["metadata"]["name"] ==
                           "metadata.db") {
                         String lowerCasePath =
-                            element["metadata"]["metadata"]["path_lower"];
+                            element["metadata"]["metadata"]["path_display"];
                         List<String> directories = element["metadata"]
                                 ["metadata"]["path_display"]
                             .split('/');
