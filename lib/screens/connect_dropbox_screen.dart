@@ -73,7 +73,12 @@ class _DropboxSignInState extends State<DropboxSignIn> {
             } else {
               return RaisedButton(
                 onPressed: () {
-                  MetadataCacher().downloadAndCacheMetadata().then(() {});
+                  print('Worked');
+                  MetadataCacher().downloadAndCacheMetadata().then((_) {
+                    MetadataCacher().checkIfCachedFileExists().then((exists){
+                      print(exists);
+                    });
+                  });
                 },
                 child: Text('Activate download'),
               );

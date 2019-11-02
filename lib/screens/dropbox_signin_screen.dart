@@ -123,7 +123,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_){
       Navigator.of(context).pop();
     });
-    MetadataCacher().downloadAndCacheMetadata().then(() {
+    MetadataCacher().downloadAndCacheMetadata().then((_) {
       Navigator.of(context).pop();
     });
 

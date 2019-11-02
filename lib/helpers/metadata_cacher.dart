@@ -9,12 +9,14 @@ class MetadataCacher {
   //Should make a shared preferences helper
   Future<String> getTokenFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    return sp.getString('token') ?? "iWMa931y4c4AAAAAAAABG9VeRCMOkBy80ElDs2_2ETwTOf8zgbiIbP2LoZZCe9bY";
+    return sp.getString('token') ??
+        "iWMa931y4c4AAAAAAAABG9VeRCMOkBy80ElDs2_2ETwTOf8zgbiIbP2LoZZCe9bY";
   }
 
   Future<String> getSelectedLibPathFromSharedPrefs() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    return sp.getString('selected_calibre_lib_path') ?? '/Calibre Library/metadata.db';
+    return sp.getString('selected_calibre_lib_path') ??
+        '/Calibre Library/metadata.db';
   }
 
   downloadMetadata(token, path) async {
@@ -28,20 +30,24 @@ class MetadataCacher {
       url,
       headers: headers,
     ); // check the status code for the result
-    int statusCode = response.statusCode; // this API passes back the id of the new item added to the body
-    String body = response.body;
-    print(response.headers);
+    return response;
+  }
+
+  Future<void> downloadAndCacheMetadata() async {
+    String token = await getTokenFromPreferences();
+    String path = await getSelectedLibPathFromSharedPrefs();
+    Response response = await downloadMetadata(token, path);
+    //Get the bytes, get the temp directory and write a file in temp
     List<int> bytes = response.bodyBytes;
     Directory tempDir = await getTemporaryDirectory();
     String pathMetadata = join(tempDir.path + "metadata.db");
     await File(pathMetadata).writeAsBytes(bytes, flush: true);
-    List<int> bytesAfterReading = await File(pathMetadata).readAsBytes();
-
   }
 
-  downloadAndCacheMetadata() async {
-    String token = await getTokenFromPreferences();
-    String path = await getSelectedLibPathFromSharedPrefs();
-    await downloadMetadata(token, path);
+  Future<bool> checkIfCachedFileExists() async {
+    Directory tempDir = await getTemporaryDirectory();
+    String pathMetadata = join(tempDir.path + "metadata.db");
+    List<int> bytes = await File(pathMetadata).readAsBytes();
+    return await File(pathMetadata).exists();
   }
 }
