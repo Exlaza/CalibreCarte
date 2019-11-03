@@ -1,5 +1,6 @@
 import 'package:calibre_carte/helpers/book_author_link_provider.dart';
 import 'package:calibre_carte/models/books_authors_link.dart';
+import 'package:calibre_carte/widgets/book_details_cover_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:calibre_carte/helpers/authors_provider.dart';
@@ -102,11 +103,8 @@ class _BooksListState extends State<BooksList> {
               leading: CircleAvatar(
                 radius: 50,
                 child: ClipOval(
-                    child: Image.asset(
-                  'assets/images/cover.jpg',
-                  fit: BoxFit.scaleDown,
-                )),
-              ),
+                    child: BookDetailsCoverImage(books[index].id,books[index].path),
+              )),
               subtitle: Text(
                 authorNames.firstWhere((auth) =>
                     auth["book"] == books[index].id.toString())["authors"],
