@@ -78,8 +78,11 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                   child: Column(
                     children: <Widget>[
                       Expanded(
-                        child: BookDetailsCoverImage(
-                            widget.bookId, bookDetails.path),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                          child: BookDetailsCoverImage(
+                              widget.bookId, bookDetails.path),
+                        ),
                       ),
                       DefaultTabController(
                           // The number of tabs / content sections to display.

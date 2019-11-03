@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'books_list.dart';
+import 'widgets/books_list.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -7,7 +7,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _layout = "list";
+  String layout = "list";
 
   void _settingModalBottomSheet(context) {
     showModalBottomSheet(elevation: 5,
@@ -67,7 +67,7 @@ showSettings(BuildContext context) {
                   title: Text("List"),
                   onTap: () {
                     setState(() {
-                      _layout = "list";
+                      layout = "list";
                     });
                   },
                 ),
@@ -76,7 +76,7 @@ showSettings(BuildContext context) {
                   title: Text("Grid"),
                   onTap: () {
                     setState(() {
-                      _layout = "grid";
+                      layout = "grid";
                     });
                   },
                 ),
@@ -122,7 +122,7 @@ showSettings(BuildContext context) {
                     },
                   )
                 ]),
-            body: BooksList(),
+            body: BooksList(layout),
           ),
         ],
       ),

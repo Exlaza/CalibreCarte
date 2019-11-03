@@ -64,6 +64,7 @@ class _SettingsState extends State<Settings> {
           if (snapshot.connectionState == ConnectionState.done) {
             print('THe connection finished now');
             return Container(
+              decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/subtle_wood.png'),fit: BoxFit.cover)),
               margin: EdgeInsets.fromLTRB(8, 8, 8, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
