@@ -8,6 +8,7 @@ class Books {
   String author_sort;
   String isbn;
   String lccn;
+
   String path;
 
   Books({

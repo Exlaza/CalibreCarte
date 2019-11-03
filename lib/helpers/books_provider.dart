@@ -15,10 +15,11 @@ class BooksProvider {
   static Future<Books> getBookByID(int id, cols) async {
     Database db = await DatabaseHelper.instance.db;
     List<Map> maps = await db.query(tableName,
-        columns: cols ? cols : Books.columns,
+//        columns: Books.columns,
         where: '${Books.columns[0]} = ?',
         whereArgs: [id]);
     if (maps.length > 0) {
+      print(Books.fromMapObject(maps.first).title);
       return Books.fromMapObject(maps.first);
     }
     return null;

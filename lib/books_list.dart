@@ -1,10 +1,13 @@
+import 'package:flutter/material.dart';
+
 import 'package:calibre_carte/helpers/authors_provider.dart';
 import 'package:calibre_carte/helpers/books_provider.dart';
-import 'package:calibre_carte/helpers/tags_provider.dart' ;
+import 'package:calibre_carte/helpers/tags_provider.dart';
 import 'package:calibre_carte/models/authors.dart';
 import 'package:calibre_carte/models/books.dart';
 import 'package:calibre_carte/models/tags.dart';
-import 'package:flutter/material.dart';
+
+import './screens/book_details_screen.dart';
 
 class BooksList extends StatefulWidget {
   @override
@@ -12,6 +15,15 @@ class BooksList extends StatefulWidget {
 }
 
 class _BooksListState extends State<BooksList> {
+  void viewBookDetails(int bookId) {
+    print(bookId);
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+      return BookDetailsScreen(
+        bookId: bookId,
+      );
+    }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -20,7 +32,10 @@ class _BooksListState extends State<BooksList> {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
-              return Text('Loading...',style: TextStyle(fontSize: 20),);
+              return Text(
+                'Loading...',
+                style: TextStyle(fontSize: 20),
+              );
             default:
               if (snapshot.hasError)
                 return Text('Error: ${snapshot.error}');
@@ -34,16 +49,15 @@ class _BooksListState extends State<BooksList> {
   Future getBooks() async {
     var books = await BooksProvider.getAllBooks();
     var authors = await AuthorsProvider.getAllAuthors();
-    var tags= await TagsProvider.getAllTags();
+    var tags = await TagsProvider.getAllTags();
     return {'books': books, 'authors': authors, 'tags': tags};
   }
-
 
   Widget booksListView(BuildContext context, AsyncSnapshot snapshot) {
     Map bookMap = snapshot.data;
     List<Authors> authors = bookMap['authors'];
     List<Books> books = bookMap['books'];
-    List<Tags> tags=bookMap['tags'];
+    List<Tags> tags = bookMap['tags'];
     return ListView.builder(
       itemBuilder: (ctx, index) {
         return Card(
@@ -57,8 +71,9 @@ class _BooksListState extends State<BooksList> {
                 gradient:
                     LinearGradient(colors: [Colors.blueGrey, Colors.grey])),
             child: ListTile(
-              //title: Text(books[index]['title'],style:TextStyle(fontWeight: FontWeight.bold)),
-              title: Text(books[index].title),
+              onTap: () => viewBookDetails(books[index].id),
+              title: Text(books[index].title,
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               leading: CircleAvatar(
                 radius: 50,
                 child: ClipOval(
@@ -81,6 +96,4 @@ class _BooksListState extends State<BooksList> {
       itemCount: books.length,
     );
   }
-
-
 }
