@@ -32,21 +32,25 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
 
   Future<void> getBookDetails() async {
     bookDetails = await BooksProvider.getBookByID(widget.bookId, null);
+    print('Book details worjing fine');
+    print(widget.bookId);
     bookComments =
         await CommentsProvider.getCommentByBookID(widget.bookId, null);
-
+    print('book comments not working fine');
     List<BooksAuthorsLink> bookAuthorsLinks =
         await BooksAuthorsLinksProvider.getAuthorsByBookID(widget.bookId);
 
     List<String> authors = List();
-    for (int i = 0; i < bookAuthorsLinks.length; i++){
+    for (int i = 0; i < bookAuthorsLinks.length; i++) {
       int authorID = bookAuthorsLinks[i].author;
       Authors author = await AuthorsProvider.getAuthorByID(authorID, null);
       authors.add(author.name);
     }
-    
-    authorText = authors.reduce((v , e){return v + ', ' + e;});
+    print("Wven coming here");
 
+    authorText = authors.reduce((v, e) {
+      return v + ', ' + e;
+    });
   }
 
   @override
@@ -108,8 +112,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                                         SizedBox(
                                           height: 5,
                                         ),
-                                        Text(
-                                            'Author(s): $authorText'),
+                                        Text('Author(s): $authorText'),
                                         SizedBox(
                                           height: 5,
                                         ),
@@ -119,9 +122,13 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                                     SingleChildScrollView(
                                         padding: EdgeInsets.all(10),
                                         child: Container(
-                                          child: Html(
-                                            data: bookComments.text,
-                                          ),
+                                          child: bookComments != null
+                                              ? Html(
+                                                  data: bookComments.text,
+                                                )
+                                              : Center(
+                                                  child: Text('No description', style: TextStyle(fontSize: 20),),
+                                                ),
                                         )),
                                   ],
                                 ),
