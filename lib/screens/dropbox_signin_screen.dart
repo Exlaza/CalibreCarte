@@ -61,7 +61,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
 
     // Attach a listener to the stream
     _sub = getLinksStream().listen((String link) {
-      //Althouhg this is not needed now, but Google actually recommends against using a webview for,
+      //Although this is not needed now, but Google actually recommends against using a webview for,
       //So assuming in future we need to do it the url_launcher way then we would have to use this method
       print(link);
       //So, just keeping it here.

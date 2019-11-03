@@ -1,8 +1,12 @@
 import 'dart:io';
 
+import 'package:calibre_carte/helpers/authors_provider.dart';
+import 'package:calibre_carte/helpers/book_author_link_provider.dart';
 import 'package:calibre_carte/helpers/comments_provider.dart';
-import 'package:calibre_carte/helpers/image_cacher.dart';
+import 'package:calibre_carte/models/authors.dart';
+import 'package:calibre_carte/models/books_authors_link.dart';
 import 'package:calibre_carte/models/comments.dart';
+import 'package:calibre_carte/widgets/book_details_cover_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
@@ -24,20 +28,24 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
   Comments bookComments;
   Future myFuture;
   String localImagePath;
+  String authorText;
 
   Future<void> getBookDetails() async {
     bookDetails = await BooksProvider.getBookByID(widget.bookId, null);
     bookComments =
         await CommentsProvider.getCommentByBookID(widget.bookId, null);
-    ImageCacher ic = ImageCacher();
 
-    bool exists = await ic.checkIfCachedFileExists(widget.bookId);
+    List<BooksAuthorsLink> bookAuthorsLinks =
+        await BooksAuthorsLinksProvider.getAuthorsByBookID(widget.bookId);
 
-    if (!exists){
-        await ic.downloadAndCacheImage(bookDetails.path, widget.bookId);
+    List<String> authors = List();
+    for (int i = 0; i < bookAuthorsLinks.length; i++){
+      int authorID = bookAuthorsLinks[i].author;
+      Authors author = await AuthorsProvider.getAuthorByID(authorID, null);
+      authors.add(author.name);
     }
-
-    localImagePath = await ic.returnCachedImagePath(widget.bookId);
+    
+    authorText = authors.reduce((v , e){return v + ', ' + e;});
 
   }
 
@@ -50,27 +58,15 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-      future: myFuture, // a previously-obtained Future<String> or null
-      builder:
-          (BuildContext context, AsyncSnapshot<void> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-            print("hello");
-            return Text('Press button to start.');
-          case ConnectionState.active:
-            return Text('Something');
-          case ConnectionState.waiting:
-            return Text('Awaiting result...');
-          case ConnectionState.done:
-            if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            }
-            return Scaffold(
-              appBar: AppBar(
-                title: Text(bookDetails.title),
-              ),
-              body: Container(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Book Info'),
+      ),
+      body: FutureBuilder<void>(
+          future: myFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return Container(
                 margin: EdgeInsets.all(20),
                 child: Card(
                   shape: RoundedRectangleBorder(
@@ -78,11 +74,8 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                   child: Column(
                     children: <Widget>[
                       Expanded(
-                        child: ClipRRect(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(15)),
-                          child: Image.file(File(localImagePath)),
-                        ),
+                        child: BookDetailsCoverImage(
+                            widget.bookId, bookDetails.path),
                       ),
                       DefaultTabController(
                           // The number of tabs / content sections to display.
@@ -116,7 +109,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                                           height: 5,
                                         ),
                                         Text(
-                                            'Author(s): ${bookDetails.author_sort}'),
+                                            'Author(s): $authorText'),
                                         SizedBox(
                                           height: 5,
                                         ),
@@ -138,11 +131,13 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                     ],
                   ),
                 ),
-              ),
-            );
-        }
-        return null; // unreachable
-      },
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }),
     );
   }
 }
