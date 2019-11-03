@@ -1,3 +1,5 @@
+import 'package:calibre_carte/helpers/book_author_link_provider.dart';
+import 'package:calibre_carte/models/books_authors_link.dart';
 import 'package:flutter/material.dart';
 
 import 'package:calibre_carte/helpers/authors_provider.dart';
@@ -15,6 +17,19 @@ class BooksList extends StatefulWidget {
 }
 
 class _BooksListState extends State<BooksList> {
+  Future bookDetails;
+  List<Books> books;
+  List<Map<String, String>> authorNames = [];
+
+  //get all details for once
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    bookDetails = getBooks();
+  }
+
+  //send book details to next screen
   void viewBookDetails(int bookId) {
     print(bookId);
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
@@ -24,18 +39,40 @@ class _BooksListState extends State<BooksList> {
     }));
   }
 
+  //aggregates all the data to display
+  Future<void> getBooks() async {
+    String authorText;
+    books = await BooksProvider.getAllBooks();
+    print("got books");
+    for (int i = 0; i < books.length; i++) {
+      List<BooksAuthorsLink> bookAuthorsLinks =
+          await BooksAuthorsLinksProvider.getAuthorsByBookID(books[i].id);
+      List<String> authors = List();
+      for (int i = 0; i < bookAuthorsLinks.length; i++) {
+        int authorID = bookAuthorsLinks[i].author;
+        Authors author = await AuthorsProvider.getAuthorByID(authorID, null);
+        authors.add(author.name);
+
+        print("got authors");
+
+        authorText = authors.reduce((v, e) {
+          return v + ', ' + e;
+        });
+      }
+      authorNames.add({"book": books[i].id.toString(), "authors": authorText});
+    }
+    print(authorNames[1]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getBooks(),
+        future: bookDetails,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.waiting:
-              return Text(
-                'Loading...',
-                style: TextStyle(fontSize: 20),
-              );
+              return Center(child: CircularProgressIndicator());
             default:
               if (snapshot.hasError)
                 return Text('Error: ${snapshot.error}');
@@ -45,19 +82,7 @@ class _BooksListState extends State<BooksList> {
         });
   }
 
-  //aggregates all the data to display
-  Future getBooks() async {
-    var books = await BooksProvider.getAllBooks();
-    var authors = await AuthorsProvider.getAllAuthors();
-    var tags = await TagsProvider.getAllTags();
-    return {'books': books, 'authors': authors, 'tags': tags};
-  }
-
   Widget booksListView(BuildContext context, AsyncSnapshot snapshot) {
-    Map bookMap = snapshot.data;
-    List<Authors> authors = bookMap['authors'];
-    List<Books> books = bookMap['books'];
-    List<Tags> tags = bookMap['tags'];
     return ListView.builder(
       itemBuilder: (ctx, index) {
         return Card(
@@ -78,17 +103,16 @@ class _BooksListState extends State<BooksList> {
                 radius: 50,
                 child: ClipOval(
                     child: Image.asset(
-                  'assets/images/calibre_logo.png',
+                  'assets/images/cover.jpg',
                   fit: BoxFit.scaleDown,
                 )),
               ),
-              subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(authors[index].name,
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text(tags[index].name)
-                  ]),
+              subtitle: Text(
+                authorNames.firstWhere((auth) =>
+                    auth["book"] == books[index].id.toString())["authors"],
+                style: TextStyle(fontWeight: FontWeight.bold),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
         );
