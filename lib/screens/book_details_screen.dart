@@ -7,6 +7,7 @@ import 'package:calibre_carte/models/authors.dart';
 import 'package:calibre_carte/models/books_authors_link.dart';
 import 'package:calibre_carte/models/comments.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
+import 'package:calibre_carte/widgets/select_format_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
@@ -32,11 +33,9 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
 
   Future<void> getBookDetails() async {
     bookDetails = await BooksProvider.getBookByID(widget.bookId, null);
-    print('Book details worjing fine');
     print(widget.bookId);
     bookComments =
         await CommentsProvider.getCommentByBookID(widget.bookId, null);
-    print('book comments not working fine');
     List<BooksAuthorsLink> bookAuthorsLinks =
         await BooksAuthorsLinksProvider.getAuthorsByBookID(widget.bookId);
 
@@ -46,7 +45,6 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
       Authors author = await AuthorsProvider.getAuthorByID(authorID, null);
       authors.add(author.name);
     }
-    print("Wven coming here");
 
     authorText = authors.reduce((v, e) {
       return v + ', ' + e;
@@ -65,6 +63,15 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Book Info'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (_) =>
+                  SelectFormatDialog(widget.bookId, bookDetails.path));
+        },
+        child: Icon(Icons.file_download),
       ),
       body: FutureBuilder<void>(
           future: myFuture,
@@ -127,7 +134,11 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                                                   data: bookComments.text,
                                                 )
                                               : Center(
-                                                  child: Text('No description', style: TextStyle(fontSize: 20),),
+                                                  child: Text(
+                                                    'No description',
+                                                    style:
+                                                        TextStyle(fontSize: 20),
+                                                  ),
                                                 ),
                                         )),
                                   ],
