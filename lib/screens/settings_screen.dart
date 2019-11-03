@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
+  static const routeName = '/settings';
   @override
   _SettingsState createState() => _SettingsState();
 }

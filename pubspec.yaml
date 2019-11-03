@@ -53,6 +53,7 @@ flutter:
     - assets/testing/metadata.db
     - assets/images/calibre_logo.png
     - assets/images/cover.jpg
+    - assets/images/subtle_wood.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
