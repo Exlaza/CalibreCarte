@@ -10,9 +10,9 @@ import 'package:calibre_carte/models/books_authors_link.dart';
 import 'package:calibre_carte/models/comments.dart';
 import 'package:calibre_carte/models/data.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
+import 'package:calibre_carte/widgets/open_format_dialog.dart';
 import 'package:calibre_carte/widgets/select_format_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_html/flutter_html.dart';
 
 import '../helpers/books_provider.dart';
@@ -121,7 +121,12 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                       width: 40,
                       child: FloatingActionButton(
                           heroTag: "2",
-                          onPressed: null,
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (_) => OpenFormatDialog(
+                                    widget.bookId, bookDetails.path));
+                          },
                           child: Icon(Icons.library_books)),
                     ),
                     SizedBox(
