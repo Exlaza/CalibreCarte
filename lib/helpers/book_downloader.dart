@@ -47,10 +47,21 @@ class BookDownloader{
     await File(pathMetadata).writeAsBytes(bytes, flush: true);
   }
 
-  Future<bool> checkIfDownloadedFileExists(bookID, fileName) async {
+  Future<bool> checkIfDownloadedFileExists(fileName) async {
     Directory tempDir = await getApplicationDocumentsDirectory();
     String pathMetadata = join(tempDir.path + "/$fileName");
     return await File(pathMetadata).exists();
+  }
+
+  checkAndDeleteIfDownloadedFilesExists(fileName) async {
+    bool exists = await checkIfDownloadedFileExists(fileName);
+    if (exists) {
+      String pathMetadata = await returnFileDirectory(fileName);
+      await File(pathMetadata).delete();
+      return true;
+    }
+    return false;
+
   }
 
   Future<String> returnFileDirectory(fileName) async {
