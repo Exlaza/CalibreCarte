@@ -151,8 +151,7 @@ class _BooksListState extends State<BooksList> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    child: BookDetailsCoverImage(
-                        books[index].id, books[index].path),
+                    child: GetBookThumbnail(books[index].id,books[index].path),
                   ),
 //                  Container(
 //                      color: Colors.brown.withOpacity(0.4),

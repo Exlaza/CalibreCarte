@@ -17,13 +17,13 @@ class _GetBookThumbnailState extends State<GetBookThumbnail> {
   Future<void> getBookCoverImage() async {
     ImageCacher ic = ImageCacher();
 
-    bool exists = await ic.checkIfCachedFileExists(widget.bookId);
+    bool exists = await ic.checkIfCachedThumbnailExists(widget.bookId);
 
     if (!exists) {
       await ic.downloadAndCacheImageThumbnail(widget.relativePath, widget.bookId);
     }
 
-    localImagePath = await ic.returnCachedImagePath(widget.bookId);
+    localImagePath = await ic.returnCachedThumbnailPath(widget.bookId);
   }
 
   @override

@@ -65,7 +65,7 @@ class ImageCacher {
     //Get the bytes, get the temp directory and write a file in temp
     List<int> bytes = response.bodyBytes;
     Directory tempDir = await getTemporaryDirectory();
-    String pathMetadata = join(tempDir.path + "/cover_$bookID.jpg");
+    String pathMetadata = join(tempDir.path + "/thumbnail_$bookID.jpg");
     await File(pathMetadata).writeAsBytes(bytes, flush: true);
   }
 
@@ -74,10 +74,20 @@ class ImageCacher {
     String pathMetadata = join(tempDir.path + "/cover_$bookID.jpg");
     return await File(pathMetadata).exists();
   }
+  Future<bool> checkIfCachedThumbnailExists(bookID) async {
+    Directory tempDir = await getTemporaryDirectory();
+    String pathMetadata = join(tempDir.path + "/thumbnail_$bookID.jpg");
+    return await File(pathMetadata).exists();
+  }
 
   Future<String> returnCachedImagePath(bookID) async {
     Directory tempDir = await getTemporaryDirectory();
     String pathMetadata = join(tempDir.path + "/cover_$bookID.jpg");
+    return pathMetadata;
+  }
+  Future<String> returnCachedThumbnailPath(bookID) async {
+    Directory tempDir = await getTemporaryDirectory();
+    String pathMetadata = join(tempDir.path + "/thumbnail_$bookID.jpg");
     return pathMetadata;
   }
 
