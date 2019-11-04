@@ -2,16 +2,11 @@ import 'package:calibre_carte/helpers/book_author_link_provider.dart';
 import 'package:calibre_carte/models/books_authors_link.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
 import 'package:calibre_carte/widgets/download_icon.dart';
-import 'package:calibre_carte/widgets/get_book_thumbnail.dart';
 import 'package:flutter/material.dart';
-
 import 'package:calibre_carte/helpers/authors_provider.dart';
 import 'package:calibre_carte/helpers/books_provider.dart';
-import 'package:calibre_carte/helpers/tags_provider.dart';
 import 'package:calibre_carte/models/authors.dart';
 import 'package:calibre_carte/models/books.dart';
-import 'package:calibre_carte/models/tags.dart';
-
 import '../screens/book_details_screen.dart';
 
 class BooksList extends StatefulWidget {
@@ -104,7 +99,6 @@ class _BooksListState extends State<BooksList> {
           child: ListTile(
             contentPadding: EdgeInsets.all(5),
             onTap: () => viewBookDetails(books[index].id),
-
             trailing: DownloadIcon(),
 //title: Text(books[index]['title'],style:TextStyle(fontWeight: FontWeight.bold)),
             title: Container(
@@ -116,7 +110,8 @@ class _BooksListState extends State<BooksList> {
                 )),
             leading: ConstrainedBox(
                 constraints: BoxConstraints(maxHeight: 100, maxWidth: 50),
-                child: GetBookThumbnail(books[index].id, books[index].path)),
+                child:
+                    BookDetailsCoverImage(books[index].id, books[index].path)),
             subtitle: Text(
               authorNames.firstWhere((auth) =>
                   auth["book"] == books[index].id.toString())["authors"],
@@ -134,9 +129,9 @@ class _BooksListState extends State<BooksList> {
     return GridView.builder(
 //      padding: EdgeInsets.all(10),
       gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
+          crossAxisCount: 3,
           childAspectRatio: (MediaQuery.of(context).size.width /
-              (MediaQuery.of(context).size.height*0.9 ))),
+              (MediaQuery.of(context).size.height * 0.83))),
       itemBuilder: (ctx, index) {
         return GestureDetector(
           onTap: () => viewBookDetails(books[index].id),
@@ -151,13 +146,17 @@ class _BooksListState extends State<BooksList> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    child: GetBookThumbnail(books[index].id,books[index].path),
+                    height: MediaQuery.of(context).size.height / 4,
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: BookDetailsCoverImage(
+                        books[index].id, books[index].path),
                   ),
 //                  Container(
+//                    height: 35,
 //                      color: Colors.brown.withOpacity(0.4),
 //                      child: Text(books[index].title,
-//                          style: TextStyle(fontWeight: FontWeight.bold))),
-//                  Container(
+//                          style: TextStyle(fontWeight: FontWeight.bold),overflow: TextOverflow.ellipsis,)),
+////                  Container(
 //                    color: Colors.grey.withOpacity(0.8),
 //                    child: Text(
 //                      authorNames.firstWhere((auth) =>

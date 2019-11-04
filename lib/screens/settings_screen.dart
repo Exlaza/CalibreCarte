@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
   static const routeName = '/settings';
+
   @override
   _SettingsState createState() => _SettingsState();
 }
@@ -54,197 +55,217 @@ class _SettingsState extends State<Settings> {
       child: CircularProgressIndicator(),
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Settings'),
-      ),
-      body: FutureBuilder(
-        future: myFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            print('THe connection finished now');
-            return Container(
-              decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/subtle_wood.png'),fit: BoxFit.cover)),
-              margin: EdgeInsets.fromLTRB(8, 8, 8, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                      padding: EdgeInsets.only(left: 4),
-                      child: Text(
-                        'Cloud',
-                        style: TextStyle(fontSize: 30),
-                      )),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30)),
-                    child: InkWell(
-                      onTap: () {
-                        print('Tap is not working');
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return DropboxSignIn();
-                        }));
-                      },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Stack(
+      children: <Widget>[
+        Image.asset(
+          'assets/images/subtle_wood.png',
+          fit: BoxFit.fill,
+          height: double.infinity,
+          width: double.infinity,
+        ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: Colors.black.withOpacity(0.5),
+            title: Text('Settings'),
+          ),
+          body: FutureBuilder(
+            future: myFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                print('THe connection finished now');
+                return Container(
+                  margin: EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                          padding: EdgeInsets.only(left: 4),
+                          child: Text(
+                            'Cloud',
+                            style: TextStyle(fontSize: 30),
+                          )),
+                      Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                        child: InkWell(
+                          onTap: () {
+                            print('Tap is not working');
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) {
+                              return DropboxSignIn();
+                            }));
+                          },
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                            child: Column(
                               children: <Widget>[
-                                Icon(Icons.cloud),
-                                Text('Dropbox'),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Icon(Icons.cloud),
+                                    Text('Dropbox'),
+                                  ],
+                                ),
                               ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 4),
-                    child: Text(
-                      'Search',
-                      style: TextStyle(fontSize: 30),
-                    ),
-                  ),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30)),
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(30))),
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.settings_ethernet,
-                                    size: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 30,
-                                  ),
-                                  Text(
-                                    'Search Title',
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                ],
-                              ),
-                              Switch(
-                                value: searchTitle,
-                                onChanged: (val) {
-                                  saveSettingsToSharedPrefs('searchTitle', val);
-                                  setState(() {
-                                    searchTitle = val;
-                                  });
-                                },
-                              )
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.settings_ethernet,
-                                    size: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 30,
-                                  ),
-                                  Text(
-                                    'Search Title',
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                ],
-                              ),
-                              Switch(
-                                value: searchAuthor,
-                                onChanged: (val) {
-                                  saveSettingsToSharedPrefs(
-                                      'searchAuthor', val);
-                                  setState(() {
-                                    searchAuthor = val;
-                                  });
-                                },
-                              )
-                            ],
-                          ),
-                        ],
+                      SizedBox(
+                        height: 10,
                       ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 4),
-                    child: Text(
-                      'Other',
-                      style: TextStyle(fontSize: 30),
-                    ),
-                  ),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30)),
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(30))),
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Container(
+                        padding: EdgeInsets.only(left: 4),
+                        child: Text(
+                          'Search',
+                          style: TextStyle(fontSize: 30),
+                        ),
+                      ),
+                      Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30))),
+                          child: Column(
                             children: <Widget>[
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Icon(
-                                    Icons.wb_sunny,
-                                    size: 20,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.settings_ethernet,
+                                        size: 20,
+                                      ),
+                                      SizedBox(
+                                        width: 30,
+                                      ),
+                                      Text(
+                                        'Search Title',
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(
-                                    width: 30,
-                                  ),
-                                  Text(
-                                    'Dark Mode',
-                                    style: TextStyle(fontSize: 20),
-                                  ),
+                                  Switch(
+                                    value: searchTitle,
+                                    onChanged: (val) {
+                                      saveSettingsToSharedPrefs(
+                                          'searchTitle', val);
+                                      setState(() {
+                                        searchTitle = val;
+                                      });
+                                    },
+                                  )
                                 ],
                               ),
-                              Switch(
-                                value: darkMode,
-                                onChanged: (val) {
-                                  saveSettingsToSharedPrefs('darkMode', val);
-                                  setState(() {
-                                    darkMode = val;
-                                  });
-                                },
-                              )
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.settings_ethernet,
+                                        size: 20,
+                                      ),
+                                      SizedBox(
+                                        width: 30,
+                                      ),
+                                      Text(
+                                        'Search Title',
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    ],
+                                  ),
+                                  Switch(
+                                    value: searchAuthor,
+                                    onChanged: (val) {
+                                      saveSettingsToSharedPrefs(
+                                          'searchAuthor', val);
+                                      setState(() {
+                                        searchAuthor = val;
+                                      });
+                                    },
+                                  )
+                                ],
+                              ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  )
-                ],
-              ),
-            );
-          } else {
-            print('The connection hasn\'t finsihed yet');
-            return CircularProgressIndicator();
-          }
-        },
-      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 4),
+                        child: Text(
+                          'Other',
+                          style: TextStyle(fontSize: 30),
+                        ),
+                      ),
+                      Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                          decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.5),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30))),
+                          child: Column(
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.wb_sunny,
+                                        size: 20,
+                                      ),
+                                      SizedBox(
+                                        width: 30,
+                                      ),
+                                      Text(
+                                        'Dark Mode',
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    ],
+                                  ),
+                                  Switch(
+                                    value: darkMode,
+                                    onChanged: (val) {
+                                      saveSettingsToSharedPrefs(
+                                          'darkMode', val);
+                                      setState(() {
+                                        darkMode = val;
+                                      });
+                                    },
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              } else {
+                print('The connection hasn\'t finsihed yet');
+                return CircularProgressIndicator();
+              }
+            },
+          ),
+        )
+      ],
     );
   }
 }

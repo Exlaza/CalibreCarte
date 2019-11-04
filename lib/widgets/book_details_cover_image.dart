@@ -43,7 +43,7 @@ class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
       future: myFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return Image.file(File(localImagePath));
+          return Image.file(File(localImagePath),fit: BoxFit.fill,);
         } else {
           return Center(
             child: CircularProgressIndicator(),

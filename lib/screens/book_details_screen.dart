@@ -62,92 +62,121 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Book Info'),
-      ),
-      body: FutureBuilder<void>(
-          future: myFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return Container(
-                margin: EdgeInsets.all(20),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Column(
-                    children: <Widget>[
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                          child: BookDetailsCoverImage(
-                              widget.bookId, bookDetails.path),
+    return Stack(
+      children: <Widget>[
+        Image.asset(
+          'assets/images/subtle_wood.png',
+          fit: BoxFit.fill,
+          height: double.infinity,
+          width: double.infinity,
+        ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: Colors.black.withOpacity(0.5),
+            title: Text('Book Info'),
+          ),
+          body: FutureBuilder<void>(
+              future: myFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return Container(
+                    margin: EdgeInsets.all(20),
+                    child: Column(
+                      children: <Widget>[
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(15),
+                                bottom: Radius.circular(15)),
+                            child: BookDetailsCoverImage(
+                                widget.bookId, bookDetails.path),
+                          ),
                         ),
-                      ),
-                      DefaultTabController(
-                          // The number of tabs / content sections to display.
-                          length: 2,
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                child: TabBar(
-                                  unselectedLabelColor: Colors.black,
-                                  labelColor: Colors.black,
-                                  tabs: [
-                                    Tab(
-                                      icon: Icon(Icons.directions_car),
-                                      text: 'Meta',
-                                    ),
-                                    Tab(
-                                      icon: Icon(Icons.description),
-                                      text: 'Description',
-                                    ),
-                                  ],
+                        DefaultTabController(
+                            // The number of tabs / content sections to display.
+                            length: 2,
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  child: TabBar(
+                                    unselectedLabelColor: Colors.black,
+                                    labelColor: Colors.black,
+                                    tabs: [
+                                      Tab(
+                                        icon: Icon(Icons.import_contacts),
+                                        text: 'MetaData',
+                                      ),
+                                      Tab(
+                                        icon: Icon(Icons.description),
+                                        text: 'Description',
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 250,
-                                child: TabBarView(
-                                  children: [
-                                    Column(
-                                      children: <Widget>[
-                                        Text('Title: ${bookDetails.title}'),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text('Author(s): $authorText'),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text('ISBN: ${bookDetails.isbn}')
-                                      ],
-                                    ),
-                                    SingleChildScrollView(
-                                        padding: EdgeInsets.all(10),
-                                        child: Container(
-                                          child: bookComments != null
-                                              ? Html(
-                                                  data: bookComments.text,
-                                                )
-                                              : Center(
-                                                  child: Text('No description', style: TextStyle(fontSize: 20),),
-                                                ),
-                                        )),
-                                  ],
-                                ),
-                              )
-                            ],
-                          )),
-                    ],
-                  ),
-                ),
-              );
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
+                                SizedBox(
+                                  height: 250,
+                                  child: TabBarView(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            'Title: ${bookDetails.title}',
+                                            style: TextStyle(
+                                                fontSize: 25,
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text('Author(s): $authorText',
+                                              style: TextStyle(
+                                                  fontSize: 25,
+                                                  fontStyle: FontStyle.italic)),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text('ISBN: ${bookDetails.isbn}',
+                                              style: TextStyle(
+                                                  fontSize: 25,
+                                                  fontStyle: FontStyle.italic))
+                                        ],
+                                      ),
+                                      SingleChildScrollView(
+                                          padding: EdgeInsets.all(10),
+                                          child: Container(
+                                            child: bookComments != null
+                                                ? Html(
+                                                    data: bookComments.text,
+                                                  )
+                                                : Center(
+                                                    child: Text(
+                                                      'No description',
+                                                      style: TextStyle(
+                                                          fontSize: 20),
+                                                    ),
+                                                  ),
+                                          )),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            )),
+                      ],
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }),
+        )
+      ],
     );
   }
 }
