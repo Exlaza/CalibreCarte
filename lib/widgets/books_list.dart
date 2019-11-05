@@ -2,6 +2,7 @@ import 'package:calibre_carte/helpers/book_author_link_provider.dart';
 import 'package:calibre_carte/models/books_authors_link.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
 import 'package:calibre_carte/widgets/download_icon.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:calibre_carte/helpers/authors_provider.dart';
 import 'package:calibre_carte/helpers/books_provider.dart';
@@ -79,9 +80,10 @@ class _BooksListState extends State<BooksList> {
               if (snapshot.hasError)
                 return Text('Error: ${snapshot.error}');
               else
-                return widget.layout == "list"
-                    ? booksListView(context, snapshot)
-                    : booksGridView(context, snapshot);
+                return booksCarouselView(context);
+//                return widget.layout == "list"
+//                    ? booksListView(context, snapshot)
+//                    : booksGridView(context, snapshot);
           }
         });
   }
@@ -170,6 +172,34 @@ class _BooksListState extends State<BooksList> {
         );
       },
       itemCount: books.length,
+    );
+  }
+  Widget booksCarouselView(BuildContext context){
+    return Container(
+      child: Center(
+        child: CarouselSlider(
+            enlargeCenterPage: true,
+            aspectRatio: 3.0,
+            items: books.map((i) {
+              return new Builder(
+                builder: (BuildContext context) {
+                  return new Container(
+                      padding: EdgeInsets.all(20),
+                      width: MediaQuery.of(context).size.width,
+                      margin: new EdgeInsets.symmetric(horizontal: 5.0),
+                      decoration: new BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                          color:Colors.black.withOpacity(0.5),
+                      ),
+                      child: BookDetailsCoverImage(i.id,i.path)
+                  );
+                },
+              );
+            }).toList(),
+            height: 400.0,
+            autoPlay: true
+        ),
+      ),
     );
   }
 }
