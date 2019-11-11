@@ -58,6 +58,7 @@ class _BooksViewState extends State<BooksView> {
 
   @override
   Widget build(BuildContext context) {
+    print("rebuilding books");
     return FutureBuilder(
         future: bookDetails,
         builder: (context, snapshot) {

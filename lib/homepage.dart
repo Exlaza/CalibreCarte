@@ -128,6 +128,8 @@ class _MyHomePageState extends State<MyHomePage> {
  Widget _appBarTitle=const Text("Calibre Carte");
   @override
   Widget build(BuildContext context) {
+    print("rebuilding homepage");
+
     return Container(
       child: Stack(
         children: <Widget>[
