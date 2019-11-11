@@ -23,6 +23,7 @@ class BooksView extends StatefulWidget {
 
 class _BooksViewState extends State<BooksView> {
   Future bookDetails;
+  Future afterSorting;
   List<Books> books;
   List<Map<String, String>> authorNames = [];
 
@@ -31,20 +32,25 @@ class _BooksViewState extends State<BooksView> {
     // TODO: implement initState
     super.initState();
     bookDetails = getBooks();
+    bookDetails.then((_){
+      print('Hit sorting');
+      afterSorting = sortBooks();
+    });
   }
 
   @override
   void didUpdateWidget(BooksView oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-    print("COming her eafter sort");
+    print("Coming here after sort");
     if (oldWidget.sortOption == widget.sortOption && oldWidget.sortDirection == widget.sortDirection){
       return;
     }
-    bookDetails = getBooks();
+    afterSorting = sortBooks();
   }
 
-  void sortBooks() {
+  Future<void> sortBooks() async{
+    print("INside sorting");
     if (widget.sortOption == 'author') {
         books.sort((a, b) {
           return a.author_sort.compareTo(b.author_sort);
@@ -64,6 +70,7 @@ class _BooksViewState extends State<BooksView> {
       print("descending of something in here");
         books = books.reversed.toList();
     }
+    print("GEtting over my sorting self");
 
   }
 
@@ -90,7 +97,7 @@ class _BooksViewState extends State<BooksView> {
       books[i].author_sort = authorText;
     }
 
-    sortBooks();
+//    await sortBooks();
 
     print(authorNames[1]);
   }
@@ -99,7 +106,7 @@ class _BooksViewState extends State<BooksView> {
   Widget build(BuildContext context) {
     print("rebuilding books");
     return FutureBuilder(
-        future: bookDetails,
+        future: afterSorting,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
