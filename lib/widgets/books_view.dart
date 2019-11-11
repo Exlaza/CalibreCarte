@@ -26,7 +26,6 @@ class _BooksViewState extends State<BooksView> {
   List<Books> books;
   List<Map<String, String>> authorNames = [];
 
-  //get all details for once
   @override
   void initState() {
     // TODO: implement initState
@@ -39,9 +38,10 @@ class _BooksViewState extends State<BooksView> {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     print("COming her eafter sort");
-    if(books != null){
-      bookDetails = getBooks();
+    if (oldWidget.sortOption == widget.sortOption && oldWidget.sortDirection == widget.sortDirection){
+      return;
     }
+    bookDetails = getBooks();
   }
 
   void sortBooks() {
