@@ -12,8 +12,10 @@ import 'package:calibre_carte/models/books.dart';
 class BooksView extends StatefulWidget {
   final String layout;
   final String filter;
+  final String sortOption;
+  final String sortDirection;
 
-  BooksView(this.layout, this.filter);
+  BooksView(this.layout, this.filter, {this.sortOption, this.sortDirection });
 
   @override
   _BooksViewState createState() => _BooksViewState();
@@ -31,11 +33,46 @@ class _BooksViewState extends State<BooksView> {
     super.initState();
     bookDetails = getBooks();
   }
+
+  @override
+  void didUpdateWidget(BooksView oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    print("COming her eafter sort");
+    if(books != null){
+      bookDetails = getBooks();
+    }
+  }
+
+  void sortBooks() {
+    if (widget.sortOption == 'author') {
+        books.sort((a, b) {
+          return a.author_sort.compareTo(b.author_sort);
+      });
+
+    } else if (widget.sortOption == 'title') {
+        books.sort((a, b) {
+          return a.title.compareTo(b.title);
+      });
+    } else {
+        books.sort((a, b) {
+          return a.title.compareTo(b.title);
+      });
+    }
+
+    if (widget.sortDirection == 'desc'){
+      print("descending of something in here");
+        books = books.reversed.toList();
+    }
+
+  }
+
   //aggregates all the data to display
   Future<void> getBooks() async {
+
+    print("NOt even coming here");
     String authorText;
     books = await BooksProvider.getAllBooks();
-    print("got books");
     for (int i = 0; i < books.length; i++) {
       List<BooksAuthorsLink> bookAuthorsLinks =
           await BooksAuthorsLinksProvider.getAuthorsByBookID(books[i].id);
@@ -45,14 +82,16 @@ class _BooksViewState extends State<BooksView> {
         Authors author = await AuthorsProvider.getAuthorByID(authorID, null);
         authors.add(author.name);
 
-        print("got authors");
-
         authorText = authors.reduce((v, e) {
           return v + ', ' + e;
         });
       }
       authorNames.add({"book": books[i].id.toString(), "authors": authorText});
+      books[i].author_sort = authorText;
     }
+
+    sortBooks();
+
     print(authorNames[1]);
   }
 
