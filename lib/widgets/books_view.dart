@@ -31,10 +31,10 @@ class _BooksViewState extends State<BooksView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    bookDetails = getBooks();
-    bookDetails.then((_){
-      print('Hit sorting');
-      afterSorting = sortBooks();
+    getBooks().then((_){
+      setState(() {
+        afterSorting = sortBooks();
+      });
     });
   }
 
@@ -70,7 +70,7 @@ class _BooksViewState extends State<BooksView> {
       print("descending of something in here");
         books = books.reversed.toList();
     }
-    print("GEtting over my sorting self");
+    print("Getting over my sorting self");
 
   }
 
