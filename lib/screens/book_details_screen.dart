@@ -63,10 +63,11 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     return false;
   }
 
-  deleteAllLocalCopies() async{
+  deleteAllLocalCopies() async {
     BookDownloader bd = BookDownloader();
     for (int i = 0; i < dataFormatsFileNameMap.length; i++) {
-      bool op =  await bd.checkAndDeleteIfDownloadedFilesExists(dataFormatsFileNameMap[i]['name']);
+      bool op = await bd.checkAndDeleteIfDownloadedFilesExists(
+          dataFormatsFileNameMap[i]['name']);
     }
     setState(() {
       mySecondFuture = checkIfLocalCopyExists();
@@ -103,172 +104,6 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Book Info'),
-      ),
-      floatingActionButton: FutureBuilder(
-          future: mySecondFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.data) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 40,
-                      width: 40,
-                      child: FloatingActionButton(
-                          heroTag: "2",
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (_) => OpenFormatDialog(
-                                    widget.bookId, bookDetails.path));
-                          },
-                          child: Icon(Icons.library_books)),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        SizedBox(
-                            height: 40,
-                            width: 40,
-                            child: FloatingActionButton(
-                              onPressed: () async{
-                                deleteAllLocalCopies();
-                              },
-                              heroTag: "1",
-                              child: Icon(
-                                Icons.delete,
-                              ),
-                            )),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        FloatingActionButton(
-                          heroTag: "0",
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (_) => SelectFormatDialog(
-                                    widget.bookId, bookDetails.path));
-                          },
-                          child: Icon(Icons.file_download),
-                        )
-                      ],
-                    )
-                  ],
-                );
-              } else {
-                return FloatingActionButton(
-                  child: Icon(Icons.file_download),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (_) => SelectFormatDialog(
-                            widget.bookId, bookDetails.path)).then((_) {
-                      setState(() {
-                        mySecondFuture = checkIfLocalCopyExists();
-                      });
-                    });
-                  },
-                );
-              }
-            } else {
-              return FloatingActionButton(
-                child: Icon(Icons.file_download),
-              );
-            }
-          }),
-      body: FutureBuilder<void>(
-          future: myFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return Container(
-                margin: EdgeInsets.all(20),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Column(
-                    children: <Widget>[
-                      Expanded(
-                        child: BookDetailsCoverImage(
-                            widget.bookId, bookDetails.path),
-                      ),
-                      DefaultTabController(
-                          // The number of tabs / content sections to display.
-                          length: 2,
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                child: TabBar(
-                                  unselectedLabelColor: Colors.black,
-                                  labelColor: Colors.black,
-                                  tabs: [
-                                    Tab(
-                                      icon: Icon(Icons.directions_car),
-                                      text: 'Meta',
-                                    ),
-                                    Tab(
-                                      icon: Icon(Icons.description),
-                                      text: 'Description',
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 250,
-                                child: TabBarView(
-                                  children: [
-                                    Column(
-                                      children: <Widget>[
-                                        Text('Title: ${bookDetails.title}'),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text('Author(s): $authorText'),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text('ISBN: ${bookDetails.isbn}')
-                                      ],
-                                    ),
-                                    SingleChildScrollView(
-                                        padding: EdgeInsets.all(10),
-                                        child: Container(
-                                          child: bookComments != null
-                                              ? Html(
-                                                  data: bookComments.text,
-                                                )
-                                              : Center(
-                                                  child: Text(
-                                                    'No description',
-                                                    style:
-                                                        TextStyle(fontSize: 20),
-                                                  ),
-                                                ),
-                                        )),
-                                  ],
-                                ),
-                              )
-                            ],
-                          )),
-                    ],
-                  ),
-                ),
-              );
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
     return Stack(
       children: <Widget>[
         Image.asset(
@@ -283,6 +118,85 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
             backgroundColor: Colors.black.withOpacity(0.5),
             title: Text('Book Info'),
           ),
+          floatingActionButton: FutureBuilder(
+              future: mySecondFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.data) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        SizedBox(
+                          height: 40,
+                          width: 40,
+                          child: FloatingActionButton(
+                              heroTag: "2",
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) => OpenFormatDialog(
+                                        widget.bookId, bookDetails.path));
+                              },
+                              child: Icon(Icons.library_books)),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: FloatingActionButton(
+                                  onPressed: () async {
+                                    deleteAllLocalCopies();
+                                  },
+                                  heroTag: "1",
+                                  child: Icon(
+                                    Icons.delete,
+                                  ),
+                                )),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            FloatingActionButton(
+                              heroTag: "0",
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) => SelectFormatDialog(
+                                        widget.bookId, bookDetails.path));
+                              },
+                              child: Icon(Icons.file_download),
+                            )
+                          ],
+                        )
+                      ],
+                    );
+                  } else {
+                    return FloatingActionButton(
+                      child: Icon(Icons.file_download),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => SelectFormatDialog(
+                                widget.bookId, bookDetails.path)).then((_) {
+                          setState(() {
+                            mySecondFuture = checkIfLocalCopyExists();
+                          });
+                        });
+                      },
+                    );
+                  }
+                } else {
+                  return FloatingActionButton(
+                    child: Icon(Icons.file_download),
+                  );
+                }
+              }),
           body: FutureBuilder<void>(
               future: myFuture,
               builder: (context, snapshot) {
@@ -294,8 +208,8 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                         Expanded(
                           child: ClipRRect(
                             borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(15),
-                                bottom: Radius.circular(15)),
+                              top: Radius.circular(15),bottom: Radius.circular(15)
+                            ),
                             child: BookDetailsCoverImage(
                                 widget.bookId, bookDetails.path),
                           ),
@@ -326,31 +240,16 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                                   child: TabBarView(
                                     children: [
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
                                         children: <Widget>[
-                                          Text(
-                                            'Title: ${bookDetails.title}',
-                                            style: TextStyle(
-                                                fontSize: 25,
-                                                fontStyle: FontStyle.italic),
-                                          ),
+                                          Text('Title: ${bookDetails.title}'),
                                           SizedBox(
-                                            height: 20,
+                                            height: 5,
                                           ),
-                                          Text('Author(s): $authorText',
-                                              style: TextStyle(
-                                                  fontSize: 25,
-                                                  fontStyle: FontStyle.italic)),
+                                          Text('Author(s): $authorText'),
                                           SizedBox(
-                                            height: 20,
+                                            height: 5,
                                           ),
-                                          Text('ISBN: ${bookDetails.isbn}',
-                                              style: TextStyle(
-                                                  fontSize: 25,
-                                                  fontStyle: FontStyle.italic))
+                                          Text('ISBN: ${bookDetails.isbn}')
                                         ],
                                       ),
                                       SingleChildScrollView(
