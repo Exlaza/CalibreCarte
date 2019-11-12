@@ -25,7 +25,7 @@ class DropboxAuthentication extends StatefulWidget {
 class _DropboxAuthenticationState extends State<DropboxAuthentication> {
   final url;
   final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+  Completer<WebViewController>();
   bool _isLoadingPage;
   final key = UniqueKey();
   num _stackToView = 1;
@@ -33,7 +33,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
   StreamSubscription _sub;
 
   _makePostRequest(token) async {
-    print(token);
+//    print(token);
     // set up POST request arguments
     String url = 'https://api.dropboxapi.com/2/files/search_v2';
     Map<String, String> headers = {
@@ -63,7 +63,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     _sub = getLinksStream().listen((String link) {
       //Although this is not needed now, but Google actually recommends against using a webview for,
       //So assuming in future we need to do it the url_launcher way then we would have to use this method
-      print(link);
+//      print(link);
       //So, just keeping it here.
       // Parse the link and warn the user, if it is not correct
     }, onError: (err) {
@@ -99,9 +99,9 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
   }
 
   _launchURL(String url) async {
-    print(await canLaunch(url));
+//    print(await canLaunch(url));
     if (await canLaunch(url)) {
-      print('url');
+//      print('url');
       await launch(url);
     } else {
       throw 'Could not launch $url';
@@ -119,20 +119,21 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
   }
 
   selectingCalibreLibrary(key, val) {
+//    print("selecting library");
     storeStringInSharedPrefs('selected_calibre_lib_path', key);
-    storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_){
+    storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_) {
       Navigator.of(context).pop();
     });
     MetadataCacher().downloadAndCacheMetadata().then((_) {
       Navigator.of(context).pop();
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black.withOpacity(0.5),
         title: Text('Dropbox Login'),
       ),
       body: IndexedStack(
@@ -149,7 +150,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
               if (request.url.startsWith('calibrecarte://dropbox')) {
                 _launchURL(request.url);
                 //Here you parse the url and get back the token value and send it wherever or store it in some state
-                //List opf things to do
+                //List of things to do
                 // 1. Parse the token from the url. 2. Store the token in shared prefs
                 // 3. Do a search for calibre libs
                 // 4. Store all the information on calibre libs like number, and paths
@@ -162,7 +163,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                 String token;
                 var tempUri = Uri.parse('http://test.com?${uri.fragment}');
                 tempUri.queryParameters.forEach((k, v) {
-                  print(k);
+//                  print(k);
                   if (k == "access_token") {
                     token = v;
                   }
@@ -181,45 +182,48 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                       if (element["metadata"]["metadata"]["name"] ==
                           "metadata.db") {
                         String lowerCasePath =
-                            element["metadata"]["metadata"]["path_display"];
+                        element["metadata"]["metadata"]["path_display"];
                         List<String> directories = element["metadata"]
-                                ["metadata"]["path_display"]
+                        ["metadata"]["path_display"]
                             .split('/');
                         String libName =
-                            directories.elementAt(directories.length - 2);
+                        directories.elementAt(directories.length - 2);
                         pathNameMap.putIfAbsent(lowerCasePath, () => libName);
-                        print(pathNameMap);
                       }
                     });
                     storeIntInSharedPrefs(
                         'noOfCalibreLibs', pathNameMap.length);
                     pathNameMap.keys.toList().asMap().forEach((index, path) {
                       String keyName = 'calibre_lib_path_$index';
+                      print("keyname: $keyName");
                       String libName = 'calibre_lib_name_$index';
                       storeStringInSharedPrefs(keyName, path);
                       storeStringInSharedPrefs(libName, pathNameMap[path]);
                     });
 //                    TODO: Change this to > 1
-                    if (pathNameMap.length == 1) {
+                    if (pathNameMap.length > 1) {
                       // First set the no of libraries in shared prefs
                       // Show a pop up which displays the list of libraries
-                      print('I have come inside the popup dispaly htingy');
+                      print('I have come inside the popup dispaly thingy');
                       List<Widget> columnChildren =
-                          pathNameMap.keys.toList().map((element) {
+                      pathNameMap.keys.toList().map((element) {
                         return InkWell(
-                            onTap: () {selectingCalibreLibrary(element, pathNameMap[element]);},
+                            onTap: () {
+                              selectingCalibreLibrary(
+                                  element, pathNameMap[element]);
+                            },
                             child: Text(
                               pathNameMap[element],
-                              style: TextStyle(fontSize: 30),
+                              style: TextStyle(fontSize: 30,fontStyle: FontStyle.italic),
                             ));
                       }).toList();
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return AlertDialog(
+                            return AlertDialog(backgroundColor: Colors.grey,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(
-                                  Radius.circular(32),
+                                  Radius.circular(20),
                                 ),
                               ),
                               contentPadding: EdgeInsets.all(10),
@@ -229,8 +233,8 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(width: 2)),
+//                                        decoration: BoxDecoration(
+//                                            border: Border.all(width: 2)),
                                         child: Text(
                                           'Select Library',
                                           style: TextStyle(
@@ -255,11 +259,12 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                       storeStringInSharedPrefs(
                         'selected_calibre_lib_name',
                         pathNameMap.values.first,
-                      ).then((_){
+                      ).then((_) {
                         Navigator.of(context).pop();
                       });
                     }
                   } else {
+                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("No libraries found"),));
                     // Show the bottom snack bar that no libraries found and Pop out of this context
                   }
                 });
@@ -267,7 +272,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                 return NavigationDecision.prevent;
               }
 
-              print('allowing navigation to $request');
+//              print('allowing navigation to $request');
               return NavigationDecision.navigate;
             },
             onPageFinished: _handleLoad,
