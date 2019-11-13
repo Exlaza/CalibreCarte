@@ -28,7 +28,7 @@ class CommentsProvider {
     Database db = await DatabaseHelper.instance.db;
     List<Map> maps = await db.query(tableName,
         columns: cols != null ? cols : Comments.columns,
-        where: '${Comments.columns[0]} = ?',
+        where: '${Comments.columns[1]} = ?',
         whereArgs: [id]);
     if (maps.length > 0) {
       return Comments.fromMapObject(maps.first);
