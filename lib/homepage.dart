@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'widgets/books_view.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -12,6 +14,8 @@ class _MyHomePageState extends State<MyHomePage> {
   String filter;
   String sortOption = "title";
   String sortDirection = "asc";
+  String token;
+  Future myFuture;
 
   @override
   void initState() {
@@ -22,6 +26,13 @@ class _MyHomePageState extends State<MyHomePage> {
         filter = controller.text;
       });
     });
+    myFuture = getTokenFromPreferences();
+  }
+
+  Future<void> getTokenFromPreferences() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    token = sp.getString('token') ??
+        "iWMa931y4c4AAAAAAAABG9VeRCMOkBy80ElDs2_2ETwTOf8zgbiIbP2LoZZCe9bY";
   }
 
   void _settingModalBottomSheet(context) {
@@ -157,7 +168,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       sortDirection = "asc";
                     });
                     Navigator.of(context).pop();
-
                   },
                 ),
                 ListTile(
@@ -169,7 +179,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       sortDirection = "desc";
                     });
                     Navigator.of(context).pop();
-
                   },
                 ),
               ],
@@ -214,34 +223,46 @@ class _MyHomePageState extends State<MyHomePage> {
             width: double.infinity,
           ),
           Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
-                backgroundColor: Colors.black.withOpacity(0.6),
-                title: _appBarTitle,
-                leading:
-                    Image.asset('assets/images/calibre_logo.png', scale: 0.4),
-                actions: <Widget>[
-                  // action button
-                  IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () {
-                      _searchPressed();
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.more_vert),
-                    onPressed: () {
-                      _settingModalBottomSheet(context);
-                    },
-                  )
-                ]),
-            body: BooksView(
-              layout,
-              filter,
-              sortDirection: sortDirection,
-              sortOption: sortOption,
-            ),
-          ),
+              backgroundColor: Colors.transparent,
+              appBar: AppBar(
+                  backgroundColor: Colors.black.withOpacity(0.6),
+                  title: _appBarTitle,
+                  leading:
+                      Image.asset('assets/images/calibre_logo.png', scale: 0.4),
+                  actions: <Widget>[
+                    // action button
+                    IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () {
+                        _searchPressed();
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.more_vert),
+                      onPressed: () {
+                        _settingModalBottomSheet(context);
+                      },
+                    )
+                  ]),
+              body: FutureBuilder(
+                  future: myFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (token != null){
+                        return BooksView(
+                          layout,
+                          filter,
+                          sortDirection: sortDirection,
+                          sortOption: sortOption,
+                        );
+                      }else{
+                        return Center(child: Text('Please Connect to dropbox'),);
+                      }
+
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  })),
         ],
       ),
     );
