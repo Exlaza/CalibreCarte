@@ -9,7 +9,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String layout = "list";
+  String layout ;
   TextEditingController controller = new TextEditingController();
   String filter;
   String sortOption = "title";
@@ -32,6 +32,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> getTokenFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     token = sp.getString('token');
+    layout=sp.getString('layout')?? "list";
+  }
+  Future<void> storeLayout(value) async{
+    SharedPreferences sp= await SharedPreferences.getInstance();
+    sp.setString('layout', value);
+    print("storing $value");
   }
 
   void _settingModalBottomSheet(context) {
@@ -96,6 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       layout = "list";
                     });
+                    storeLayout('list');
                   },
                 ),
                 ListTile(
@@ -105,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       layout = "grid";
                     });
+                    storeLayout('grid');
                   },
                 ),
                 ListTile(
@@ -114,6 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       layout = "carousel";
                     });
+                    storeLayout('carousel');
                   },
                 )
               ],

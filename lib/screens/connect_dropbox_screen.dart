@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DropboxSignIn extends StatefulWidget {
-  static const clientID = 'xw6prhzsxxtkza1';
+  static const clientID = 'h1csd4yy5cxl0rl';
   static const redirectUri = 'calibrecarte://dropbox';
 
   @override
