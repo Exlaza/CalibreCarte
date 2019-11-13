@@ -31,8 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> getTokenFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    token = sp.getString('token') ??
-        "iWMa931y4c4AAAAAAAABG9VeRCMOkBy80ElDs2_2ETwTOf8zgbiIbP2LoZZCe9bY";
+    token = sp.getString('token');
   }
 
   void _settingModalBottomSheet(context) {
@@ -73,7 +72,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   showSettings(BuildContext context) {
     Navigator.of(context).pop();
-    Navigator.pushNamed(context, "/settings");
+    Navigator.pushNamed(context, "/settings").then((_){
+      setState(() {
+        myFuture = getTokenFromPreferences();
+      });
+    });
   }
 
   void showLayouts(BuildContext context) {
