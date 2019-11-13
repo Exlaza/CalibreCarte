@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:calibre_carte/helpers/metadata_cacher.dart';
 import 'package:calibre_carte/screens/dropbox_signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
+import 'package:http/http.dart';
 
 class DropboxSignIn extends StatefulWidget {
   static const clientID = 'h1csd4yy5cxl0rl';
@@ -49,16 +53,23 @@ class _DropboxSignInState extends State<DropboxSignIn> {
     }
   }
 
-  selectingCalibreLibrary(String name, int index) async {
+  Future<void> storeStringInSharedPrefs(key, val) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    setState(() {
-      selected_calibre_lib_dir = sp.getString('calibre_lib_path_$index');
-    });
-    print("selecting library");
-    sp.setString('selected_calibre_lib_path', selected_calibre_lib_dir);
-    sp.setString('selected_calibre_lib_name', name);
+    sp.setString(key, val);
+  }
 
-    MetadataCacher().downloadAndCacheMetadata();
+  Future<void> storeIntInSharedPrefs(key, val) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setInt(key, val);
+  }
+
+  selectingCalibreLibrary(key, val) {
+//    print("selecting library");
+    storeStringInSharedPrefs('selected_calibre_lib_path', key);
+    storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_) {
+      Navigator.of(context).pop();
+    });
+    MetadataCacher().downloadAndCacheMetadata().then((_) {});
   }
 
   @override
@@ -71,6 +82,132 @@ class _DropboxSignInState extends State<DropboxSignIn> {
 
   final url =
       'https://www.dropbox.com/oauth2/authorize?client_id=${DropboxSignIn.clientID}&response_type=token&redirect_uri=${DropboxSignIn.redirectUri}';
+
+  _makePostRequest(token) async {
+//    print(token);
+    // set up POST request arguments
+    String url = 'https://api.dropboxapi.com/2/files/search_v2';
+    Map<String, String> headers = {
+      "Authorization": "Bearer $token",
+      "Content-type": "application/json"
+    };
+    String json =
+        '{"query": "metadata.db", "options":{"filename_only":true, "file_extensions":["db"]}}'; // make POST request
+    Response response = await post(url,
+        headers: headers, body: json); // check the status code for the result
+    int statusCode = response
+        .statusCode; // this API passes back the id of the new item added to the body
+    String body = response.body;
+    // {
+    //   "title": "Hello",
+    //   "body": "body text",
+    //   "userId": 1,
+    //   "id": 101
+    // }}
+    return response;
+  }
+
+  Future<List<Widget>> refreshLibrary(BuildContext context) async {
+    Map<String, String> pathNameMap = Map();
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    var token = sp.getString('token');
+    _makePostRequest(token).then((response) {
+      //Make a map Map<String, String> First value is the base path in lower case
+      // Second Value is the name of the Folder(Library)
+      // I have to convert string response.body to json
+      Map<String, dynamic> responseJson = jsonDecode(response.body);
+      if (responseJson['matches'].length != 0) {
+        responseJson['matches'].forEach((element) {
+          if (element["metadata"]["metadata"]["name"] == "metadata.db") {
+            String lowerCasePath =
+                element["metadata"]["metadata"]["path_display"];
+            List<String> directories =
+                element["metadata"]["metadata"]["path_display"].split('/');
+            String libName = directories.elementAt(directories.length - 2);
+            pathNameMap.putIfAbsent(lowerCasePath, () => libName);
+          }
+        });
+        sp.setInt('noOfCalibreLibs', pathNameMap.length);
+        pathNameMap.keys.toList().asMap().forEach((index, path) {
+          String keyName = 'calibre_lib_path_$index';
+          print("keyname: $keyName");
+          String libName = 'calibre_lib_name_$index';
+          sp.setString(keyName, path);
+          sp.setString(libName, pathNameMap[path]);
+        });
+//                    TODO: Change this to > 1
+        if (pathNameMap.length > 1) {
+          // First set the no of libraries in shared prefs
+          // Show a pop up which displays the list of libraries
+          print('I have come inside the popup dispaly thingy');
+          List<Widget> columnChildren =
+              pathNameMap.keys.toList().map((element) {
+            return ListTile(
+                onTap: () {
+                  selectingCalibreLibrary(element, pathNameMap[element]);
+                  setState(() {
+                    myFuture = loadingToken();
+                  });
+                },
+                title: Text(
+                  pathNameMap[element],
+                  style: TextStyle(fontSize: 30, fontStyle: FontStyle.italic),
+                ));
+          }).toList();
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: Colors.grey.withOpacity(0.8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                  ),
+                  contentPadding: EdgeInsets.all(10),
+                  content: Container(
+                    width: 300,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Container(
+//                                        decoration: BoxDecoration(
+//                                            border: Border.all(width: 2)),
+                            child: Text(
+                          'Select Library',
+                          style: TextStyle(
+                              fontSize: 35, fontWeight: FontWeight.bold),
+                        )),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Column(children: columnChildren)
+                      ],
+                    ),
+                  ),
+                );
+              });
+        } else {
+          // Her we have only one library so we make that the default
+          storeStringInSharedPrefs(
+            'selected_calibre_lib_path',
+            pathNameMap.keys.first,
+          );
+          storeStringInSharedPrefs(
+            'selected_calibre_lib_name',
+            pathNameMap.values.first,
+          ).then((_) {
+            Navigator.of(context).pop();
+          });
+        }
+      } else {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text("No libraries found"),
+        ));
+        // Show the bottom snack bar that no libraries found and Pop out of this context
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,36 +271,33 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                                     RaisedButton(
                                       child: Text("Change Directory"),
                                       onPressed: () {
-                                        print(dirNames);
-                                        printLibs();
-                                        showModalBottomSheet(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(5.0)),
-                                            backgroundColor:
-                                                Colors.grey.withOpacity(0.8),
-                                            context: context,
-                                            builder: (BuildContext bc) {
-                                              List<Widget> libraries = [];
-                                              for (var i = 0;
-                                                  i < dirNames.length;
-                                                  i++) {
-                                                libraries.add(ListTile(
-                                                  title: Text(dirNames[i]),
-                                                  onTap: () {
-                                                    selectingCalibreLibrary(
-                                                        dirNames[i], i);
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ));
-                                              }
-                                              return Container(
-                                                width: 300,
-                                                child: Wrap(
-                                                  children: libraries,
-                                                ),
-                                              );
-                                            });
+                                        refreshLibrary(context);
+
+//                                        Scaffold.of(context)
+//                                            .showSnackBar(SnackBar(
+//                                          content: Text("refreshing"),
+//                                        ));
+//                                        refreshLibrary(context)
+//                                            .then((columnChildren) {
+//                                          Scaffold.of(context)
+//                                              .removeCurrentSnackBar();
+//                                          showModalBottomSheet(
+//                                              shape: RoundedRectangleBorder(
+//                                                  borderRadius:
+//                                                      BorderRadius.circular(
+//                                                          5.0)),
+//                                              backgroundColor:
+//                                                  Colors.grey.withOpacity(0.8),
+//                                              context: context,
+//                                              builder: (BuildContext bc) {
+//                                                return Container(
+//                                                  width: 300,
+//                                                  child: Wrap(
+//                                                    children: columnChildren,
+//                                                  ),
+//                                                );
+//                                              });
+//                                        });
                                       },
                                     )
                                   ],
