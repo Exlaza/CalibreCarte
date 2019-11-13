@@ -12,10 +12,8 @@ import 'package:calibre_carte/models/books.dart';
 class BooksView extends StatefulWidget {
   final String layout;
   final String filter;
-  final String sortOption;
-  final String sortDirection;
 
-  BooksView(this.layout, this.filter, {this.sortOption, this.sortDirection });
+  BooksView(this.layout, this.filter);
 
   @override
   _BooksViewState createState() => _BooksViewState();
@@ -23,63 +21,21 @@ class BooksView extends StatefulWidget {
 
 class _BooksViewState extends State<BooksView> {
   Future bookDetails;
-  Future afterSorting;
   List<Books> books;
   List<Map<String, String>> authorNames = [];
 
+  //get all details for once
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getBooks().then((_){
-      setState(() {
-        afterSorting = sortBooks();
-      });
-    });
+    bookDetails = getBooks();
   }
-
-  @override
-  void didUpdateWidget(BooksView oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
-    print("Coming here after sort");
-    if (oldWidget.sortOption == widget.sortOption && oldWidget.sortDirection == widget.sortDirection){
-      return;
-    }
-    afterSorting = sortBooks();
-  }
-
-  Future<void> sortBooks() async{
-    print("INside sorting");
-    if (widget.sortOption == 'author') {
-        books.sort((a, b) {
-          return a.author_sort.compareTo(b.author_sort);
-      });
-
-    } else if (widget.sortOption == 'title') {
-        books.sort((a, b) {
-          return a.title.compareTo(b.title);
-      });
-    } else {
-        books.sort((a, b) {
-          return a.title.compareTo(b.title);
-      });
-    }
-
-    if (widget.sortDirection == 'desc'){
-      print("descending of something in here");
-        books = books.reversed.toList();
-    }
-    print("Getting over my sorting self");
-
-  }
-
   //aggregates all the data to display
   Future<void> getBooks() async {
-
-    print("NOt even coming here");
     String authorText;
     books = await BooksProvider.getAllBooks();
+    print("got books");
     for (int i = 0; i < books.length; i++) {
       List<BooksAuthorsLink> bookAuthorsLinks =
           await BooksAuthorsLinksProvider.getAuthorsByBookID(books[i].id);
@@ -89,16 +45,14 @@ class _BooksViewState extends State<BooksView> {
         Authors author = await AuthorsProvider.getAuthorByID(authorID, null);
         authors.add(author.name);
 
+        print("got authors");
+
         authorText = authors.reduce((v, e) {
           return v + ', ' + e;
         });
       }
       authorNames.add({"book": books[i].id.toString(), "authors": authorText});
-      books[i].author_sort = authorText;
     }
-
-//    await sortBooks();
-
     print(authorNames[1]);
   }
 
@@ -106,7 +60,7 @@ class _BooksViewState extends State<BooksView> {
   Widget build(BuildContext context) {
     print("rebuilding books");
     return FutureBuilder(
-        future: afterSorting,
+        future: bookDetails,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:

@@ -10,8 +10,6 @@ class _MyHomePageState extends State<MyHomePage> {
   String layout = "list";
   TextEditingController controller = new TextEditingController();
   String filter;
-  String sortOption = "title";
-  String sortDirection = "asc";
 
   @override
   void initState() {
@@ -43,10 +41,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   onTap: () => {showLayouts(context)},
                 ),
                 ListTile(
-                  leading: new Icon(Icons.sort),
+                  leading: new Icon(Icons.sort_by_alpha),
                   title: new Text('Sort',
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  onTap: () => {showSortOptions(context)},
+                  onTap: () => {},
                 ),
                 ListTile(
                   leading: new Icon(Icons.settings),
@@ -59,12 +57,10 @@ class _MyHomePageState extends State<MyHomePage> {
           );
         });
   }
-
   showSettings(BuildContext context) {
     Navigator.of(context).pop();
     Navigator.pushNamed(context, "/settings");
   }
-
   void showLayouts(BuildContext context) {
     Navigator.of(context).pop();
     showModalBottomSheet(
@@ -108,98 +104,28 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  void showSortOptions(BuildContext context) {
-    Navigator.of(context).pop();
-    showModalBottomSheet(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        backgroundColor: Colors.grey.withOpacity(0.8),
-        context: context,
-        builder: (BuildContext bc) {
-          return Container(
-            child: Wrap(
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(Icons.title),
-                  title: Text("Title"),
-                  onTap: () {
-                    showSortDirectionOptions("title");
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.alternate_email),
-                  title: Text("Author Name"),
-                  onTap: () {
-                    showSortDirectionOptions("author");
-                  },
-                ),
-              ],
-            ),
-          );
-        });
-  }
-
-  void showSortDirectionOptions(String sortOpt) {
-    Navigator.of(context).pop();
-    showModalBottomSheet(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        backgroundColor: Colors.grey.withOpacity(0.8),
-        context: context,
-        builder: (BuildContext bc) {
-          return Container(
-            child: Wrap(
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(Icons.keyboard_arrow_up),
-                  title: Text("Ascending"),
-                  onTap: () {
-                    setState(() {
-                      sortOption = sortOpt;
-                      sortDirection = "asc";
-                    });
-                    Navigator.of(context).pop();
-
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.keyboard_arrow_down),
-                  title: Text("Descending"),
-                  onTap: () {
-                    setState(() {
-                      sortOption = sortOpt;
-                      sortDirection = "desc";
-                    });
-                    Navigator.of(context).pop();
-
-                  },
-                ),
-              ],
-            ),
-          );
-        });
-  }
-
-  Widget closeButton() {
+  Widget closeButton(){
     return IconButton(
       icon: Icon(Icons.close),
-      onPressed: () {
-        _appBarTitle = Text("Calibre Carte");
-        controller.clear();
+      onPressed: (){
+        _appBarTitle=Text("Calibre Carte");
+          controller.clear();
       },
     );
   }
 
-  void _searchPressed() {
-    setState(() {
-      _appBarTitle = new TextField(
-        controller: controller,
-        decoration: new InputDecoration(
-            prefixIcon: closeButton(), hintText: 'Search...'),
-      );
-    });
+  void _searchPressed(){
+  setState(() {
+    _appBarTitle= new TextField(
+      controller: controller,
+      decoration: new InputDecoration(
+          prefixIcon: closeButton(),
+          hintText: 'Search...'
+      ),
+    );
+  });
   }
-
-  Widget _appBarTitle = const Text("Calibre Carte");
-
+ Widget _appBarTitle=const Text("Calibre Carte");
   @override
   Widget build(BuildContext context) {
     print("rebuilding homepage");
@@ -235,12 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                   )
                 ]),
-            body: BooksView(
-              layout,
-              filter,
-              sortDirection: sortDirection,
-              sortOption: sortOption,
-            ),
+            body: BooksView(layout,filter),
           ),
         ],
       ),

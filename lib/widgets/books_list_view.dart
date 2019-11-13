@@ -46,7 +46,8 @@ class BooksListView extends StatelessWidget {
               constraints: BoxConstraints(maxHeight: 100, maxWidth: 50),
               child: BookDetailsCoverImage(books[index].id, books[index].path)),
           subtitle: Text(
-            books[index].author_sort,
+            authorNames.firstWhere((auth) =>
+                auth["book"] == books[index].id.toString())["authors"],
             style: TextStyle(fontWeight: FontWeight.bold),
             overflow: TextOverflow.ellipsis,
           ),
