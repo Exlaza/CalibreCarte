@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:calibre_carte/helpers/metadata_cacher.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'dart:async';
@@ -7,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
-  static final _databaseName = "metadata.db";
+  static final _databaseName = "/metadata.db";
   static final _databaseVersion = 1;
 
   //  Make this class a singleton class(A singleton class is has only one instance active at any time)
@@ -28,8 +29,8 @@ class DatabaseHelper {
 
   // Here we are checking that there is not already a copy of the
   initDb() async {
-    var databasePath = await getDatabasesPath();
-    var path = join(databasePath, _databaseName);
+    String databasePath = await getDatabasesPath();
+    String path = join(databasePath + "/metadata.db");
     var exists = await databaseExists(path);
 
     if (!exists) {
@@ -42,14 +43,13 @@ class DatabaseHelper {
       // rest of the application development
       //Copy it to some location that Android like to keep it database files,
       // that only this application can access
-      ByteData data = await rootBundle.load("assets/testing/metadata.db");
-      List<int> bytes =
-      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-      await File(path).writeAsBytes(bytes, flush: true);
+      MetadataCacher mc = MetadataCacher();
+      print('Metdata cacher should now run"');
+      await mc.downloadAndCacheMetadata();
     } else {
     }
 
-    return await openDatabase(path);
+    return await openDatabase("metadata.db");
   }
 }
 
