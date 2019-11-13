@@ -43,16 +43,9 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     String json =
         '{"query": "metadata.db", "options":{"filename_only":true, "file_extensions":["db"]}}'; // make POST request
     Response response = await post(url,
-        headers: headers, body: json); // check the status code for the result
-    int statusCode = response
-        .statusCode; // this API passes back the id of the new item added to the body
+        headers: headers, body: json);
+    int statusCode = response.statusCode;
     String body = response.body;
-    // {
-    //   "title": "Hello",
-    //   "body": "body text",
-    //   "userId": 1,
-    //   "id": 101
-    // }}
     return response;
   }
 
@@ -109,6 +102,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
   }
 
   Future<void> storeStringInSharedPrefs(key, val) async {
+    print("Storing token");
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setString(key, val);
   }
@@ -120,13 +114,12 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
 
   selectingCalibreLibrary(key, val) {
     storeStringInSharedPrefs('selected_calibre_lib_path', key);
-    storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_){
+    storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_) {
       Navigator.of(context).pop();
     });
     MetadataCacher().downloadAndCacheMetadata().then((_) {
       Navigator.of(context).pop();
     });
-
   }
 
   @override
@@ -180,14 +173,15 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                     responseJson['matches'].forEach((element) {
                       if (element["metadata"]["metadata"]["name"] ==
                           "metadata.db") {
-                        String lowerCasePath =
+                        String libPath =
                             element["metadata"]["metadata"]["path_display"];
+                        libPath = libPath.replaceAll('metadata.db', "");
                         List<String> directories = element["metadata"]
                                 ["metadata"]["path_display"]
                             .split('/');
                         String libName =
                             directories.elementAt(directories.length - 2);
-                        pathNameMap.putIfAbsent(lowerCasePath, () => libName);
+                        pathNameMap.putIfAbsent(libPath, () => libName);
                         print(pathNameMap);
                       }
                     });
@@ -207,7 +201,10 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                       List<Widget> columnChildren =
                           pathNameMap.keys.toList().map((element) {
                         return InkWell(
-                            onTap: () {selectingCalibreLibrary(element, pathNameMap[element]);},
+                            onTap: () {
+                              selectingCalibreLibrary(
+                                  element, pathNameMap[element]);
+                            },
                             child: Text(
                               pathNameMap[element],
                               style: TextStyle(fontSize: 30),
@@ -255,7 +252,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                       storeStringInSharedPrefs(
                         'selected_calibre_lib_name',
                         pathNameMap.values.first,
-                      ).then((_){
+                      ).then((_) {
                         Navigator.of(context).pop();
                       });
                     }

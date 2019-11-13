@@ -9,17 +9,16 @@ class MetadataCacher {
   //Should make a shared preferences helper
   Future<String> getTokenFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    return sp.getString('token') ??
-        "iWMa931y4c4AAAAAAAABG9VeRCMOkBy80ElDs2_2ETwTOf8zgbiIbP2LoZZCe9bY";
+    return sp.getString('token');
   }
 
   Future<String> getSelectedLibPathFromSharedPrefs() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    return sp.getString('selected_calibre_lib_path') ??
-        '/Calibre Library/metadata.db';
+    return sp.getString('selected_calibre_lib_path');
   }
 
   downloadMetadata(token, path) async {
+    print("I should also have come here after logging in");
     String url = "https://content.dropboxapi.com/2/files/download";
     Map<String, String> headers = {
       "Authorization": "Bearer $token",
@@ -36,8 +35,11 @@ class MetadataCacher {
   Future<void> downloadAndCacheMetadata() async {
     String token = await getTokenFromPreferences();
     String path = await getSelectedLibPathFromSharedPrefs();
-    Response response = await downloadMetadata(token, path);
+    String absPath = path + 'metadata.db';
+    print(absPath);
+    Response response = await downloadMetadata(token, absPath);
     //Get the bytes, get the temp directory and write a file in temp
+    print(response.statusCode);
     List<int> bytes = response.bodyBytes;
     Directory tempDir = await getTemporaryDirectory();
     String pathMetadata = join(tempDir.path + "metadata.db");
