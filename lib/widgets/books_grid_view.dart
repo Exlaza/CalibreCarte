@@ -23,10 +23,8 @@ class BooksGridView extends StatelessWidget {
         SliverPadding(
           padding: EdgeInsets.all(0),
           sliver: SliverGrid.count(
-            childAspectRatio: (MediaQuery.of(context).size.width /
-                (MediaQuery.of(context).size.height * 0.83)),
-            crossAxisCount: 3,
-            mainAxisSpacing: 5.0,
+            childAspectRatio: 2 / 3,
+            crossAxisCount: 2,
             children: filter == null
                 ? books.map((book) => CalibreGridTile(book)).toList()
                 : books
