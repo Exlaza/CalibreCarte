@@ -111,7 +111,9 @@ class _DropboxSignInState extends State<DropboxSignIn> {
     Map<String, String> pathNameMap = Map();
     SharedPreferences sp = await SharedPreferences.getInstance();
     var token = sp.getString('token');
+    Scaffold.of(context).showSnackBar(SnackBar(content: Text("Refreshing Libraries..."),));
     _makePostRequest(token).then((response) {
+      Scaffold.of(context).removeCurrentSnackBar();
       //Make a map Map<String, String> First value is the base path in lower case
       // Second Value is the name of the Folder(Library)
       // I have to convert string response.body to json
@@ -154,38 +156,55 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                   style: TextStyle(fontSize: 30, fontStyle: FontStyle.italic),
                 ));
           }).toList();
-          showDialog(
+          showModalBottomSheet(
               context: context,
               builder: (BuildContext context) {
-                return AlertDialog(
-                  backgroundColor: Colors.grey.withOpacity(0.8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  contentPadding: EdgeInsets.all(10),
-                  content: Container(
-                    width: 300,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Container(
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
 //                                        decoration: BoxDecoration(
-//                                            border: Border.all(width: 2)),
-                            child: Text(
+//                                           border: Border.all(width: 2)),
+                        child: Text(
                           'Select Library',
                           style: TextStyle(
                               fontSize: 35, fontWeight: FontWeight.bold),
                         )),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Column(children: columnChildren)
-                      ],
+                    SizedBox(
+                      height: 20,
                     ),
-                  ),
+                    Column(children: columnChildren)
+                  ],
                 );
+//                return AlertDialog(
+//                  backgroundColor: Colors.grey.withOpacity(0.8),
+//                  shape: RoundedRectangleBorder(
+//                    borderRadius: BorderRadius.all(
+//                      Radius.circular(10),
+//                    ),
+//                  ),
+//                  contentPadding: EdgeInsets.all(10),
+//                  content: Container(
+//                    width: 300,
+//                    child: Column(
+//                      mainAxisSize: MainAxisSize.min,
+//                      children: <Widget>[
+//                        Container(
+////                                        decoration: BoxDecoration(
+////                                            border: Border.all(width: 2)),
+//                            child: Text(
+//                          'Select Library',
+//                          style: TextStyle(
+//                              fontSize: 35, fontWeight: FontWeight.bold),
+//                        )),
+//                        SizedBox(
+//                          height: 20,
+//                        ),
+//                        Column(children: columnChildren)
+//                      ],
+//                    ),
+//                  ),
+//                );
               });
         } else {
           // Her we have only one library so we make that the default
@@ -197,7 +216,9 @@ class _DropboxSignInState extends State<DropboxSignIn> {
             'selected_calibre_lib_name',
             pathNameMap.values.first,
           ).then((_) {
-            Navigator.of(context).pop();
+//            Navigator.of(context).pop();
+//          showModalBottomSheet(context: context, builder: (_){return Text("works");});
+          Scaffold.of(context).showSnackBar(SnackBar(content: Text("No other Calibre libraries found."),));
           });
         }
       } else {
