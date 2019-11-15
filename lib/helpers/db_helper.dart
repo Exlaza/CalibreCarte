@@ -34,6 +34,7 @@ class DatabaseHelper {
     var exists = await databaseExists(path);
 
     if (!exists) {
+      print("USING METADATA FROM ASSETS");
       //Making sure  the parent directory exists
       try {
         await Directory(dirname(path)).create(recursive: true);
@@ -47,6 +48,7 @@ class DatabaseHelper {
       print('Metdata cacher should now run"');
       await mc.downloadAndCacheMetadata();
     } else {
+      print("NOT USING ASSETS METADATA");
     }
 
     return await openDatabase("metadata.db");

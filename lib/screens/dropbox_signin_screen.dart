@@ -194,7 +194,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                       storeStringInSharedPrefs(libName, pathNameMap[path]);
                     });
 //                    TODO: Change this to > 1
-                    if (pathNameMap.length == 1) {
+                    if (pathNameMap.length > 1) {
                       // First set the no of libraries in shared prefs
                       // Show a pop up which displays the list of libraries
                       print('I have come inside the popup dispaly htingy');
