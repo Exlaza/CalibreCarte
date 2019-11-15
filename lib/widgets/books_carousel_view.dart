@@ -23,7 +23,29 @@ class BooksCarouselView extends StatelessWidget {
         child: CarouselSlider(
             enlargeCenterPage: true,
             aspectRatio: 3.0,
-            items: books.map((i) {
+            items:filter==null? books.map((i) {
+              return new Builder(
+                builder: (BuildContext context) {
+                  return GestureDetector(
+                    onTap: () => viewBookDetails(i.id),
+                    child: Container(
+                        padding: EdgeInsets.all(15),
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.symmetric(horizontal: 5.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color:Colors.black.withOpacity(0.5),
+                        ),
+                        child: BookDetailsCoverImage(i.id,i.path)
+                    ),
+                  );
+                },
+              );
+            }).toList():books
+                .where((book) =>
+                book.title.toLowerCase().contains(filter.toLowerCase()))
+                .toList()
+                .map((i) {
               return new Builder(
                 builder: (BuildContext context) {
                   return GestureDetector(
@@ -43,7 +65,8 @@ class BooksCarouselView extends StatelessWidget {
               );
             }).toList(),
             height: 400.0,
-            autoPlay: true
+            autoPlay: false,
+          enableInfiniteScroll: false,
         ),
       ),
     );  }
