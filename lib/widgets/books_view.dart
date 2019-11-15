@@ -1,5 +1,6 @@
 import 'package:calibre_carte/helpers/book_author_link_provider.dart';
 import 'package:calibre_carte/models/books_authors_link.dart';
+import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/widgets/books_carousel_view.dart';
 import 'package:calibre_carte/widgets/books_grid_view.dart';
 import 'package:calibre_carte/widgets/books_list_view.dart';
@@ -8,6 +9,7 @@ import 'package:calibre_carte/helpers/authors_provider.dart';
 import 'package:calibre_carte/helpers/books_provider.dart';
 import 'package:calibre_carte/models/authors.dart';
 import 'package:calibre_carte/models/books.dart';
+import 'package:provider/provider.dart';
 
 class BooksView extends StatefulWidget {
   final String layout;
@@ -104,7 +106,18 @@ class _BooksViewState extends State<BooksView> {
 
   @override
   Widget build(BuildContext context) {
-    print("rebuilding books");
+    Update update= Provider.of(context);
+    print("rebuilding books ");
+
+    if(update.shouldDoUpdate==true){
+      getBooks().then((_){
+        setState(() {
+          afterSorting = sortBooks();
+        });
+      });
+      print("FRONT PAGE UPDATED////////////////////////////////////////////");
+update.updateFlagState(false);
+    }
     return FutureBuilder(
         future: afterSorting,
         builder: (context, snapshot) {
@@ -115,12 +128,12 @@ class _BooksViewState extends State<BooksView> {
             default:
               if (snapshot.hasError)
                 return Text('Error: ${snapshot.error}');
-              else
+              else{
                 return widget.layout == "list"
                     ? BooksListView(widget.filter, books, authorNames)
                     : (widget.layout == "grid"
                         ? BooksGridView(widget.filter, books, authorNames)
-                        : BooksCarouselView(widget.filter, books, authorNames));
+                        : BooksCarouselView(widget.filter, books, authorNames));}
           }
         });
   }

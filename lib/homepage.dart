@@ -1,5 +1,7 @@
+import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'widgets/books_view.dart';
 
@@ -16,7 +18,6 @@ class _MyHomePageState extends State<MyHomePage> {
   String sortDirection = "asc";
   String token;
   Future myFuture;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -26,12 +27,11 @@ class _MyHomePageState extends State<MyHomePage> {
         filter = controller.text;
       });
     });
-    myFuture = getTokenFromPreferences();
+    myFuture = getLayoutFromPreferences();
   }
 
-  Future<void> getTokenFromPreferences() async {
+  Future<void> getLayoutFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    token = sp.getString('token');
     layout=sp.getString('layout')?? "list";
   }
   Future<void> storeLayout(value) async{
@@ -79,9 +79,9 @@ class _MyHomePageState extends State<MyHomePage> {
   showSettings(BuildContext context) {
     Navigator.of(context).pop();
     Navigator.pushNamed(context, "/settings").then((_){
-      setState(() {
-        myFuture = getTokenFromPreferences();
-      });
+//      setState(() {
+//        myFuture = getTokenFromPreferences();
+//      });
     });
   }
 
@@ -223,8 +223,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Update update=Provider.of(context);
     print("rebuilding homepage");
-
     return Container(
       child: Stack(
         children: <Widget>[
@@ -260,7 +260,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   future: myFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
-                      if (token != null){
+                      if (update.tokenExists==true){
+                        print("I come here tokensss");
                         return BooksView(
                           layout,
                           filter,

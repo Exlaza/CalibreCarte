@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:calibre_carte/helpers/metadata_cacher.dart';
+import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -124,6 +126,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
 
   @override
   Widget build(BuildContext context) {
+    Update update= Provider.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Dropbox Login'),
@@ -158,6 +161,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                   print(k);
                   if (k == "access_token") {
                     token = v;
+                    update.changeTokenState(true);
                   }
                 });
                 // Step 2: Storing token in shared prefs. Remember this is async so, the next statement would be executed immediately
@@ -257,6 +261,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                       });
                     }
                   } else {
+                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("No Calibre libraries found"),));
                     // Show the bottom snack bar that no libraries found and Pop out of this context
                   }
                 });

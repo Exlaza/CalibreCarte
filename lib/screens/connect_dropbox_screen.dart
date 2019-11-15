@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:calibre_carte/helpers/metadata_cacher.dart';
+import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/dropbox_signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:http/http.dart';
@@ -22,6 +24,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
   String selected_calibre_lib_dir;
   List<String> dirNames = [];
   int noOfCalibreLibs;
+  bool hasChanged;
 
   Future<bool> loadingToken() async {
     String temp;
@@ -63,13 +66,18 @@ class _DropboxSignInState extends State<DropboxSignIn> {
     sp.setInt(key, val);
   }
 
-  selectingCalibreLibrary(key, val) {
+  selectingCalibreLibrary(key, val, update) {
 //    print("selecting library");
     storeStringInSharedPrefs('selected_calibre_lib_path', key);
     storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_) {
       Navigator.of(context).pop();
     });
-    MetadataCacher().downloadAndCacheMetadata().then((_) {});
+    MetadataCacher().downloadAndCacheMetadata().then((_) {print("changed directory");
+    update.updateFlagState(true);
+    print("came here after changing dir?");
+
+    });
+
   }
 
   @override
@@ -107,7 +115,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
     return response;
   }
 
-  Future<List<Widget>> refreshLibrary(BuildContext context) async {
+  Future<List<Widget>> refreshLibrary(BuildContext context, Update update) async {
     Map<String, String> pathNameMap = Map();
     SharedPreferences sp = await SharedPreferences.getInstance();
     var token = sp.getString('token');
@@ -146,10 +154,12 @@ class _DropboxSignInState extends State<DropboxSignIn> {
               pathNameMap.keys.toList().map((element) {
             return ListTile(
                 onTap: () {
-                  selectingCalibreLibrary(element, pathNameMap[element]);
+                  selectingCalibreLibrary(element, pathNameMap[element],update);
+
                   setState(() {
                     myFuture = loadingToken();
                   });
+
                 },
                 title: Text(
                   pathNameMap[element],
@@ -232,6 +242,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
 
   @override
   Widget build(BuildContext context) {
+    Update update=Provider.of(context);
     return Stack(
       children: <Widget>[
         Image.asset(
@@ -261,9 +272,11 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                                 selectedUrl: url,
                               );
                             })).then((_) {
+
                               setState(() {
                                 myFuture = loadingToken();
                               });
+                              update.updateFlagState(true);
                             });
                           }));
                 } else {
@@ -292,7 +305,8 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                                     RaisedButton(
                                       child: Text("Change Directory"),
                                       onPressed: () {
-                                        refreshLibrary(context);
+                                        refreshLibrary(context, update);
+
 
 //                                        Scaffold.of(context)
 //                                            .showSnackBar(SnackBar(
@@ -326,6 +340,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                               ),
                         RaisedButton(
                           onPressed: () {
+                            update.updateFlagState(true);
                             Scaffold.of(context).showSnackBar(SnackBar(
                               content: Text("Refreshing..."),
                               backgroundColor: Colors.grey.withOpacity(0.7),
@@ -348,6 +363,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                             deleteToken();
                             setState(() {
                               myFuture = loadingToken();
+                              update.changeTokenState(false);
                             });
                           },
                           child: Text("Logout"),
