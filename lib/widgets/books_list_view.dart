@@ -36,7 +36,7 @@ class BooksListView extends StatelessWidget {
         child: ListTile(
           contentPadding: EdgeInsets.all(5),
           onTap: () => viewBookDetails(books[index].id),
-          trailing: DownloadIcon(),
+          trailing: DownloadIcon(books[index].id),
 //title: Text(books[index]['title'],style:TextStyle(fontWeight: FontWeight.bold)),
           title: Container(
               height: 40,
