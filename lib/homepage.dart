@@ -209,12 +209,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _searchPressed() {
+  void _searchPressed(String searchFil) {
     setState(() {
       _appBarTitle = new TextField(
         controller: controller,
         decoration: new InputDecoration(
-            prefixIcon: closeButton(), hintText: 'Search...'),
+            prefixIcon: closeButton(), hintText: 'Search for ${searchFil}s'),
       );
     });
   }
@@ -246,7 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     IconButton(
                       icon: Icon(Icons.search),
                       onPressed: () {
-                        _searchPressed();
+                        _searchPressed(update.searchFilter);
                       },
                     ),
                     IconButton(

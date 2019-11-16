@@ -17,29 +17,44 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool tokenExists;
-  Future<void> getTokenFromPreferences() async {
+  String searchFilter;
+  Future myFuture;
+  Future<void> getTokenAndSearchFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     tokenExists=sp.containsKey('token');
+    searchFilter=sp.getString('searchFilter')??'title';
   }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getTokenFromPreferences();
+    myFuture=getTokenAndSearchFromPreferences();
   }
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      builder: (_)=>Update(tokenExists),
-      child: MaterialApp(
-        title: "Calibre Carte",
-        theme: ThemeData(primarySwatch: Colors.blueGrey),
-        home: MyHomePage(),
-        routes: {
-          BookDetailsScreen.routeName: (ctx) => BookDetailsScreen(),
-          Settings.routeName: (ctx)=>Settings()
-        },
-      ),
+    print("REBUILDING APP");
+    return FutureBuilder(
+      future: myFuture,
+      builder: (context, snapshot){
+        if (snapshot.connectionState == ConnectionState.done){
+          return ChangeNotifierProvider(
+            builder: (_)=>Update(tokenExists,searchFilter),
+            child: MaterialApp(
+              title: "Calibre Carte",
+              theme: ThemeData(primarySwatch: Colors.blueGrey),
+              home: MyHomePage(),
+              routes: {
+                BookDetailsScreen.routeName: (ctx) => BookDetailsScreen(),
+                Settings.routeName: (ctx)=>Settings()
+              },
+            ),
+          );
+        }
+        else{
+          return Container(color: Colors.white,child: CircularProgressIndicator());
+        }
+      },
+       
     );
   }
 }

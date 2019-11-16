@@ -1,18 +1,21 @@
 import 'package:calibre_carte/models/books.dart';
+import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/book_details_screen.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
 import 'package:calibre_carte/widgets/download_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BooksListView extends StatelessWidget {
   final String filter;
   final List<Books> books;
-  final List<Map<String, String>> authorNames;
 
-  BooksListView(this.filter, this.books, this.authorNames);
+  BooksListView(this.filter, this.books);
 
   @override
   Widget build(BuildContext context) {
+    Update update = Provider.of(context);
+
     void viewBookDetails(int bookId) {
       print(bookId);
       Navigator.of(context).push(MaterialPageRoute(builder: (_) {
@@ -54,13 +57,22 @@ class BooksListView extends StatelessWidget {
       );
     }
 
-    return ListView.builder(
+    return update.searchFilter=='title'?ListView.builder(
       itemBuilder: (ctx, index) {
         return filter == null
             ? tile(index)
             : (books[index].title.toLowerCase().contains(filter.toLowerCase())
                 ? tile(index)
                 : Container());
+      },
+      itemCount: books.length,
+    ):ListView.builder(
+      itemBuilder: (ctx, index) {
+        return filter == null
+            ? tile(index)
+            : (books[index].title.toLowerCase().contains(filter.toLowerCase())
+            ? tile(index)
+            : Container());
       },
       itemCount: books.length,
     );

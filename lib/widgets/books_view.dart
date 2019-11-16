@@ -17,7 +17,7 @@ class BooksView extends StatefulWidget {
   final String sortOption;
   final String sortDirection;
 
-  BooksView(this.layout, this.filter, {this.sortOption, this.sortDirection });
+  BooksView(this.layout, this.filter, {this.sortOption, this.sortDirection});
 
   @override
   _BooksViewState createState() => _BooksViewState();
@@ -33,7 +33,7 @@ class _BooksViewState extends State<BooksView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getBooks().then((_){
+    getBooks().then((_) {
       setState(() {
         afterSorting = sortBooks();
       });
@@ -45,41 +45,38 @@ class _BooksViewState extends State<BooksView> {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     print("Coming here after sort");
-    if (oldWidget.sortOption == widget.sortOption && oldWidget.sortDirection == widget.sortDirection){
+    if (oldWidget.sortOption == widget.sortOption &&
+        oldWidget.sortDirection == widget.sortDirection) {
       return;
     }
     afterSorting = sortBooks();
   }
 
-  Future<void> sortBooks() async{
+  Future<void> sortBooks() async {
     print("INside sorting");
     if (widget.sortOption == 'author') {
-        books.sort((a, b) {
-          return a.author_sort.compareTo(b.author_sort);
+      books.sort((a, b) {
+        return a.author_sort.compareTo(b.author_sort);
       });
-
     } else if (widget.sortOption == 'title') {
-        books.sort((a, b) {
-          return a.title.compareTo(b.title);
+      books.sort((a, b) {
+        return a.title.compareTo(b.title);
       });
     } else {
-        books.sort((a, b) {
-          return a.title.compareTo(b.title);
+      books.sort((a, b) {
+        return a.title.compareTo(b.title);
       });
     }
 
-    if (widget.sortDirection == 'desc'){
+    if (widget.sortDirection == 'desc') {
       print("descending of something in here");
-        books = books.reversed.toList();
+      books = books.reversed.toList();
     }
     print("Getting over my sorting self");
-
   }
 
   //aggregates all the data to display
   Future<void> getBooks() async {
-
-    print("NOt even coming here");
     String authorText;
     books = await BooksProvider.getAllBooks();
     for (int i = 0; i < books.length; i++) {
@@ -95,28 +92,26 @@ class _BooksViewState extends State<BooksView> {
           return v + ', ' + e;
         });
       }
-      authorNames.add({"book": books[i].id.toString(), "authors": authorText});
       books[i].author_sort = authorText;
     }
 
 //    await sortBooks();
 
-    print(authorNames[1]);
   }
 
   @override
   Widget build(BuildContext context) {
-    Update update= Provider.of(context);
+    Update update = Provider.of(context);
     print("rebuilding books ");
 
-    if(update.shouldDoUpdate==true){
-      getBooks().then((_){
+    if (update.shouldDoUpdate == true) {
+      getBooks().then((_) {
         setState(() {
           afterSorting = sortBooks();
         });
       });
       print("FRONT PAGE UPDATED////////////////////////////////////////////");
-update.updateFlagState(false);
+      update.updateFlagState(false);
     }
     return FutureBuilder(
         future: afterSorting,
@@ -128,12 +123,13 @@ update.updateFlagState(false);
             default:
               if (snapshot.hasError)
                 return Text('Error: ${snapshot.error}');
-              else{
+              else {
                 return widget.layout == "list"
-                    ? BooksListView(widget.filter, books, authorNames)
-                    : (widget.layout == "grid"
-                        ? BooksGridView(widget.filter, books, authorNames)
-                        : BooksCarouselView(widget.filter, books, authorNames));}
+                      ? BooksListView(widget.filter, books)
+                      : (widget.layout == "grid"
+                      ? BooksGridView(widget.filter, books)
+                      : BooksCarouselView(widget.filter, books));
+              }
           }
         });
   }

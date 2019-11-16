@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 class Update with ChangeNotifier {
   bool _tokenExists;
   bool _shouldUpdate = false;
+  String _searchFilter;
 
-  Update(this._tokenExists);
+  Update(this._tokenExists,this._searchFilter){
+    print("search filter $_searchFilter");
+    print("token existance $_tokenExists");
+  }
 
   void changeTokenState(bool tokenStateFlag) {
     _tokenExists = tokenStateFlag;
@@ -15,11 +19,19 @@ class Update with ChangeNotifier {
     _shouldUpdate = updateFlag;
     notifyListeners();
   }
+  void changeSearchFilter(String filter){
+    _searchFilter=filter;
+    notifyListeners();
+  }
 
   bool get tokenExists {
     return _tokenExists;
   }
   bool get shouldDoUpdate {
     return _shouldUpdate;
+  }
+  String get searchFilter{
+    print("returning $_searchFilter");
+    return _searchFilter;
   }
 }

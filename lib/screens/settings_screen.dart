@@ -1,5 +1,7 @@
+import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/connect_dropbox_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
@@ -11,10 +13,7 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   SharedPreferences _prefs;
-  bool searchAuthor;
-  bool searchTitle = true;
   bool darkMode;
-
   Future myFuture;
 
   @override
@@ -24,14 +23,16 @@ class _SettingsState extends State<Settings> {
     myFuture = SharedPreferences.getInstance();
     myFuture.then((sp) {
       _prefs = sp;
-      searchTitle = sp.getBool('searchTitle') ?? true;
-      searchAuthor = sp.getBool('searchAuthor') ?? true;
       darkMode = sp.getBool('darkMode') ?? false;
     });
   }
 
-  void saveSettingsToSharedPrefs(String settingName, bool val) {
+  void saveBoolToSharedPrefs(String settingName, bool val) {
     _prefs.setBool(settingName, val);
+  }
+
+  void saveStringToSP(String settingName, String val) {
+    _prefs.setString(settingName, val);
   }
 
 //  I needed to save Future builder in an instance because that was the only way, to prevent Future builder from firing again and again
@@ -50,11 +51,10 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    print('Building again for no reason');
+    print('Building asettings for no reason');
     Widget loadingWidget = Center(
       child: CircularProgressIndicator(),
     );
-
     return Stack(
       children: <Widget>[
         Image.asset(
@@ -123,83 +123,119 @@ class _SettingsState extends State<Settings> {
                           style: TextStyle(fontSize: 30),
                         ),
                       ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                        child: Container(
-                          padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(30))),
+                      Consumer<Update>(
+                        builder:
+                        (ctx,update,child)=>Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)),
                           child: Column(
                             children: <Widget>[
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.settings_ethernet,
-                                        size: 20,
-                                      ),
-                                      SizedBox(
-                                        width: 30,
-                                      ),
-                                      Text(
-                                        'Search Title',
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                    ],
-                                  ),
-                                  Switch(
-                                    value: searchTitle,
-                                    onChanged: (val) {
-                                      saveSettingsToSharedPrefs(
-                                          'searchTitle', val);
-                                      setState(() {
-                                        searchTitle = val;
+                              ListTile(trailing: Text(update.searchFilter??'not selected'),
+                                leading: Icon(Icons.search),
+                                title: Text(
+                                  "Search By",
+                                ),
+                                onTap: () {
+                                  showModalBottomSheet(
+                                      elevation: 10,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(5.0)),
+                                      backgroundColor:
+                                      Colors.grey.withOpacity(0.8),
+                                      context: context,
+                                      builder: (_) {
+                                        return Container(
+                                          child: Wrap(
+                                            children: <Widget>[
+                                              ListTile(
+                                                title: Text("Author"),
+                                                onTap: (){
+                                                  saveStringToSP('searchFilter', 'author');
+                                                  update.changeSearchFilter('author');
+                                                },
+                                              ),
+                                              ListTile(
+                                                title: Text("Book Title"),
+                                                onTap: (){
+                                                  saveStringToSP('searchFilter', 'title');
+                                                  update.changeSearchFilter('title');
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        );
                                       });
-                                    },
-                                  )
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.settings_ethernet,
-                                        size: 20,
-                                      ),
-                                      SizedBox(
-                                        width: 30,
-                                      ),
-                                      Text(
-                                        'Search Title',
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                    ],
-                                  ),
-                                  Switch(
-                                    value: searchAuthor,
-                                    onChanged: (val) {
-                                      saveSettingsToSharedPrefs(
-                                          'searchAuthor', val);
-                                      setState(() {
-                                        searchAuthor = val;
-                                      });
-                                    },
-                                  )
-                                ],
-                              ),
+                                },
+                              )
+//                              Row(
+//                                mainAxisAlignment:
+//                                    MainAxisAlignment.spaceBetween,
+//                                children: <Widget>[
+//                                  Row(
+//                                    mainAxisAlignment: MainAxisAlignment.start,
+//                                    children: <Widget>[
+//                                      Icon(
+//                                        Icons.settings_ethernet,
+//                                        size: 20,
+//                                      ),
+//                                      SizedBox(
+//                                        width: 30,
+//                                      ),
+//                                      Text(
+//                                        'Search Title',
+//                                        style: TextStyle(fontSize: 20),
+//                                      ),
+//                                    ],
+//                                  ),
+//                                  Switch(
+//                                    value: searchTitle,
+//                                    onChanged: (val) {
+//                                      saveSettingsToSharedPrefs(
+//                                          'searchTitle', val);
+//                                      setState(() {
+//                                        searchTitle = val;
+//                                      });
+//                                    },
+//                                  )
+//                                ],
+//                              ),
+//                              Row(
+//                                mainAxisAlignment:
+//                                    MainAxisAlignment.spaceBetween,
+//                                children: <Widget>[
+//                                  Row(
+//                                    mainAxisAlignment: MainAxisAlignment.start,
+//                                    children: <Widget>[
+//                                      Icon(
+//                                        Icons.settings_ethernet,
+//                                        size: 20,
+//                                      ),
+//                                      SizedBox(
+//                                        width: 30,
+//                                      ),
+//                                      Text(
+//                                        'Search Title',
+//                                        style: TextStyle(fontSize: 20),
+//                                      ),
+//                                    ],
+//                                  ),
+//                                  Switch(
+//                                    value: searchAuthor,
+//                                    onChanged: (val) {
+//                                      saveSettingsToSharedPrefs(
+//                                          'searchAuthor', val);
+//                                      setState(() {
+//                                        searchAuthor = val;
+//                                      });
+//                                    },
+//                                  )
+//                                ],
+//                              ),
                             ],
                           ),
                         ),
+
                       ),
                       Container(
                         padding: EdgeInsets.only(left: 4),
@@ -242,7 +278,7 @@ class _SettingsState extends State<Settings> {
                                   Switch(
                                     value: darkMode,
                                     onChanged: (val) {
-                                      saveSettingsToSharedPrefs(
+                                      saveBoolToSharedPrefs(
                                           'darkMode', val);
                                       setState(() {
                                         darkMode = val;
