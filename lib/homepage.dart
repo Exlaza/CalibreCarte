@@ -267,6 +267,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           filter,
                           sortDirection: sortDirection,
                           sortOption: sortOption,
+                          update: update.shouldDoUpdate
                         );
                       }else{
                         return Center(child: Text('Please Connect to dropbox'),);

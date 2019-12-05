@@ -16,8 +16,10 @@ class BooksView extends StatefulWidget {
   final String filter;
   final String sortOption;
   final String sortDirection;
+  final bool update;
 
-  BooksView(this.layout, this.filter, {this.sortOption, this.sortDirection});
+  BooksView(this.layout, this.filter,
+      {this.sortOption, this.sortDirection, this.update});
 
   @override
   _BooksViewState createState() => _BooksViewState();
@@ -45,6 +47,14 @@ class _BooksViewState extends State<BooksView> {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 //    print("Coming here after sort");
+    if (oldWidget.update == true) {
+
+      getBooks().then((_) {
+        setState(() {
+          afterSorting = sortBooks();
+        });
+      });
+    }
     if (oldWidget.sortOption == widget.sortOption &&
         oldWidget.sortDirection == widget.sortDirection) {
       return;
@@ -96,43 +106,36 @@ class _BooksViewState extends State<BooksView> {
     }
 
 //    await sortBooks();
-
   }
 
   @override
   Widget build(BuildContext context) {
-    Update update = Provider.of(context);
     print("rebuilding books//////////////////////////// ");
-
-    if (update.shouldDoUpdate == true) {
-      getBooks().then((_) {
-        initState();
+//
+//    if (update.shouldDoUpdate == true) {
+//      getBooks().then((_) {
+////        initState();
 //        setState(() {
 //          afterSorting = sortBooks();
 //        });
-      });
-      print("FRONT PAGE UPDATED////////////////////////////////////////////");
-      update.updateFlagState(false);
-
-    }
+//      });
+//      print("FRONT PAGE UPDATED////////////////////////////////////////////");
+//      update.updateFlagState(false);
+//
+//    }
     return FutureBuilder(
         future: afterSorting,
         builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.waiting:
-              return Center(child: CircularProgressIndicator());
-            default:
-              if (snapshot.hasError)
-                return Text('Error: ${snapshot.error}');
-              else {
-                return widget.layout == "list"
-                      ? BooksListView(widget.filter, books)
-                      : (widget.layout == "grid"
-                      ? BooksGridView(widget.filter, books)
-                      : BooksCarouselView(widget.filter, books));
-              }
-          }
-        });
+       if(snapshot.connectionState==ConnectionState.done){
+         return widget.layout == "list"
+             ? BooksListView(widget.filter, books)
+             : (widget.layout == "grid"
+             ? BooksGridView(widget.filter, books)
+             : BooksCarouselView(widget.filter, books));
+       }else{
+         return CircularProgressIndicator();
+        }
+
+    });
   }
 }

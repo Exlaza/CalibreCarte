@@ -65,7 +65,6 @@ class _DropboxSignInState extends State<DropboxSignIn> {
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setInt(key, val);
   }
-
   selectingCalibreLibrary(key, val, update) {
 //    print("selecting library");
     storeStringInSharedPrefs('selected_calibre_lib_path', key);
@@ -190,35 +189,6 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                     Column(children: columnChildren)
                   ],
                 );
-//                return AlertDialog(
-//                  backgroundColor: Colors.grey.withOpacity(0.8),
-//                  shape: RoundedRectangleBorder(
-//                    borderRadius: BorderRadius.all(
-//                      Radius.circular(10),
-//                    ),
-//                  ),
-//                  contentPadding: EdgeInsets.all(10),
-//                  content: Container(
-//                    width: 300,
-//                    child: Column(
-//                      mainAxisSize: MainAxisSize.min,
-//                      children: <Widget>[
-//                        Container(
-////                                        decoration: BoxDecoration(
-////                                            border: Border.all(width: 2)),
-//                            child: Text(
-//                          'Select Library',
-//                          style: TextStyle(
-//                              fontSize: 35, fontWeight: FontWeight.bold),
-//                        )),
-//                        SizedBox(
-//                          height: 20,
-//                        ),
-//                        Column(children: columnChildren)
-//                      ],
-//                    ),
-//                  ),
-//                );
               });
         } else {
           // Her we have only one library so we make that the default
@@ -280,7 +250,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                               setState(() {
                                 myFuture = loadingToken();
                               });
-                              update.updateFlagState(true);
+//                              update.updateFlagState(true);
                             });
                           }));
                 } else {

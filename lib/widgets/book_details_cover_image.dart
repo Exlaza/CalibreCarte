@@ -32,6 +32,7 @@ class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
     }
 
     localImagePath = await ic.returnCachedImagePath(widget.bookId);
+
   }
 
   @override
