@@ -6,8 +6,8 @@ class Update with ChangeNotifier {
   String _searchFilter;
 
   Update(this._tokenExists,this._searchFilter){
-    print("search filter $_searchFilter");
-    print("token existance $_tokenExists");
+//    print("search filter $_searchFilter");
+//    print("token existance $_tokenExists");
   }
 
   void changeTokenState(bool tokenStateFlag) {
@@ -31,7 +31,7 @@ class Update with ChangeNotifier {
     return _shouldUpdate;
   }
   String get searchFilter{
-    print("returning $_searchFilter");
+//    print("returning $_searchFilter");
     return _searchFilter;
   }
 }

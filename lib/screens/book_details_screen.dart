@@ -49,7 +49,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
       };
       dataFormatsFileNameMap.add(tempMap);
     });
-    print('Maybe coming here');
+//    print('Maybe coming here');
 
     BookDownloader bd = BookDownloader();
     for (int i = 0; i < dataFormatsFileNameMap.length; i++) {
@@ -59,7 +59,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
         return true;
       }
     }
-    print('Coming here');
+//    print('Coming here');
     return false;
   }
 
@@ -76,7 +76,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
 
   Future<void> getBookDetails() async {
     bookDetails = await BooksProvider.getBookByID(widget.bookId, null);
-    print(widget.bookId);
+//    print(widget.bookId);
     bookComments =
         await CommentsProvider.getCommentByBookID(widget.bookId, null);
     List<BooksAuthorsLink> bookAuthorsLinks =

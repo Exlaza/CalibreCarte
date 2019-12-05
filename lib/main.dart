@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
   }
   @override
   Widget build(BuildContext context) {
-    print("REBUILDING APP");
+//    print("REBUILDING APP");
     return FutureBuilder(
       future: myFuture,
       builder: (context, snapshot){

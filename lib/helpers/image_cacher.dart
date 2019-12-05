@@ -31,8 +31,8 @@ class ImageCacher {
     return response;
   }
   downloadThumbnailImage(token, path) async {
-    print("I am in th donlaod thumbanial image method");
-    print(token);
+//    print("I am in th donlaod thumbanial image method");
+//    print(token);
     String url = "https://content.dropboxapi.com/2/files/get_thumbnail";
     Map<String, String> headers = {
       "Authorization": "Bearer $token",
@@ -47,12 +47,12 @@ class ImageCacher {
   }
 
   Future<void> downloadAndCacheImage(relativePath, bookID) async {
-    print("I am in the download image method");
+//    print("I am in the download image method");
     String token = await getTokenFromPreferences();
-    print(token);
+//    print(token);
     String basePath = await getSelectedLibPathFromSharedPrefs();
     String absPath = basePath + relativePath + '/cover.jpg';
-    print(absPath);
+//    print(absPath);
     Response response = await downloadCoverImage(token, absPath);
     //Get the bytes, get the temp directory and write a file in temp
     List<int> bytes = response.bodyBytes;

@@ -19,7 +19,7 @@ class MetadataCacher {
   }
 
   downloadMetadata(token, path) async {
-    print("I should also have come here after logging in");
+//    print("I should also have come here after logging in");
     String url = "https://content.dropboxapi.com/2/files/download";
     Map<String, String> headers = {
       "Authorization": "Bearer $token",
@@ -37,14 +37,14 @@ class MetadataCacher {
     String token = await getTokenFromPreferences();
     String path = await getSelectedLibPathFromSharedPrefs();
     String absPath = path + 'metadata.db';
-    print(absPath);
+//    print(absPath);
     Response response = await downloadMetadata(token, absPath);
     //Get the bytes, get the temp directory and write a file in temp
-    print(response.statusCode);
+//    print(response.statusCode);
     List<int> bytes = response.bodyBytes;
     String tempDir = await getDatabasesPath();
     String pathMetadata = join(tempDir + "/metadata.db");
-    print(pathMetadata);
+//    print(pathMetadata);
     await File(pathMetadata).writeAsBytes(bytes, flush: true);
   }
 

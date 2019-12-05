@@ -37,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> storeLayout(value) async{
     SharedPreferences sp= await SharedPreferences.getInstance();
     sp.setString('layout', value);
-    print("storing $value");
+//    print("storing $value");
   }
 
   void _settingModalBottomSheet(context) {
@@ -224,7 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     Update update=Provider.of(context);
-    print("rebuilding homepage");
+//    print("rebuilding homepage");
     return Container(
       child: Stack(
         children: <Widget>[
@@ -261,7 +261,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (update.tokenExists==true){
-                        print("I come here tokensss");
+//                        print("I come here tokensss");
                         return BooksView(
                           layout,
                           filter,

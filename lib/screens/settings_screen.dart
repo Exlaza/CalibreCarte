@@ -51,7 +51,7 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    print('Building asettings for no reason');
+//    print('Building asettings for no reason');
     Widget loadingWidget = Center(
       child: CircularProgressIndicator(),
     );
@@ -73,7 +73,7 @@ class _SettingsState extends State<Settings> {
             future: myFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                print('THe connection finished now');
+//                print('THe connection finished now');
                 return Container(
                   margin: EdgeInsets.fromLTRB(8, 8, 8, 0),
                   child: Column(
@@ -90,7 +90,7 @@ class _SettingsState extends State<Settings> {
                             borderRadius: BorderRadius.circular(30)),
                         child: InkWell(
                           onTap: () {
-                            print('Tap is not working');
+//                            print('Tap is not working');
                             Navigator.of(context)
                                 .push(MaterialPageRoute(builder: (context) {
                               return DropboxSignIn();
@@ -295,7 +295,7 @@ class _SettingsState extends State<Settings> {
                   ),
                 );
               } else {
-                print('The connection hasn\'t finsihed yet');
+//                print('The connection hasn\'t finsihed yet');
                 return CircularProgressIndicator();
               }
             },

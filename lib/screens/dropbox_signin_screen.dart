@@ -35,7 +35,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
   StreamSubscription _sub;
 
   _makePostRequest(token) async {
-    print(token);
+//    print(token);
     // set up POST request arguments
     String url = 'https://api.dropboxapi.com/2/files/search_v2';
     Map<String, String> headers = {
@@ -58,7 +58,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     _sub = getLinksStream().listen((String link) {
       //Although this is not needed now, but Google actually recommends against using a webview for,
       //So assuming in future we need to do it the url_launcher way then we would have to use this method
-      print(link);
+//      print(link);
       //So, just keeping it here.
       // Parse the link and warn the user, if it is not correct
     }, onError: (err) {
@@ -94,9 +94,9 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
   }
 
   _launchURL(String url) async {
-    print(await canLaunch(url));
+//    print(await canLaunch(url));
     if (await canLaunch(url)) {
-      print('url');
+//      print('url');
       await launch(url);
     } else {
       throw 'Could not launch $url';
@@ -104,7 +104,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
   }
 
   Future<void> storeStringInSharedPrefs(key, val) async {
-    print("Storing token");
+//    print("Storing token");
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setString(key, val);
   }
@@ -158,7 +158,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                 String token;
                 var tempUri = Uri.parse('http://test.com?${uri.fragment}');
                 tempUri.queryParameters.forEach((k, v) {
-                  print(k);
+//                  print(k);
                   if (k == "access_token") {
                     token = v;
                     update.changeTokenState(true);
@@ -186,7 +186,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                         String libName =
                             directories.elementAt(directories.length - 2);
                         pathNameMap.putIfAbsent(libPath, () => libName);
-                        print(pathNameMap);
+//                        print(pathNameMap);
                       }
                     });
                     storeIntInSharedPrefs(
@@ -201,11 +201,13 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                     if (pathNameMap.length > 1) {
                       // First set the no of libraries in shared prefs
                       // Show a pop up which displays the list of libraries
-                      print('I have come inside the popup dispaly htingy');
+//                      print('I have come inside the popup dispaly htingy');
                       List<Widget> columnChildren =
                           pathNameMap.keys.toList().map((element) {
                         return InkWell(
                             onTap: () {
+//                              print("first selected lib path ${element}");
+//                            print("first selected lib name ${pathNameMap[element]}");
                               selectingCalibreLibrary(
                                   element, pathNameMap[element]);
                             },
@@ -269,7 +271,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                 return NavigationDecision.prevent;
               }
 
-              print('allowing navigation to $request');
+//              print('allowing navigation to $request');
               return NavigationDecision.navigate;
             },
             onPageFinished: _handleLoad,

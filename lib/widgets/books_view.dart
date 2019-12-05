@@ -44,7 +44,7 @@ class _BooksViewState extends State<BooksView> {
   void didUpdateWidget(BooksView oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-    print("Coming here after sort");
+//    print("Coming here after sort");
     if (oldWidget.sortOption == widget.sortOption &&
         oldWidget.sortDirection == widget.sortDirection) {
       return;
@@ -53,7 +53,7 @@ class _BooksViewState extends State<BooksView> {
   }
 
   Future<void> sortBooks() async {
-    print("INside sorting");
+//    print("INside sorting");
     if (widget.sortOption == 'author') {
       books.sort((a, b) {
         return a.author_sort.compareTo(b.author_sort);
@@ -69,10 +69,10 @@ class _BooksViewState extends State<BooksView> {
     }
 
     if (widget.sortDirection == 'desc') {
-      print("descending of something in here");
+//      print("descending of something in here");
       books = books.reversed.toList();
     }
-    print("Getting over my sorting self");
+//    print("Getting over my sorting self");
   }
 
   //aggregates all the data to display
@@ -102,7 +102,7 @@ class _BooksViewState extends State<BooksView> {
   @override
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
-    print("rebuilding books ");
+    print("rebuilding books//////////////////////////// ");
 
     if (update.shouldDoUpdate == true) {
       getBooks().then((_) {

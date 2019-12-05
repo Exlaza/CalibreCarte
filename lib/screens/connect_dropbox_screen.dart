@@ -48,13 +48,13 @@ class _DropboxSignInState extends State<DropboxSignIn> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.remove('token');
   }
-
-  Future<void> printLibs() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    for (int i = 0; i < noOfCalibreLibs; i++) {
-      print(sp.getString('calibre_lib_name_$i'));
-    }
-  }
+//
+//  Future<void> printLibs() async {
+//    SharedPreferences sp = await SharedPreferences.getInstance();
+//    for (int i = 0; i < noOfCalibreLibs; i++) {
+//      print(sp.getString('calibre_lib_name_$i'));
+//    }
+//  }
 
   Future<void> storeStringInSharedPrefs(key, val) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -67,14 +67,14 @@ class _DropboxSignInState extends State<DropboxSignIn> {
   }
 
   selectingCalibreLibrary(key, val, update) {
-//    print("selecting library");
+//    print("selecting library $key");
     storeStringInSharedPrefs('selected_calibre_lib_path', key);
     storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_) {
       Navigator.of(context).pop();
     });
     MetadataCacher().downloadAndCacheMetadata().then((_) {print("changed directory");
     update.updateFlagState(true);
-    print("came here after changing dir?");
+//    print("came here after changing dir?");
 
     });
 
@@ -84,7 +84,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print('Hitting it');
+//    print('Hitting it');
     myFuture = loadingToken();
   }
 
@@ -128,32 +128,39 @@ class _DropboxSignInState extends State<DropboxSignIn> {
       Map<String, dynamic> responseJson = jsonDecode(response.body);
       if (responseJson['matches'].length != 0) {
         responseJson['matches'].forEach((element) {
-          if (element["metadata"]["metadata"]["name"] == "metadata.db") {
-            String lowerCasePath =
-                element["metadata"]["metadata"]["path_display"];
-            List<String> directories =
-                element["metadata"]["metadata"]["path_display"].split('/');
-            String libName = directories.elementAt(directories.length - 2);
-            pathNameMap.putIfAbsent(lowerCasePath, () => libName);
+          if (element["metadata"]["metadata"]["name"] ==
+              "metadata.db") {
+            String libPath =
+            element["metadata"]["metadata"]["path_display"];
+            libPath = libPath.replaceAll('metadata.db', "");
+            List<String> directories = element["metadata"]
+            ["metadata"]["path_display"]
+                .split('/');
+            String libName =
+            directories.elementAt(directories.length - 2);
+            pathNameMap.putIfAbsent(libPath, () => libName);
+//                        print(pathNameMap);
           }
         });
-        sp.setInt('noOfCalibreLibs', pathNameMap.length);
+        storeIntInSharedPrefs(
+            'noOfCalibreLibs', pathNameMap.length);
         pathNameMap.keys.toList().asMap().forEach((index, path) {
           String keyName = 'calibre_lib_path_$index';
-          print("keyname: $keyName");
           String libName = 'calibre_lib_name_$index';
-          sp.setString(keyName, path);
-          sp.setString(libName, pathNameMap[path]);
+          storeStringInSharedPrefs(keyName, path);
+          storeStringInSharedPrefs(libName, pathNameMap[path]);
         });
 //                    TODO: Change this to > 1
         if (pathNameMap.length > 1) {
           // First set the no of libraries in shared prefs
           // Show a pop up which displays the list of libraries
-          print('I have come inside the popup dispaly thingy');
+//          print('I have come inside the popup dispaly thingy');
           List<Widget> columnChildren =
               pathNameMap.keys.toList().map((element) {
             return ListTile(
                 onTap: () {
+//                  print("first selected lib path ${element}");
+//                  print("first selected lib name ${pathNameMap[element]}");
                   selectingCalibreLibrary(element, pathNameMap[element],update);
 
                   setState(() {
@@ -173,8 +180,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Container(
-//                                        decoration: BoxDecoration(
-//                                           border: Border.all(width: 2)),
+
                         child: Text(
                           'Select Library',
                           style: TextStyle(
@@ -186,35 +192,6 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                     Column(children: columnChildren)
                   ],
                 );
-//                return AlertDialog(
-//                  backgroundColor: Colors.grey.withOpacity(0.8),
-//                  shape: RoundedRectangleBorder(
-//                    borderRadius: BorderRadius.all(
-//                      Radius.circular(10),
-//                    ),
-//                  ),
-//                  contentPadding: EdgeInsets.all(10),
-//                  content: Container(
-//                    width: 300,
-//                    child: Column(
-//                      mainAxisSize: MainAxisSize.min,
-//                      children: <Widget>[
-//                        Container(
-////                                        decoration: BoxDecoration(
-////                                            border: Border.all(width: 2)),
-//                            child: Text(
-//                          'Select Library',
-//                          style: TextStyle(
-//                              fontSize: 35, fontWeight: FontWeight.bold),
-//                        )),
-//                        SizedBox(
-//                          height: 20,
-//                        ),
-//                        Column(children: columnChildren)
-//                      ],
-//                    ),
-//                  ),
-//                );
               });
         } else {
           // Her we have only one library so we make that the default
@@ -306,33 +283,6 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                                       child: Text("Change Directory"),
                                       onPressed: () {
                                         refreshLibrary(context, update);
-
-
-//                                        Scaffold.of(context)
-//                                            .showSnackBar(SnackBar(
-//                                          content: Text("refreshing"),
-//                                        ));
-//                                        refreshLibrary(context)
-//                                            .then((columnChildren) {
-//                                          Scaffold.of(context)
-//                                              .removeCurrentSnackBar();
-//                                          showModalBottomSheet(
-//                                              shape: RoundedRectangleBorder(
-//                                                  borderRadius:
-//                                                      BorderRadius.circular(
-//                                                          5.0)),
-//                                              backgroundColor:
-//                                                  Colors.grey.withOpacity(0.8),
-//                                              context: context,
-//                                              builder: (BuildContext bc) {
-//                                                return Container(
-//                                                  width: 300,
-//                                                  child: Wrap(
-//                                                    children: columnChildren,
-//                                                  ),
-//                                                );
-//                                              });
-//                                        });
                                       },
                                     )
                                   ],
@@ -345,14 +295,14 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                               content: Text("Refreshing..."),
                               backgroundColor: Colors.grey.withOpacity(0.7),
                             ));
-                            print('Worked');
+//                            print('Worked');
                             MetadataCacher()
                                 .downloadAndCacheMetadata()
                                 .then((_) {
                               MetadataCacher()
                                   .checkIfCachedFileExists()
                                   .then((exists) {
-                                print(exists);
+//                                print(exists);
                               });
                             });
                           },

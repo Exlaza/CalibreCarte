@@ -19,13 +19,13 @@ class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
   String localImagePath;
 
   Future<void> getBookCoverImage() async {
-    print('Does it even come here');
+//    print('Does it even come here');
     ImageCacher ic = ImageCacher();
 
     bool exists = await ic.checkIfCachedFileExists(widget.bookId);
 
-    print('After exists');
-    print(exists);
+//    print('After exists');
+//    print(exists);
 
     if (!exists) {
       await ic.downloadAndCacheImage(widget.relativePath, widget.bookId);

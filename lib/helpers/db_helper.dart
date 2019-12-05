@@ -34,7 +34,7 @@ class DatabaseHelper {
     var exists = await databaseExists(path);
 
     if (!exists) {
-      print("USING METADATA FROM ASSETS");
+//      print("USING METADATA FROM ASSETS");
       //Making sure  the parent directory exists
       try {
         await Directory(dirname(path)).create(recursive: true);
@@ -45,10 +45,10 @@ class DatabaseHelper {
       //Copy it to some location that Android like to keep it database files,
       // that only this application can access
       MetadataCacher mc = MetadataCacher();
-      print('Metdata cacher should now run"');
+//      print('Metdata cacher should now run"');
       await mc.downloadAndCacheMetadata();
     } else {
-      print("NOT USING ASSETS METADATA");
+//      print("NOT USING ASSETS METADATA");
     }
 
     return await openDatabase("metadata.db");

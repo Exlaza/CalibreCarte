@@ -17,7 +17,7 @@ class BooksListView extends StatelessWidget {
     Update update = Provider.of(context);
 
     void viewBookDetails(int bookId) {
-      print(bookId);
+//      print(bookId);
       Navigator.of(context).push(MaterialPageRoute(builder: (_) {
         return BookDetailsScreen(
           bookId: bookId,
@@ -47,7 +47,7 @@ class BooksListView extends StatelessWidget {
               )),
           leading: ConstrainedBox(
               constraints: BoxConstraints(maxHeight: 100, maxWidth: 50),
-              child: BookDetailsCoverImage(books[index].id, books[index].path)),
+              child: BookDetailsCoverImage(books[index].id, books[index].path)??Text("no image")),
           subtitle: Text(
             books[index].author_sort,
             style: TextStyle(fontWeight: FontWeight.bold),

@@ -13,7 +13,7 @@ class BooksCarouselView extends StatelessWidget {
   Widget build(BuildContext context) {
     Update update=Provider.of(context);
     void viewBookDetails(int bookId) {
-      print(bookId);
+//      print(bookId);
       Navigator.of(context).push(MaterialPageRoute(builder: (_) {
         return BookDetailsScreen(
           bookId: bookId,
