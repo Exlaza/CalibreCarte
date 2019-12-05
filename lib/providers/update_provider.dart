@@ -15,9 +15,16 @@ class Update with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateFlagState(bool updateFlag) {
-    _shouldUpdate = updateFlag;
+//  void updateFlagState(bool updateFlag) {
+//    _shouldUpdate = updateFlag;
+//    notifyListeners();
+//  }
+  void updateFlagTrue(){
+    _shouldUpdate=true;
     notifyListeners();
+  }
+  void updateFlagFalse(){
+    _shouldUpdate=false;
   }
   void changeSearchFilter(String filter){
     _searchFilter=filter;

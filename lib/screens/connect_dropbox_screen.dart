@@ -73,7 +73,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
       Navigator.of(context).pop();
     });
     MetadataCacher().downloadAndCacheMetadata().then((_) {print("changed directory");
-    update.updateFlagState(true);
+    update.updateFlagTrue();
     print("came here after changing dir?");
 
     });
@@ -281,7 +281,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                               setState(() {
                                 myFuture = loadingToken();
                               });
-                              update.updateFlagState(true);
+                              update.updateFlagTrue();
                             });
                           }));
                 } else {
@@ -345,7 +345,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                               ),
                         RaisedButton(
                           onPressed: () {
-                            update.updateFlagState(true);
+                            update.updateFlagTrue();
                             Scaffold.of(context).showSnackBar(SnackBar(
                               content: Text("Refreshing..."),
                               backgroundColor: Colors.grey.withOpacity(0.7),
