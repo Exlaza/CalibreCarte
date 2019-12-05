@@ -73,7 +73,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
       Navigator.of(context).pop();
     });
     MetadataCacher().downloadAndCacheMetadata().then((_) {print("changed directory");
-    update.updateFlagTrue();
+    update.updateFlagState(true);
     print("came here after changing dir?");
 
     });
@@ -150,7 +150,6 @@ class _DropboxSignInState extends State<DropboxSignIn> {
           storeStringInSharedPrefs(keyName, path);
           storeStringInSharedPrefs(libName, pathNameMap[path]);
         });
-//                    TODO: Change this to > 1
         if (pathNameMap.length > 1) {
           // First set the no of libraries in shared prefs
           // Show a pop up which displays the list of libraries
@@ -281,7 +280,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                               setState(() {
                                 myFuture = loadingToken();
                               });
-                              update.updateFlagTrue();
+                              update.updateFlagState(true);
                             });
                           }));
                 } else {
@@ -345,7 +344,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                               ),
                         RaisedButton(
                           onPressed: () {
-                            update.updateFlagTrue();
+                            update.updateFlagState(true);
                             Scaffold.of(context).showSnackBar(SnackBar(
                               content: Text("Refreshing..."),
                               backgroundColor: Colors.grey.withOpacity(0.7),

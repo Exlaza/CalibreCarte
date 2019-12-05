@@ -105,15 +105,14 @@ class _BooksViewState extends State<BooksView> {
     print("rebuilding books//////////////////////////// ");
 
     if (update.shouldDoUpdate == true) {
-//      getBooks().then((_) {
-//        initState();
-////        setState(() {
-////          afterSorting = sortBooks();
-////        });
-//      });
+      getBooks().then((_) {
+        initState();
+//        setState(() {
+//          afterSorting = sortBooks();
+//        });
+      });
       print("FRONT PAGE UPDATED////////////////////////////////////////////");
-      update.updateFlagTrue();
-      initState();
+      update.updateFlagState(false);
 
     }
     return FutureBuilder(
