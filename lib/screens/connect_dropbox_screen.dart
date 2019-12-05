@@ -48,7 +48,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.remove('token');
   }
-//
+
 //  Future<void> printLibs() async {
 //    SharedPreferences sp = await SharedPreferences.getInstance();
 //    for (int i = 0; i < noOfCalibreLibs; i++) {
@@ -67,14 +67,14 @@ class _DropboxSignInState extends State<DropboxSignIn> {
   }
 
   selectingCalibreLibrary(key, val, update) {
-//    print("selecting library $key");
+//    print("selecting library");
     storeStringInSharedPrefs('selected_calibre_lib_path', key);
     storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_) {
       Navigator.of(context).pop();
     });
     MetadataCacher().downloadAndCacheMetadata().then((_) {print("changed directory");
     update.updateFlagState(true);
-//    print("came here after changing dir?");
+    print("came here after changing dir?");
 
     });
 
@@ -159,8 +159,6 @@ class _DropboxSignInState extends State<DropboxSignIn> {
               pathNameMap.keys.toList().map((element) {
             return ListTile(
                 onTap: () {
-//                  print("first selected lib path ${element}");
-//                  print("first selected lib name ${pathNameMap[element]}");
                   selectingCalibreLibrary(element, pathNameMap[element],update);
 
                   setState(() {
@@ -180,7 +178,8 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Container(
-
+//                                        decoration: BoxDecoration(
+//                                           border: Border.all(width: 2)),
                         child: Text(
                           'Select Library',
                           style: TextStyle(
@@ -192,6 +191,35 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                     Column(children: columnChildren)
                   ],
                 );
+//                return AlertDialog(
+//                  backgroundColor: Colors.grey.withOpacity(0.8),
+//                  shape: RoundedRectangleBorder(
+//                    borderRadius: BorderRadius.all(
+//                      Radius.circular(10),
+//                    ),
+//                  ),
+//                  contentPadding: EdgeInsets.all(10),
+//                  content: Container(
+//                    width: 300,
+//                    child: Column(
+//                      mainAxisSize: MainAxisSize.min,
+//                      children: <Widget>[
+//                        Container(
+////                                        decoration: BoxDecoration(
+////                                            border: Border.all(width: 2)),
+//                            child: Text(
+//                          'Select Library',
+//                          style: TextStyle(
+//                              fontSize: 35, fontWeight: FontWeight.bold),
+//                        )),
+//                        SizedBox(
+//                          height: 20,
+//                        ),
+//                        Column(children: columnChildren)
+//                      ],
+//                    ),
+//                  ),
+//                );
               });
         } else {
           // Her we have only one library so we make that the default
@@ -283,6 +311,33 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                                       child: Text("Change Directory"),
                                       onPressed: () {
                                         refreshLibrary(context, update);
+
+
+//                                        Scaffold.of(context)
+//                                            .showSnackBar(SnackBar(
+//                                          content: Text("refreshing"),
+//                                        ));
+//                                        refreshLibrary(context)
+//                                            .then((columnChildren) {
+//                                          Scaffold.of(context)
+//                                              .removeCurrentSnackBar();
+//                                          showModalBottomSheet(
+//                                              shape: RoundedRectangleBorder(
+//                                                  borderRadius:
+//                                                      BorderRadius.circular(
+//                                                          5.0)),
+//                                              backgroundColor:
+//                                                  Colors.grey.withOpacity(0.8),
+//                                              context: context,
+//                                              builder: (BuildContext bc) {
+//                                                return Container(
+//                                                  width: 300,
+//                                                  child: Wrap(
+//                                                    children: columnChildren,
+//                                                  ),
+//                                                );
+//                                              });
+//                                        });
                                       },
                                     )
                                   ],
