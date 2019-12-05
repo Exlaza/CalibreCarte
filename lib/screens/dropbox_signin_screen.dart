@@ -114,12 +114,13 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     sp.setInt(key, val);
   }
 
-  selectingCalibreLibrary(key, val) {
+  selectingCalibreLibrary(key, val,update) {
     storeStringInSharedPrefs('selected_calibre_lib_path', key);
     storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_) {
       Navigator.of(context).pop();
     });
     MetadataCacher().downloadAndCacheMetadata().then((_) {
+      update.changeTokenState(true);
       Navigator.of(context).pop();
     });
   }
@@ -161,7 +162,6 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
 //                  print(k);
                   if (k == "access_token") {
                     token = v;
-                    update.changeTokenState(true);
                   }
                 });
                 // Step 2: Storing token in shared prefs. Remember this is async so, the next statement would be executed immediately
@@ -209,7 +209,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
 //                              print("first selected lib path ${element}");
 //                            print("first selected lib name ${pathNameMap[element]}");
                               selectingCalibreLibrary(
-                                  element, pathNameMap[element]);
+                                  element, pathNameMap[element],update);
                             },
                             child: Text(
                               pathNameMap[element],
