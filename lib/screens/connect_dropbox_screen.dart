@@ -73,7 +73,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
     });
     MetadataCacher().downloadAndCacheMetadata().then((_) {print("changed directory");
     update.updateFlagState(true);
-    print("came here after changing dir?");
+//    print("came here after changing dir?");
 
     });
 

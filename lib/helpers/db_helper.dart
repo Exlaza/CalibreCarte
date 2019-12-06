@@ -28,21 +28,24 @@ class DatabaseHelper {
   }
 
   static nullDb() async{
-    print(_db);
     _db = null;
-    print(_db);
+  }
+
+  static Future<String> getDatabasePath() async{
+    String databasePath = await getDatabasesPath();
+    String path = join(databasePath + "/metadata.db");
+    return path;
   }
 
   // Here we are checking that there is not already a copy of the
   initDb() async {
-    print("I am inside initDb");
-    String databasePath = await getDatabasesPath();
-    String path = join(databasePath + "/metadata.db");
+//    print("I am inside initDb");
+    String path = await getDatabasePath();
     var exists = await databaseExists(path);
 
     if (!exists) {
-      print("Database at path doesn't exist");
-      //Making sure  the parent directory exists
+//      print("Database at path doesn't exist");
+//      Making sure  the parent directory exists
       try {
         await Directory(dirname(path)).create(recursive: true);
       } catch (_) {}
@@ -55,16 +58,20 @@ class DatabaseHelper {
 //      print('Metdata cacher should now run"');
       await mc.downloadAndCacheMetadata();
     } else {
-      print("Database at path exists");
+//      print("Database at path exists");
     }
-    print("Open gets called asfter this stateemnt");
+//    print("Open gets called asfter this stateemnt");
     return await openDatabase("metadata.db");
   }
 
-  deleteDb() async{
-    String databasePath = await getDatabasesPath();
-    String path = join(databasePath + "/metadata.db");
+  static deleteDb() async{
+    String path = await getDatabasePath();
     await deleteDatabase(path);
+  }
+
+  static invalidateCache() async{
+    await _db.close();
+    await DatabaseHelper.nullDb();
   }
 
 }

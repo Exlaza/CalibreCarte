@@ -1,3 +1,4 @@
+import 'package:calibre_carte/helpers/cache_invalidator.dart';
 import 'package:calibre_carte/models/books.dart';
 import 'package:calibre_carte/models/data.dart';
 import 'package:sqflite/sqflite.dart';
@@ -26,13 +27,16 @@ class BooksProvider {
     return null;
   }
 
-  static Future<List<Books>> getAllBooks() async {
-    print("Inside get all books");
+  static Future<List<Books>> getAllBooks(bool refresh) async {
     Database db = await DatabaseHelper.instance.db;
-    db.close();
-    db = null;
-    await DatabaseHelper.nullDb();
-    db = await DatabaseHelper.instance.db;
+
+    if (refresh) {
+      print('This is a new cache invalidation update');
+      db = null;
+      await CacheInvalidator.invalidateDatabaseCache();
+      db = await DatabaseHelper.instance.db;
+    }
+
     List<Map> maps = await db.query(tableName);
     return maps.map((m) {
       return Books.fromMapObject(m);

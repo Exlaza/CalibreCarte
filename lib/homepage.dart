@@ -51,8 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
     myFuture = getLayoutFromPreferences();
   }
 
-
-
   Future<void> getLayoutFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     layout = sp.getString('layout') ?? "list";
@@ -248,6 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
+    String searchFilter = update.searchFilter;
 //    print("rebuilding homepage");
     return Container(
       child: Stack(
@@ -270,7 +269,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     IconButton(
                       icon: Icon(Icons.search),
                       onPressed: () {
-                        _searchPressed(update.searchFilter);
+                        _searchPressed(searchFilter);
                       },
                     ),
                     IconButton(
@@ -291,11 +290,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (update.tokenExists == true) {
-//                        print("I come here tokensss");
-                        return BooksView(layout, filter,
-                            sortDirection: sortDirection,
-                            sortOption: sortOption,
-                            update: update.shouldDoUpdate);
+                        return BooksView(
+                          layout,
+                          filter,
+                          sortDirection: sortDirection,
+                          sortOption: sortOption,
+                          update: update.shouldDoUpdate,
+                        );
                       } else {
                         return Center(
                           child: Text('Please Connect to dropbox'),

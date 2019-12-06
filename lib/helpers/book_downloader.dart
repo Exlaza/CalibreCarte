@@ -35,9 +35,9 @@ class BookDownloader{
   Future<void> downloadAndStoreFile(relativePath, bookID, fileName) async {
     String token = await getTokenFromPreferences();
     String basePath = await getSelectedLibPathFromSharedPrefs();
-    print(basePath);
-    print(relativePath);
-    print(fileName);
+//    print(basePath);
+//    print(relativePath);
+//    print(fileName);
     String absPath = basePath + relativePath + '/' + fileName;
     Response response = await downloadFile(token, absPath);
     //Get the bytes, get the temp directory and write a file in temp
