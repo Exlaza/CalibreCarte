@@ -13,7 +13,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String layout ;
   TextEditingController controller = new TextEditingController();
-  String filter;
+  String filter = "";
   String sortOption = "title";
   String sortDirection = "asc";
   String token;
@@ -23,9 +23,11 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     super.initState();
     controller.addListener(() {
-      setState(() {
-        filter = controller.text;
-      });
+      if (filter != controller.text) {
+        setState(() {
+          filter = controller.text;
+        });
+      }
     });
     myFuture = getLayoutFromPreferences();
   }
