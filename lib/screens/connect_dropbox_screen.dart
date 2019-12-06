@@ -63,9 +63,37 @@ class _DropboxSignInState extends State<DropboxSignIn> {
     storeStringInSharedPrefs('selected_calibre_lib_path', key);
     storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_) {
       Navigator.of(context).pop();
+      showDialog<void>(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return WillPopScope(
+                onWillPop: () async => false,
+                child: SimpleDialog(
+                    key: UniqueKey(),
+                    backgroundColor: Colors.black54,
+                    children: <Widget>[
+                      Center(
+                        child: Column(children: [
+                          CircularProgressIndicator(),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "Updating library",
+                            style: TextStyle(color: Colors.blueAccent),
+                          )
+                        ]),
+                      )
+                    ]));
+          });
     });
+
+
+
     MetadataCacher().downloadAndCacheMetadata().then((_) {
       update.updateFlagState(true);
+      Navigator.of(context).pop();
     });
   }
 

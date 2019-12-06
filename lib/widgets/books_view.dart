@@ -16,7 +16,7 @@ class BooksView extends StatefulWidget {
   final String filter;
   final String sortOption;
   final String sortDirection;
-  final bool update;
+  final Update update;
 
   BooksView(this.layout, this.filter,
       {this.sortOption, this.sortDirection, this.update});
@@ -47,13 +47,16 @@ class _BooksViewState extends State<BooksView> {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 //    print("Coming here after sort");
-    if (widget.update == true) {
+    if (widget.update.shouldDoUpdate == true) {
 
       getBooks().then((_) {
         setState(() {
           afterSorting = sortBooks();
         });
       });
+
+      widget.update.shouldDoUpdateFalse();
+
     }
     if (oldWidget.sortOption == widget.sortOption &&
         oldWidget.sortDirection == widget.sortDirection) {
@@ -89,7 +92,7 @@ class _BooksViewState extends State<BooksView> {
   Future<void> getBooks() async {
 //    print("getting books");
     String authorText;
-    books = await BooksProvider.getAllBooks(widget.update);
+    books = await BooksProvider.getAllBooks(widget.update.shouldDoUpdate);
     for (int i = 0; i < books.length; i++) {
       List<BooksAuthorsLink> bookAuthorsLinks =
       await BooksAuthorsLinksProvider.getAuthorsByBookID(books[i].id);

@@ -24,6 +24,10 @@ class Update with ChangeNotifier {
     notifyListeners();
   }
 
+  void shouldDoUpdateFalse(){
+    _shouldUpdate = false;
+  }
+
   bool get tokenExists {
     return _tokenExists;
   }

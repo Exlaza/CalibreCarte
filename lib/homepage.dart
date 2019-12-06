@@ -295,7 +295,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           filter,
                           sortDirection: sortDirection,
                           sortOption: sortOption,
-                          update: update.shouldDoUpdate,
+                          update: update,
                         );
                       } else {
                         return Center(
@@ -303,7 +303,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         );
                       }
                     } else {
-                      return CircularProgressIndicator();
+                      return Center(child: CircularProgressIndicator());
                     }
                   })),
         ],
