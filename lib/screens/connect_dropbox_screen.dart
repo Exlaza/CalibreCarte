@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:calibre_carte/helpers/cache_invalidator.dart';
 import 'package:calibre_carte/helpers/metadata_cacher.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/dropbox_signin_screen.dart';
@@ -380,9 +381,12 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                         RaisedButton(
                           onPressed: () {
                             deleteToken();
+                            CacheInvalidator.invalidateImagesCache();
+                            CacheInvalidator.invalidateDatabaseCache();
                             setState(() {
                               myFuture = loadingToken();
                               update.changeTokenState(false);
+
                             });
                           },
                           child: Text("Logout"),
