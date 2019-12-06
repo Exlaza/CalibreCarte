@@ -27,14 +27,21 @@ class DatabaseHelper {
     return _db;
   }
 
+  static nullDb() async{
+    print(_db);
+    _db = null;
+    print(_db);
+  }
+
   // Here we are checking that there is not already a copy of the
   initDb() async {
+    print("I am inside initDb");
     String databasePath = await getDatabasesPath();
     String path = join(databasePath + "/metadata.db");
     var exists = await databaseExists(path);
 
     if (!exists) {
-//      print("USING METADATA FROM ASSETS");
+      print("Database at path doesn't exist");
       //Making sure  the parent directory exists
       try {
         await Directory(dirname(path)).create(recursive: true);
@@ -48,10 +55,17 @@ class DatabaseHelper {
 //      print('Metdata cacher should now run"');
       await mc.downloadAndCacheMetadata();
     } else {
-//      print("NOT USING ASSETS METADATA");
+      print("Database at path exists");
     }
-
+    print("Open gets called asfter this stateemnt");
     return await openDatabase("metadata.db");
   }
+
+  deleteDb() async{
+    String databasePath = await getDatabasesPath();
+    String path = join(databasePath + "/metadata.db");
+    await deleteDatabase(path);
+  }
+
 }
 

@@ -15,7 +15,7 @@ class BooksGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("rebuilding grid");
+//    print("rebuilding grid");
 
     Update update = Provider.of(context);
     return update.searchFilter == 'title' ?CustomScrollView(

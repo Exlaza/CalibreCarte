@@ -154,7 +154,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
           // Show a pop up which displays the list of libraries
 //          print('I have come inside the popup dispaly thingy');
           List<Widget> columnChildren =
-              pathNameMap.keys.toList().map((element) {
+          pathNameMap.keys.toList().map((element) {
             return ListTile(
                 onTap: () {
                   selectingCalibreLibrary(element, pathNameMap[element],update);
@@ -202,7 +202,7 @@ class _DropboxSignInState extends State<DropboxSignIn> {
           ).then((_) {
 //            Navigator.of(context).pop();
 //          showModalBottomSheet(context: context, builder: (_){return Text("works");});
-          Scaffold.of(context).showSnackBar(SnackBar(content: Text("No other Calibre libraries found."),));
+            Scaffold.of(context).showSnackBar(SnackBar(content: Text("No other Calibre libraries found."),));
           });
         }
       } else {
@@ -261,25 +261,25 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                         selected_calibre_lib_dir == null
                             ? Text("no directory selected")
                             : Card(
-                                color: Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      "Selected Calibre Library:",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          1.5,
-                                    ),
-                                    Text(selected_calibre_lib_dir),
-                                    RaisedButton(
-                                      child: Text("Change Directory"),
-                                      onPressed: () {
-                                        refreshLibrary(context, update);
+                          color: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                "Selected Calibre Library:",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width /
+                                    1.5,
+                              ),
+                              Text(selected_calibre_lib_dir),
+                              RaisedButton(
+                                child: Text("Change Directory"),
+                                onPressed: () {
+                                  refreshLibrary(context, update);
 
 
 //                                        Scaffold.of(context)
@@ -307,11 +307,11 @@ class _DropboxSignInState extends State<DropboxSignIn> {
 //                                                );
 //                                              });
 //                                        });
-                                      },
-                                    )
-                                  ],
-                                ),
-                              ),
+                                },
+                              )
+                            ],
+                          ),
+                        ),
                         RaisedButton(
                           onPressed: () {
                             update.updateFlagState(true);

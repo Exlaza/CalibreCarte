@@ -9,7 +9,7 @@ class CalibreGridTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void viewBookDetails(int bookId) {
-      print(bookId);
+//      print(bookId);
       Navigator.of(context).push(MaterialPageRoute(builder: (_) {
         return BookDetailsScreen(
           bookId: bookId,

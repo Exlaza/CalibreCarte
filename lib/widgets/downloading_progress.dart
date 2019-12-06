@@ -31,18 +31,18 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
       "Authorization": "Bearer $token",
       "Dropbox-API-Arg": jsonEncode({"path": absPath}),
     };
-    print('Coming till here');
+//    print('Coming till here');
     Dio d = Dio();
     try {
       await d.download(url, savePath, options: Options(headers: headers),
           onReceiveProgress: (rec, total) {
-            print("Rec: $rec, Total: $total");
+//            print("Rec: $rec, Total: $total");
             setState(() {
               progress = ((rec / total) * 100).toStringAsFixed(0) + "%";
             });
           });
     } catch (e) {
-      print(e);
+//      print(e);
     }
   }
 
