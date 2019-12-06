@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'widgets/books_view.dart';
 
@@ -11,33 +14,52 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String layout ;
+  String layout;
+
   TextEditingController controller = new TextEditingController();
   String filter = "";
   String sortOption = "title";
   String sortDirection = "asc";
   String token;
   Future myFuture;
+  final _textUpdates = StreamController<String>();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller.addListener(() {
-      if (filter != controller.text) {
+//    TODO: Listener requires that we dispose it off when the widget terrminates
+    controller.addListener(() => _textUpdates.add(controller.text));
+
+    Observable(_textUpdates.stream)
+        .debounce((_) => TimerStream(true, const Duration(milliseconds: 500)))
+        .forEach((s) {
+      if (filter != s) {
         setState(() {
-          filter = controller.text;
+          filter = s;
         });
       }
     });
+//
+//    controller.addListener(() {
+//      if (filter != controller.text) {
+//        setState(() {
+//          filter = controller.text;
+//        });
+//      }
+//    });
     myFuture = getLayoutFromPreferences();
   }
 
+
+
   Future<void> getLayoutFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    layout=sp.getString('layout')?? "list";
+    layout = sp.getString('layout') ?? "list";
   }
-  Future<void> storeLayout(value) async{
-    SharedPreferences sp= await SharedPreferences.getInstance();
+
+  Future<void> storeLayout(value) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setString('layout', value);
 //    print("storing $value");
   }
@@ -80,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   showSettings(BuildContext context) {
     Navigator.of(context).pop();
-    Navigator.pushNamed(context, "/settings").then((_){
+    Navigator.pushNamed(context, "/settings").then((_) {
 //      setState(() {
 //        myFuture = getTokenFromPreferences();
 //      });
@@ -225,7 +247,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Update update=Provider.of(context);
+    Update update = Provider.of(context);
 //    print("rebuilding homepage");
     return Container(
       child: Stack(
@@ -257,27 +279,28 @@ class _MyHomePageState extends State<MyHomePage> {
                         _settingModalBottomSheet(context);
                       },
                     ),
-                    IconButton(icon: Icon(Icons.refresh),onPressed: (){
-                     update.updateFlagState(true);
-                    },)
+                    IconButton(
+                      icon: Icon(Icons.refresh),
+                      onPressed: () {
+                        update.updateFlagState(true);
+                      },
+                    )
                   ]),
               body: FutureBuilder(
                   future: myFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
-                      if (update.tokenExists==true){
+                      if (update.tokenExists == true) {
 //                        print("I come here tokensss");
-                        return BooksView(
-                          layout,
-                          filter,
-                          sortDirection: sortDirection,
-                          sortOption: sortOption,
-                          update: update.shouldDoUpdate
+                        return BooksView(layout, filter,
+                            sortDirection: sortDirection,
+                            sortOption: sortOption,
+                            update: update.shouldDoUpdate);
+                      } else {
+                        return Center(
+                          child: Text('Please Connect to dropbox'),
                         );
-                      }else{
-                        return Center(child: Text('Please Connect to dropbox'),);
                       }
-
                     } else {
                       return CircularProgressIndicator();
                     }
