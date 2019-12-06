@@ -1,6 +1,5 @@
 import 'package:calibre_carte/helpers/cache_invalidator.dart';
 import 'package:calibre_carte/models/books.dart';
-import 'package:calibre_carte/models/data.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'db_helper.dart';
@@ -31,7 +30,6 @@ class BooksProvider {
     Database db = await DatabaseHelper.instance.db;
 
     if (refresh) {
-      print('This is a new cache invalidation update');
       db = null;
       await CacheInvalidator.invalidateDatabaseCache();
       db = await DatabaseHelper.instance.db;

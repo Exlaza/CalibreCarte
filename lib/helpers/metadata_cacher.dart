@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:calibre_carte/helpers/cache_invalidator.dart';
-import 'package:calibre_carte/models/data.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart';
@@ -42,11 +41,8 @@ class MetadataCacher {
     Response response = await downloadMetadata(token, absPath);
     //Get the bytes, get the temp directory and write a file in temp
     if (response.statusCode == 200){
-      print("Metadata file Downloaded Correctly");
       await DatabaseHelper.deleteDb();
-      print("Old Database Deleted successfully");
       await CacheInvalidator.invalidateImagesCache();
-      print("Cache of images cleared successfully");
     }
     List<int> bytes = response.bodyBytes;
     String tempDir = await getDatabasesPath();

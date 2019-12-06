@@ -50,10 +50,6 @@ class DatabaseHelper {
         await Directory(dirname(path)).create(recursive: true);
       } catch (_) {}
 
-      //Copy the metadata file in assets so we can proceed with the
-      // rest of the application development
-      //Copy it to some location that Android like to keep it database files,
-      // that only this application can access
       MetadataCacher mc = MetadataCacher();
 //      print('Metdata cacher should now run"');
       await mc.downloadAndCacheMetadata();
