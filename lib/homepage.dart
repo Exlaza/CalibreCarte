@@ -254,7 +254,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         _settingModalBottomSheet(context);
                       },
-                    )
+                    ),
+                    IconButton(icon: Icon(Icons.refresh),onPressed: (){
+                     update.updateFlagState(true);
+                    },)
                   ]),
               body: FutureBuilder(
                   future: myFuture,

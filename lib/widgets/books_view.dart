@@ -63,7 +63,7 @@ class _BooksViewState extends State<BooksView> {
   }
 
   Future<void> sortBooks() async {
-//    print("INside sorting");
+    print("Got books");
     if (widget.sortOption == 'author') {
       books.sort((a, b) {
         return a.author_sort.compareTo(b.author_sort);
@@ -87,6 +87,7 @@ class _BooksViewState extends State<BooksView> {
 
   //aggregates all the data to display
   Future<void> getBooks() async {
+    print("getting books");
     String authorText;
     books = await BooksProvider.getAllBooks();
     for (int i = 0; i < books.length; i++) {
