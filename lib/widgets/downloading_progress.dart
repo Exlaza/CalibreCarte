@@ -44,7 +44,7 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
       return true;
     } catch (e) {
 setState(() {
-  progress="No internet";
+  progress="Error downloading book: Check your internet connection";
 });
       await Future.delayed(const Duration(seconds: 1));
       return false;
