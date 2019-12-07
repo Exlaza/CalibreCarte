@@ -52,6 +52,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
 //    print('Building asettings for no reason');
+    Update update = Provider.of(context);
     Widget loadingWidget = Center(
       child: CircularProgressIndicator(),
     );
@@ -104,7 +105,7 @@ class _SettingsState extends State<Settings> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Icon(Icons.cloud),
+                                    Icon(Icons.cloud, color: update.tokenExists?Colors.blue:Colors.transparent,),
                                     Text('Dropbox'),
                                   ],
                                 ),
