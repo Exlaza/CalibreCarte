@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:calibre_carte/helpers/cache_invalidator.dart';
 import 'package:calibre_carte/helpers/metadata_cacher.dart';
@@ -117,11 +118,12 @@ class _DropboxSignInState extends State<DropboxSignIn> {
     };
     String json =
         '{"query": "metadata.db", "options":{"filename_only":true, "file_extensions":["db"]}}'; // make POST request
-    Response response = await post(url, headers: headers, body: json);
-    int statusCode = response.statusCode;
-    String body = response.body;
-
-    return response;
+    try {
+      Response response = await post(url, headers: headers, body: json);
+      return response;
+    } on SocketException catch (_) {
+      return null;
+    }
   }
 
   Future<List<Widget>> refreshLibrary(
@@ -134,6 +136,13 @@ class _DropboxSignInState extends State<DropboxSignIn> {
     ));
     _makePostRequest(token).then((response) {
       Scaffold.of(context).removeCurrentSnackBar();
+      if (response == null) {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text("No internet"),
+        ));
+        return;
+      }
+
       //Make a map Map<String, String> First value is the base path in lower case
       // Second Value is the name of the Folder(Library)
       // I have to convert string response.body to json
@@ -289,32 +298,6 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                                       child: Text("Change Directory"),
                                       onPressed: () {
                                         refreshLibrary(context, update);
-
-//                                        Scaffold.of(context)
-//                                            .showSnackBar(SnackBar(
-//                                          content: Text("refreshing"),
-//                                        ));
-//                                        refreshLibrary(context)
-//                                            .then((columnChildren) {
-//                                          Scaffold.of(context)
-//                                              .removeCurrentSnackBar();
-//                                          showModalBottomSheet(
-//                                              shape: RoundedRectangleBorder(
-//                                                  borderRadius:
-//                                                      BorderRadius.circular(
-//                                                          5.0)),
-//                                              backgroundColor:
-//                                                  Colors.grey.withOpacity(0.8),
-//                                              context: context,
-//                                              builder: (BuildContext bc) {
-//                                                return Container(
-//                                                  width: 300,
-//                                                  child: Wrap(
-//                                                    children: columnChildren,
-//                                                  ),
-//                                                );
-//                                              });
-//                                        });
                                       },
                                     )
                                   ],
@@ -348,13 +331,16 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                                           ]));
                                 });
 
-                            Future m =
+                            Future<bool> m =
                                 MetadataCacher().downloadAndCacheMetadata();
 
-                            m.then((_) {
-                              print("Donwloading finished");
+                            m.then((value) {
+                              if(value==true){print("Donwloading finished");
                               update.updateFlagState(true);
-                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();}else{
+                                Navigator.of(context).pop();
+                                Scaffold.of(context).showSnackBar(SnackBar(content: Text("No internet"),));
+                              }
                             });
 
 //                            Showing a dialog till the snackbar thing works
@@ -386,7 +372,6 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                             setState(() {
                               myFuture = loadingToken();
                               update.changeTokenState(false);
-
                             });
                           },
                           child: Text("Logout"),

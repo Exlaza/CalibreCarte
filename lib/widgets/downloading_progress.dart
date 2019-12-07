@@ -16,11 +16,11 @@ class DownloadingProgress extends StatefulWidget {
 }
 
 class _DownloadingProgressState extends State<DownloadingProgress> {
-  String progress = "0%";
+  String progress = "Progress  0%";
   bool downloading = false;
   String url = "https://content.dropboxapi.com/2/files/download";
 
-  Future<void> downloadFile() async {
+  Future<bool> downloadFile() async {
     BookDownloader bd = BookDownloader();
     String token = await bd.getTokenFromPreferences();
     String basePath = await bd.getSelectedLibPathFromSharedPrefs();
@@ -38,11 +38,16 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
           onReceiveProgress: (rec, total) {
 //            print("Rec: $rec, Total: $total");
             setState(() {
-              progress = ((rec / total) * 100).toStringAsFixed(0) + "%";
+              progress = "Progress  "+((rec / total) * 100).toStringAsFixed(0) + "%";
             });
           });
+      return true;
     } catch (e) {
-//      print(e);
+setState(() {
+  progress="No internet";
+});
+      await Future.delayed(const Duration(seconds: 1));
+      return false;
     }
   }
 
@@ -50,7 +55,7 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    downloadFile().then((_){
+    downloadFile().then((value){
       Navigator.of(context).pop();
     });
   }
@@ -58,7 +63,7 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Progress: $progress'),
+      title: Text(progress),
     );
   }
 }
