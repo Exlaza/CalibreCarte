@@ -4,23 +4,23 @@ import 'package:calibre_carte/helpers/book_downloader.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-
 class DownloadingProgress extends StatefulWidget {
   String relativePath;
   String fileName;
+  BuildContext oldContext;
 
-  DownloadingProgress(this.relativePath, this.fileName);
+  DownloadingProgress(this.relativePath, this.fileName, this.oldContext);
 
   @override
   _DownloadingProgressState createState() => _DownloadingProgressState();
 }
 
 class _DownloadingProgressState extends State<DownloadingProgress> {
-  String progress = "0%";
+  String progress = "Progress  0%";
   bool downloading = false;
   String url = "https://content.dropboxapi.com/2/files/download";
 
-  Future<void> downloadFile() async {
+  Future<bool> downloadFile() async {
     BookDownloader bd = BookDownloader();
     String token = await bd.getTokenFromPreferences();
     String basePath = await bd.getSelectedLibPathFromSharedPrefs();
@@ -31,18 +31,23 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
       "Authorization": "Bearer $token",
       "Dropbox-API-Arg": jsonEncode({"path": absPath}),
     };
-    print('Coming till here');
+//    print('Coming till here');
     Dio d = Dio();
     try {
       await d.download(url, savePath, options: Options(headers: headers),
           onReceiveProgress: (rec, total) {
-            print("Rec: $rec, Total: $total");
-            setState(() {
-              progress = ((rec / total) * 100).toStringAsFixed(0) + "%";
-            });
-          });
+//            print("Rec: $rec, Total: $total");
+        setState(() {
+          progress =
+              "Progress  " + ((rec / total) * 100).toStringAsFixed(0) + "%";
+        });
+      });
+      return true;
     } catch (e) {
-      print(e);
+      setState(() {
+        progress="ERROR";
+      });
+      return false;
     }
   }
 
@@ -50,15 +55,20 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    downloadFile().then((_){
+    downloadFile().then((value) {
       Navigator.of(context).pop();
+      if (value == false) {
+        Scaffold.of(widget.oldContext).showSnackBar(SnackBar(
+          content: Text("Download Error"),
+        ));
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Progress: $progress'),
+      title: Text(progress),
     );
   }
 }

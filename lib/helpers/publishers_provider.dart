@@ -31,5 +31,4 @@ class PublishersProvider {
       return Publishers.fromMapObject(m);
     }).toList();
   }
-
 }

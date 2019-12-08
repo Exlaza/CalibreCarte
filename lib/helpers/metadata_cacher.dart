@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:calibre_carte/helpers/cache_invalidator.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:io';
+import '../helpers/db_helper.dart';
 
 class MetadataCacher {
   //Should make a shared preferences helper
@@ -19,33 +21,41 @@ class MetadataCacher {
   }
 
   downloadMetadata(token, path) async {
-    print("I should also have come here after logging in");
     String url = "https://content.dropboxapi.com/2/files/download";
     Map<String, String> headers = {
       "Authorization": "Bearer $token",
       "Dropbox-API-Arg": jsonEncode({"path": path}),
     };
-//    String json = '{"path": $path}'; // make POST request
-    Response response = await post(
-      url,
-      headers: headers,
-    ); // check the status code for the result
-    return response;
+    try {
+      Response response = await post(
+        url,
+        headers: headers,
+      );
+      return response;
+    } on SocketException catch (_) {
+      return null;
+    }
   }
 
-  Future<void> downloadAndCacheMetadata() async {
+  Future<bool> downloadAndCacheMetadata() async {
     String token = await getTokenFromPreferences();
     String path = await getSelectedLibPathFromSharedPrefs();
     String absPath = path + 'metadata.db';
-    print(absPath);
     Response response = await downloadMetadata(token, absPath);
     //Get the bytes, get the temp directory and write a file in temp
-    print(response.statusCode);
-    List<int> bytes = response.bodyBytes;
-    String tempDir = await getDatabasesPath();
-    String pathMetadata = join(tempDir + "/metadata.db");
-    print(pathMetadata);
-    await File(pathMetadata).writeAsBytes(bytes, flush: true);
+    if (response == null) {
+      return false;
+    } else {
+      if (response.statusCode == 200) {
+        await DatabaseHelper.deleteDb();
+        await CacheInvalidator.invalidateImagesCache();
+      }
+      List<int> bytes = response.bodyBytes;
+      String tempDir = await getDatabasesPath();
+      String pathMetadata = join(tempDir + "/metadata.db");
+      await File(pathMetadata).writeAsBytes(bytes, flush: true);
+      return true;
+    }
   }
 
   Future<bool> checkIfCachedFileExists() async {

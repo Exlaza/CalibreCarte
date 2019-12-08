@@ -7,14 +7,7 @@ class Data {
 
   Data({this.id, this.book, this.format, this.uncompressed_size, this.name});
 
-  static final columns = [
-    "id",
-    "book",
-    "format",
-    "uncompressed_size",
-    "name"
-  ];
-
+  static final columns = ["id", "book", "format", "uncompressed_size", "name"];
 
   //  Method to convert sqflite map to the model
   Data.fromMapObject(Map<String, dynamic> map) {

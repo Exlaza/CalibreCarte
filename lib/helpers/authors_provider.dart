@@ -14,9 +14,8 @@ class AuthorsProvider {
 
   static Future<Authors> getAuthorByID(int id, cols) async {
     Database db = await DatabaseHelper.instance.db;
-    List<Map> maps = await db.query(tableName,
-        where: '${Authors.columns[0]} = ?',
-        whereArgs: [id]);
+    List<Map> maps = await db
+        .query(tableName, where: '${Authors.columns[0]} = ?', whereArgs: [id]);
     if (maps.length > 0) {
       return Authors.fromMapObject(maps.first);
     }

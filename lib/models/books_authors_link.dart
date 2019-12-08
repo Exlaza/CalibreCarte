@@ -4,7 +4,7 @@ class BooksAuthorsLink {
   int author;
 
   BooksAuthorsLink({
-    this.id ,
+    this.id,
     this.book,
     this.author,
   });

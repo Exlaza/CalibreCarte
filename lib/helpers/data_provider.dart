@@ -8,18 +8,15 @@ class DataProvider {
 
   static Future<List<Data>> getDataByBookID(int id) async {
     Database db = await DatabaseHelper.instance.db;
-    List<Map> maps = await db.query(tableName,
-        where: '${Data.columns[1]} = ?',
-        whereArgs: [id]);
+    List<Map> maps = await db
+        .query(tableName, where: '${Data.columns[1]} = ?', whereArgs: [id]);
 
     List<Data> booksDataList = List();
 
-    maps.forEach((element){
+    maps.forEach((element) {
       booksDataList.add(Data.fromMapObject(element));
     });
 
     return booksDataList;
-
   }
-
 }

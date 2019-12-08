@@ -31,5 +31,4 @@ class RatingsProvider {
       return Ratings.fromMapObject(m);
     }).toList();
   }
-
 }

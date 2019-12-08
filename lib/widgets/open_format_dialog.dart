@@ -32,11 +32,12 @@ class _OpenFormatDialogState extends State<OpenFormatDialog> {
       };
       dataFormatsFileNameMap.add(tempMap);
     });
-    List<Map<String, String>>filteredDataFormatsFileNameMap = List();
+    List<Map<String, String>> filteredDataFormatsFileNameMap = List();
     BookDownloader bd = BookDownloader();
-    for (int i = 0; i < dataFormatsFileNameMap.length; i++){
-      bool exists = await bd.checkIfDownloadedFileExists(dataFormatsFileNameMap[i]["name"]);
-      if (exists){
+    for (int i = 0; i < dataFormatsFileNameMap.length; i++) {
+      bool exists = await bd
+          .checkIfDownloadedFileExists(dataFormatsFileNameMap[i]["name"]);
+      if (exists) {
         filteredDataFormatsFileNameMap.add(dataFormatsFileNameMap[i]);
       }
     }
@@ -44,15 +45,13 @@ class _OpenFormatDialogState extends State<OpenFormatDialog> {
     setState(() {
       dataFormatsFileNameMap = filteredDataFormatsFileNameMap;
     });
-
   }
 
-  Future<void> bookOpen(fileName) async{
+  Future<void> bookOpen(fileName) async {
     BookDownloader bd = BookDownloader();
     String fileDirectory = await bd.returnFileDirectory(fileName);
 
     OpenFile.open(fileDirectory);
-
   }
 
   @override

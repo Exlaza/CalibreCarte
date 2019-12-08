@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 import 'package:path/path.dart';
 import 'dart:io';
 
-class BookDownloader{
+class BookDownloader {
   Future<String> getTokenFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     return sp.getString('token') ??
@@ -14,8 +14,7 @@ class BookDownloader{
 
   Future<String> getSelectedLibPathFromSharedPrefs() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    return sp.getString('selected_calibre_lib_path') ??
-        '/Calibre Library/';
+    return sp.getString('selected_calibre_lib_path') ?? '/Calibre Library/';
   }
 
   downloadFile(token, path) async {
@@ -35,9 +34,9 @@ class BookDownloader{
   Future<void> downloadAndStoreFile(relativePath, bookID, fileName) async {
     String token = await getTokenFromPreferences();
     String basePath = await getSelectedLibPathFromSharedPrefs();
-    print(basePath);
-    print(relativePath);
-    print(fileName);
+//    print(basePath);
+//    print(relativePath);
+//    print(fileName);
     String absPath = basePath + relativePath + '/' + fileName;
     Response response = await downloadFile(token, absPath);
     //Get the bytes, get the temp directory and write a file in temp
@@ -61,7 +60,6 @@ class BookDownloader{
       return true;
     }
     return false;
-
   }
 
   Future<String> returnFileDirectory(fileName) async {

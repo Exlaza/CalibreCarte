@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:calibre_carte/helpers/metadata_cacher.dart';
+import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -33,7 +35,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
   StreamSubscription _sub;
 
   _makePostRequest(token) async {
-    print(token);
+//    print(token);
     // set up POST request arguments
     String url = 'https://api.dropboxapi.com/2/files/search_v2';
     Map<String, String> headers = {
@@ -42,8 +44,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     };
     String json =
         '{"query": "metadata.db", "options":{"filename_only":true, "file_extensions":["db"]}}'; // make POST request
-    Response response = await post(url,
-        headers: headers, body: json);
+    Response response = await post(url, headers: headers, body: json);
     int statusCode = response.statusCode;
     String body = response.body;
     return response;
@@ -56,7 +57,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     _sub = getLinksStream().listen((String link) {
       //Although this is not needed now, but Google actually recommends against using a webview for,
       //So assuming in future we need to do it the url_launcher way then we would have to use this method
-      print(link);
+//      print(link);
       //So, just keeping it here.
       // Parse the link and warn the user, if it is not correct
     }, onError: (err) {
@@ -92,9 +93,9 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
   }
 
   _launchURL(String url) async {
-    print(await canLaunch(url));
+//    print(await canLaunch(url));
     if (await canLaunch(url)) {
-      print('url');
+//      print('url');
       await launch(url);
     } else {
       throw 'Could not launch $url';
@@ -102,7 +103,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
   }
 
   Future<void> storeStringInSharedPrefs(key, val) async {
-    print("Storing token");
+//    print("Storing token");
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setString(key, val);
   }
@@ -112,18 +113,20 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     sp.setInt(key, val);
   }
 
-  selectingCalibreLibrary(key, val) {
+  selectingCalibreLibrary(key, val, update) {
     storeStringInSharedPrefs('selected_calibre_lib_path', key);
     storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_) {
       Navigator.of(context).pop();
     });
     MetadataCacher().downloadAndCacheMetadata().then((_) {
+      update.changeTokenState(true);
       Navigator.of(context).pop();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    Update update = Provider.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Dropbox Login'),
@@ -155,7 +158,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                 String token;
                 var tempUri = Uri.parse('http://test.com?${uri.fragment}');
                 tempUri.queryParameters.forEach((k, v) {
-                  print(k);
+//                  print(k);
                   if (k == "access_token") {
                     token = v;
                   }
@@ -182,7 +185,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                         String libName =
                             directories.elementAt(directories.length - 2);
                         pathNameMap.putIfAbsent(libPath, () => libName);
-                        print(pathNameMap);
+//                        print(pathNameMap);
                       }
                     });
                     storeIntInSharedPrefs(
@@ -197,13 +200,15 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                     if (pathNameMap.length > 1) {
                       // First set the no of libraries in shared prefs
                       // Show a pop up which displays the list of libraries
-                      print('I have come inside the popup dispaly htingy');
+//                      print('I have come inside the popup dispaly htingy');
                       List<Widget> columnChildren =
                           pathNameMap.keys.toList().map((element) {
                         return InkWell(
                             onTap: () {
+//                              print("first selected lib path ${element}");
+//                            print("first selected lib name ${pathNameMap[element]}");
                               selectingCalibreLibrary(
-                                  element, pathNameMap[element]);
+                                  element, pathNameMap[element], update);
                             },
                             child: Text(
                               pathNameMap[element],
@@ -257,6 +262,9 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                       });
                     }
                   } else {
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text("No Calibre libraries found"),
+                    ));
                     // Show the bottom snack bar that no libraries found and Pop out of this context
                   }
                 });
@@ -264,7 +272,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                 return NavigationDecision.prevent;
               }
 
-              print('allowing navigation to $request');
+//              print('allowing navigation to $request');
               return NavigationDecision.navigate;
             },
             onPageFinished: _handleLoad,

@@ -17,37 +17,46 @@ class BookDetailsCoverImage extends StatefulWidget {
 class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
   Future myFuture;
   String localImagePath;
+  Future<bool> gotImage;
 
-  Future<void> getBookCoverImage() async {
-    print('Does it even come here');
+  Future<bool> getBookCoverImage() async {
     ImageCacher ic = ImageCacher();
+    bool imageExists = true;
 
     bool exists = await ic.checkIfCachedFileExists(widget.bookId);
-
-    print('After exists');
-    print(exists);
-
     if (!exists) {
-      await ic.downloadAndCacheImage(widget.relativePath, widget.bookId);
+      imageExists =
+          await ic.downloadAndCacheImage(widget.relativePath, widget.bookId);
     }
-
-    localImagePath = await ic.returnCachedImagePath(widget.bookId);
+    if (imageExists == true) {
+      localImagePath = await ic.returnCachedImagePath(widget.bookId);
+      return true;
+    }
+    if (imageExists == false) {
+      return false;
+    }
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    myFuture = getBookCoverImage();
+    gotImage = getBookCoverImage();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: myFuture,
+      future: gotImage,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return Image.file(File(localImagePath),fit: BoxFit.fill,);
+          if (snapshot.data == true) {
+            return Image.file(
+              File(localImagePath),
+              fit: BoxFit.fill,
+            );
+          } else
+            return Image.asset('assets/images/calibre_logo.png', scale: 0.4);
         } else {
           return Center(
             child: CircularProgressIndicator(),

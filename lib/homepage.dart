@@ -1,5 +1,10 @@
+import 'dart:async';
+
+import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'widgets/books_view.dart';
 
@@ -9,29 +14,45 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String layout = "list";
+  String layout;
+
   TextEditingController controller = new TextEditingController();
-  String filter;
+  String filter = "";
   String sortOption = "title";
   String sortDirection = "asc";
   String token;
   Future myFuture;
+  final _textUpdates = StreamController<String>();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller.addListener(() {
-      setState(() {
-        filter = controller.text;
-      });
+//    TODO: Listener requires that we dispose it off when the widget terrminates
+    controller.addListener(() => _textUpdates.add(controller.text));
+
+    Observable(_textUpdates.stream)
+        .debounce((_) => TimerStream(true, const Duration(milliseconds: 500)))
+        .forEach((s) {
+      if (filter != s) {
+        setState(() {
+          filter = s;
+        });
+      }
     });
-    myFuture = getTokenFromPreferences();
+
+    myFuture = getLayoutFromPreferences();
   }
 
-  Future<void> getTokenFromPreferences() async {
+  Future<void> getLayoutFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    token = sp.getString('token');
+    layout = sp.getString('layout') ?? "list";
+  }
+
+  Future<void> storeLayout(value) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setString('layout', value);
+//    print("storing $value");
   }
 
   void _settingModalBottomSheet(context) {
@@ -72,10 +93,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   showSettings(BuildContext context) {
     Navigator.of(context).pop();
-    Navigator.pushNamed(context, "/settings").then((_){
-      setState(() {
-        myFuture = getTokenFromPreferences();
-      });
+    Navigator.pushNamed(context, "/settings").then((_) {
+//      setState(() {
+//        myFuture = getTokenFromPreferences();
+//      });
     });
   }
 
@@ -96,6 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       layout = "list";
                     });
+                    storeLayout('list');
                   },
                 ),
                 ListTile(
@@ -105,6 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       layout = "grid";
                     });
+                    storeLayout('grid');
                   },
                 ),
                 ListTile(
@@ -114,6 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       layout = "carousel";
                     });
+                    storeLayout('carousel');
                   },
                 )
               ],
@@ -200,12 +224,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _searchPressed() {
+  void _searchPressed(String searchFil) {
     setState(() {
       _appBarTitle = new TextField(
         controller: controller,
         decoration: new InputDecoration(
-            prefixIcon: closeButton(), hintText: 'Search...'),
+            prefixIcon: closeButton(), hintText: 'Search for ${searchFil}s'),
       );
     });
   }
@@ -214,8 +238,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print("rebuilding homepage");
-
+    Update update = Provider.of(context);
+    String searchFilter = update.searchFilter;
+//    print("rebuilding homepage");
     return Container(
       child: Stack(
         children: <Widget>[
@@ -237,7 +262,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     IconButton(
                       icon: Icon(Icons.search),
                       onPressed: () {
-                        _searchPressed();
+                        _searchPressed(searchFilter);
                       },
                     ),
                     IconButton(
@@ -245,25 +270,33 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         _settingModalBottomSheet(context);
                       },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.refresh),
+                      onPressed: () {
+                        update.updateFlagState(true);
+                      },
                     )
                   ]),
               body: FutureBuilder(
                   future: myFuture,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
-                      if (token != null){
+                      if (update.tokenExists == true) {
                         return BooksView(
                           layout,
                           filter,
                           sortDirection: sortDirection,
                           sortOption: sortOption,
+                          update: update,
                         );
-                      }else{
-                        return Center(child: Text('Please Connect to dropbox'),);
+                      } else {
+                        return Center(
+                          child: Text('Please Connect to dropbox'),
+                        );
                       }
-
                     } else {
-                      return CircularProgressIndicator();
+                      return Center(child: CircularProgressIndicator());
                     }
                   })),
         ],

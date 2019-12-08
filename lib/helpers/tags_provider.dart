@@ -31,5 +31,4 @@ class TagsProvider {
       return Tags.fromMapObject(m);
     }).toList();
   }
-
 }

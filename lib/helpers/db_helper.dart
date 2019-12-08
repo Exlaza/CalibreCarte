@@ -1,10 +1,7 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:calibre_carte/helpers/metadata_cacher.dart';
-import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'dart:async';
-import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
@@ -27,31 +24,46 @@ class DatabaseHelper {
     return _db;
   }
 
-  // Here we are checking that there is not already a copy of the
-  initDb() async {
+  static nullDb() async {
+    _db = null;
+  }
+
+  static Future<String> getDatabasePath() async {
     String databasePath = await getDatabasesPath();
     String path = join(databasePath + "/metadata.db");
+    return path;
+  }
+
+  // Here we are checking that there is not already a copy of the
+  initDb() async {
+//    print("I am inside initDb");
+    String path = await getDatabasePath();
     var exists = await databaseExists(path);
 
     if (!exists) {
-      print("USING METADATA FROM ASSETS");
-      //Making sure  the parent directory exists
+//      print("Database at path doesn't exist");
+//      Making sure  the parent directory exists
       try {
         await Directory(dirname(path)).create(recursive: true);
       } catch (_) {}
 
-      //Copy the metadata file in assets so we can proceed with the
-      // rest of the application development
-      //Copy it to some location that Android like to keep it database files,
-      // that only this application can access
       MetadataCacher mc = MetadataCacher();
-      print('Metdata cacher should now run"');
+//      print('Metdata cacher should now run"');
       await mc.downloadAndCacheMetadata();
     } else {
-      print("NOT USING ASSETS METADATA");
+//      print("Database at path exists");
     }
-
+//    print("Open gets called asfter this stateemnt");
     return await openDatabase("metadata.db");
   }
-}
 
+  static deleteDb() async {
+    String path = await getDatabasePath();
+    await deleteDatabase(path);
+  }
+
+  static invalidateCache() async {
+    await _db.close();
+    await DatabaseHelper.nullDb();
+  }
+}

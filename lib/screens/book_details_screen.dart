@@ -49,7 +49,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
       };
       dataFormatsFileNameMap.add(tempMap);
     });
-    print('Maybe coming here');
+//    print('Maybe coming here');
 
     BookDownloader bd = BookDownloader();
     for (int i = 0; i < dataFormatsFileNameMap.length; i++) {
@@ -59,7 +59,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
         return true;
       }
     }
-    print('Coming here');
+//    print('Coming here');
     return false;
   }
 
@@ -76,7 +76,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
 
   Future<void> getBookDetails() async {
     bookDetails = await BooksProvider.getBookByID(widget.bookId, null);
-    print(widget.bookId);
+//    print(widget.bookId);
     bookComments =
         await CommentsProvider.getCommentByBookID(widget.bookId, null);
     List<BooksAuthorsLink> bookAuthorsLinks =
@@ -168,7 +168,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                                 showDialog(
                                     context: context,
                                     builder: (_) => SelectFormatDialog(
-                                        widget.bookId, bookDetails.path));
+                                        widget.bookId, bookDetails.path,context));
                               },
                               child: Icon(Icons.file_download),
                             )
@@ -183,7 +183,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                         showDialog(
                             context: context,
                             builder: (_) => SelectFormatDialog(
-                                widget.bookId, bookDetails.path)).then((_) {
+                                widget.bookId, bookDetails.path,context)).then((_) {
                           setState(() {
                             mySecondFuture = checkIfLocalCopyExists();
                           });
@@ -208,8 +208,8 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                         Expanded(
                           child: ClipRRect(
                             borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(15),bottom: Radius.circular(15)
-                            ),
+                                top: Radius.circular(15),
+                                bottom: Radius.circular(15)),
                             child: BookDetailsCoverImage(
                                 widget.bookId, bookDetails.path),
                           ),

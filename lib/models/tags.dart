@@ -14,5 +14,4 @@ class Tags {
     this.id = map['id'];
     this.name = map['name'];
   }
-
 }
