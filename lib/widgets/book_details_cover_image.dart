@@ -52,12 +52,18 @@ class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == true) {
             return Image.file(
-              File(localImagePath),height: MediaQuery.of(context).size.height / 5,
-        width: MediaQuery.of(context).size.width/3.7,fit: BoxFit.fill,
+              File(localImagePath),
+              height: MediaQuery.of(context).size.height / 5,
+              width: MediaQuery.of(context).size.width / 3.7,
+              fit: BoxFit.fill,
             );
           } else
-            return Image.asset('assets/images/calibre_logo.png', height: MediaQuery.of(context).size.height / 5,
-              width: MediaQuery.of(context).size.width/3.7,fit: BoxFit.fill,git);
+            return Image.asset(
+              'assets/images/calibre_logo.png',
+              height: MediaQuery.of(context).size.height / 5,
+              width: MediaQuery.of(context).size.width / 3.7,
+              fit: BoxFit.fill,
+            );
         } else {
           return Center(
             child: CircularProgressIndicator(),

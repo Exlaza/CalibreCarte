@@ -75,10 +75,10 @@ flutter:
   fonts:
     - family: Montserrat
       fonts:
-        - asset: fonts/Montserrat-Regular.ttf
-        - asset: fonts/Montserrat-SemiBold.ttf
+        - asset: assets/fonts/Montserrat-Regular.ttf
+        - asset: assets/fonts/Montserrat-SemiBold.ttf
           weight: 600
-        - asset: fonts/Montserrat-Bold.ttf
+        - asset: assets/fonts/Montserrat-Bold.ttf
           weight: 700
   # fonts:
   #   - family: Schyler
