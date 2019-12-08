@@ -47,7 +47,9 @@ class BooksListView extends StatelessWidget {
               )),
           leading: ConstrainedBox(
               constraints: BoxConstraints(maxHeight: 100, maxWidth: 50),
-              child: BookDetailsCoverImage(books[index].id, books[index].path)??Text("no image")),
+              child:
+                  BookDetailsCoverImage(books[index].id, books[index].path) ??
+                      Text("no image")),
           subtitle: Text(
             books[index].author_sort,
             style: TextStyle(fontWeight: FontWeight.bold),
@@ -57,24 +59,32 @@ class BooksListView extends StatelessWidget {
       );
     }
 
-    return update.searchFilter=='title'?ListView.builder(
-      itemBuilder: (ctx, index) {
-        return filter == null
-            ? tile(index)
-            : (books[index].title.toLowerCase().contains(filter.toLowerCase())
-                ? tile(index)
-                : Container());
-      },
-      itemCount: books.length,
-    ):ListView.builder(
-      itemBuilder: (ctx, index) {
-        return filter == null
-            ? tile(index)
-            : (books[index].title.toLowerCase().contains(filter.toLowerCase())
-            ? tile(index)
-            : Container());
-      },
-      itemCount: books.length,
-    );
+    return update.searchFilter == 'title'
+        ? ListView.builder(
+            itemBuilder: (ctx, index) {
+              return filter == null
+                  ? tile(index)
+                  : (books[index]
+                          .title
+                          .toLowerCase()
+                          .contains(filter.toLowerCase())
+                      ? tile(index)
+                      : Container());
+            },
+            itemCount: books.length,
+          )
+        : ListView.builder(
+            itemBuilder: (ctx, index) {
+              return filter == null
+                  ? tile(index)
+                  : (books[index]
+                          .title
+                          .toLowerCase()
+                          .contains(filter.toLowerCase())
+                      ? tile(index)
+                      : Container());
+            },
+            itemCount: books.length,
+          );
   }
 }

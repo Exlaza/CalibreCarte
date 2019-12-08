@@ -168,7 +168,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                                 showDialog(
                                     context: context,
                                     builder: (_) => SelectFormatDialog(
-                                        widget.bookId, bookDetails.path));
+                                        widget.bookId, bookDetails.path,context));
                               },
                               child: Icon(Icons.file_download),
                             )
@@ -183,7 +183,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                         showDialog(
                             context: context,
                             builder: (_) => SelectFormatDialog(
-                                widget.bookId, bookDetails.path)).then((_) {
+                                widget.bookId, bookDetails.path,context)).then((_) {
                           setState(() {
                             mySecondFuture = checkIfLocalCopyExists();
                           });
@@ -208,8 +208,8 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                         Expanded(
                           child: ClipRRect(
                             borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(15),bottom: Radius.circular(15)
-                            ),
+                                top: Radius.circular(15),
+                                bottom: Radius.circular(15)),
                             child: BookDetailsCoverImage(
                                 widget.bookId, bookDetails.path),
                           ),

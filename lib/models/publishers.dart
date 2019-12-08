@@ -16,5 +16,4 @@ class Publishers {
     this.name = map['name'];
     this.sort = map['sort'];
   }
-
 }

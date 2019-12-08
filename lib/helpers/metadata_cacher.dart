@@ -8,7 +8,6 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:io';
 import '../helpers/db_helper.dart';
 
-
 class MetadataCacher {
   //Should make a shared preferences helper
   Future<String> getTokenFromPreferences() async {
@@ -27,14 +26,15 @@ class MetadataCacher {
       "Authorization": "Bearer $token",
       "Dropbox-API-Arg": jsonEncode({"path": path}),
     };
-  try{  Response response = await post(
-    url,
-    headers: headers,
-  );
-  return response;}
-  on SocketException catch(_){
-    return null;
-  }
+    try {
+      Response response = await post(
+        url,
+        headers: headers,
+      );
+      return response;
+    } on SocketException catch (_) {
+      return null;
+    }
   }
 
   Future<bool> downloadAndCacheMetadata() async {
@@ -43,16 +43,19 @@ class MetadataCacher {
     String absPath = path + 'metadata.db';
     Response response = await downloadMetadata(token, absPath);
     //Get the bytes, get the temp directory and write a file in temp
-   if(response==null){return false;}
-   else{ if (response.statusCode == 200){
-     await DatabaseHelper.deleteDb();
-     await CacheInvalidator.invalidateImagesCache();
-   }
-   List<int> bytes = response.bodyBytes;
-   String tempDir = await getDatabasesPath();
-   String pathMetadata = join(tempDir + "/metadata.db");
-   await File(pathMetadata).writeAsBytes(bytes, flush: true);
-   return true;}
+    if (response == null) {
+      return false;
+    } else {
+      if (response.statusCode == 200) {
+        await DatabaseHelper.deleteDb();
+        await CacheInvalidator.invalidateImagesCache();
+      }
+      List<int> bytes = response.bodyBytes;
+      String tempDir = await getDatabasesPath();
+      String pathMetadata = join(tempDir + "/metadata.db");
+      await File(pathMetadata).writeAsBytes(bytes, flush: true);
+      return true;
+    }
   }
 
   Future<bool> checkIfCachedFileExists() async {

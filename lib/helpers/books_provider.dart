@@ -40,5 +40,4 @@ class BooksProvider {
       return Books.fromMapObject(m);
     }).toList();
   }
-
 }

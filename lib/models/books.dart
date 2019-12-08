@@ -11,18 +11,17 @@ class Books {
 
   String path;
 
-  Books({
-    this.id,
-    this.title,
-    this.sort,
-    this.timestamp,
-    this.pubdate,
-    this.series_index,
-    this.author_sort,
-    this.isbn,
-    this.lccn,
-    this.path
-  });
+  Books(
+      {this.id,
+      this.title,
+      this.sort,
+      this.timestamp,
+      this.pubdate,
+      this.series_index,
+      this.author_sort,
+      this.isbn,
+      this.lccn,
+      this.path});
 
   static final columns = [
     "id",

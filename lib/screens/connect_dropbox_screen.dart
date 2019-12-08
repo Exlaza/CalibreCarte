@@ -335,11 +335,15 @@ class _DropboxSignInState extends State<DropboxSignIn> {
                                 MetadataCacher().downloadAndCacheMetadata();
 
                             m.then((value) {
-                              if(value==true){print("Donwloading finished");
-                              update.updateFlagState(true);
-                              Navigator.of(context).pop();}else{
+                              if (value == true) {
+//                                print("Donwloading finished");
+                                update.updateFlagState(true);
                                 Navigator.of(context).pop();
-                                Scaffold.of(context).showSnackBar(SnackBar(content: Text("No internet"),));
+                              } else {
+                                Navigator.of(context).pop();
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text("No internet"),
+                                ));
                               }
                             });
 

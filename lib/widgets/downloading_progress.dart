@@ -4,12 +4,12 @@ import 'package:calibre_carte/helpers/book_downloader.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-
 class DownloadingProgress extends StatefulWidget {
   String relativePath;
   String fileName;
+  BuildContext oldContext;
 
-  DownloadingProgress(this.relativePath, this.fileName);
+  DownloadingProgress(this.relativePath, this.fileName, this.oldContext);
 
   @override
   _DownloadingProgressState createState() => _DownloadingProgressState();
@@ -37,16 +37,13 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
       await d.download(url, savePath, options: Options(headers: headers),
           onReceiveProgress: (rec, total) {
 //            print("Rec: $rec, Total: $total");
-            setState(() {
-              progress = "Progress  "+((rec / total) * 100).toStringAsFixed(0) + "%";
-            });
-          });
+        setState(() {
+          progress =
+              "Progress  " + ((rec / total) * 100).toStringAsFixed(0) + "%";
+        });
+      });
       return true;
     } catch (e) {
-setState(() {
-  progress="Error downloading book: Check your internet connection";
-});
-      await Future.delayed(const Duration(seconds: 1));
       return false;
     }
   }
@@ -55,8 +52,13 @@ setState(() {
   void initState() {
     // TODO: implement initState
     super.initState();
-    downloadFile().then((value){
+    downloadFile().then((value) {
       Navigator.of(context).pop();
+      if (value == false) {
+        Scaffold.of(widget.oldContext).showSnackBar(SnackBar(
+          content: Text("Download Error"),
+        ));
+      }
     });
   }
 

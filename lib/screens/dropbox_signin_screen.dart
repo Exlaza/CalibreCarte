@@ -44,8 +44,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     };
     String json =
         '{"query": "metadata.db", "options":{"filename_only":true, "file_extensions":["db"]}}'; // make POST request
-    Response response = await post(url,
-        headers: headers, body: json);
+    Response response = await post(url, headers: headers, body: json);
     int statusCode = response.statusCode;
     String body = response.body;
     return response;
@@ -114,7 +113,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     sp.setInt(key, val);
   }
 
-  selectingCalibreLibrary(key, val,update) {
+  selectingCalibreLibrary(key, val, update) {
     storeStringInSharedPrefs('selected_calibre_lib_path', key);
     storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_) {
       Navigator.of(context).pop();
@@ -127,7 +126,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
 
   @override
   Widget build(BuildContext context) {
-    Update update= Provider.of(context);
+    Update update = Provider.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Dropbox Login'),
@@ -209,7 +208,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
 //                              print("first selected lib path ${element}");
 //                            print("first selected lib name ${pathNameMap[element]}");
                               selectingCalibreLibrary(
-                                  element, pathNameMap[element],update);
+                                  element, pathNameMap[element], update);
                             },
                             child: Text(
                               pathNameMap[element],
@@ -263,7 +262,9 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                       });
                     }
                   } else {
-                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("No Calibre libraries found"),));
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text("No Calibre libraries found"),
+                    ));
                     // Show the bottom snack bar that no libraries found and Pop out of this context
                   }
                 });

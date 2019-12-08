@@ -24,11 +24,11 @@ class DatabaseHelper {
     return _db;
   }
 
-  static nullDb() async{
+  static nullDb() async {
     _db = null;
   }
 
-  static Future<String> getDatabasePath() async{
+  static Future<String> getDatabasePath() async {
     String databasePath = await getDatabasesPath();
     String path = join(databasePath + "/metadata.db");
     return path;
@@ -57,15 +57,13 @@ class DatabaseHelper {
     return await openDatabase("metadata.db");
   }
 
-  static deleteDb() async{
+  static deleteDb() async {
     String path = await getDatabasePath();
     await deleteDatabase(path);
   }
 
-  static invalidateCache() async{
+  static invalidateCache() async {
     await _db.close();
     await DatabaseHelper.nullDb();
   }
-
 }
-

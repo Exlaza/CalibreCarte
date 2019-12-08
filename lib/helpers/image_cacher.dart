@@ -6,7 +6,6 @@ import 'package:path/path.dart';
 import 'dart:io';
 
 class ImageCacher {
-
   Future<String> getTokenFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     return sp.getString('token');
@@ -30,6 +29,7 @@ class ImageCacher {
     ); // check the status code for the result
     return response;
   }
+
   downloadThumbnailImage(token, path) async {
 //    print("I am in th donlaod thumbanial image method");
 //    print(token);
@@ -55,13 +55,17 @@ class ImageCacher {
 //    print(absPath);
     Response response = await downloadCoverImage(token, absPath);
     //Get the bytes, get the temp directory and write a file in temp
-    if(response.statusCode!=200) {print(response.statusCode); return false;}
+    if (response.statusCode != 200) {
+      print(response.statusCode);
+      return false;
+    }
     List<int> bytes = response.bodyBytes;
     Directory tempDir = await getTemporaryDirectory();
     String pathMetadata = join(tempDir.path + "/cover_$bookID.jpg");
     await File(pathMetadata).writeAsBytes(bytes, flush: true);
     return true;
   }
+
   Future<void> downloadAndCacheImageThumbnail(relativePath, bookID) async {
     String token = await getTokenFromPreferences();
     String basePath = await getSelectedLibPathFromSharedPrefs();
@@ -79,6 +83,7 @@ class ImageCacher {
     String pathMetadata = join(tempDir.path + "/cover_$bookID.jpg");
     return await File(pathMetadata).exists();
   }
+
   Future<bool> checkIfCachedThumbnailExists(bookID) async {
     Directory tempDir = await getTemporaryDirectory();
     String pathMetadata = join(tempDir.path + "/thumbnail_$bookID.jpg");
@@ -90,10 +95,10 @@ class ImageCacher {
     String pathMetadata = join(tempDir.path + "/cover_$bookID.jpg");
     return pathMetadata;
   }
+
   Future<String> returnCachedThumbnailPath(bookID) async {
     Directory tempDir = await getTemporaryDirectory();
     String pathMetadata = join(tempDir.path + "/thumbnail_$bookID.jpg");
     return pathMetadata;
   }
-
 }

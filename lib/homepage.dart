@@ -40,14 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
         });
       }
     });
-//
-//    controller.addListener(() {
-//      if (filter != controller.text) {
-//        setState(() {
-//          filter = controller.text;
-//        });
-//      }
-//    });
+
     myFuture = getLayoutFromPreferences();
   }
 

@@ -8,8 +8,9 @@ import 'downloading_progress.dart';
 class SelectFormatDialog extends StatefulWidget {
   int bookId;
   String relativePath;
+  BuildContext oldContext;
 
-  SelectFormatDialog(this.bookId, this.relativePath);
+  SelectFormatDialog(this.bookId, this.relativePath, this.oldContext);
 
   @override
   _SelectFormatDialogState createState() => _SelectFormatDialogState();
@@ -33,14 +34,13 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
     });
   }
 
-  Future<void> bookDownloader(fileName) {
-
+  Future<void> bookDownloader(fileName, BuildContext context) {
     showDialog(
         context: context,
         builder: (_) {
-          return DownloadingProgress(widget.relativePath, fileName);
-        }).then((_){
-          Navigator.of(context).pop();
+          return DownloadingProgress(widget.relativePath, fileName,context);
+        }).then((_) {
+      Navigator.of(context).pop();
     });
   }
 
@@ -64,7 +64,7 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
                 return FlatButton(
                   child: Text(element["format"]),
                   onPressed: () {
-                    bookDownloader(element["name"]);
+                    bookDownloader(element["name"],widget.oldContext);
                   },
                 );
               }).toList(),

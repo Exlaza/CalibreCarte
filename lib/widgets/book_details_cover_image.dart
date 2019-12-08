@@ -21,11 +21,12 @@ class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
 
   Future<bool> getBookCoverImage() async {
     ImageCacher ic = ImageCacher();
-    bool imageExists=true;
+    bool imageExists = true;
 
     bool exists = await ic.checkIfCachedFileExists(widget.bookId);
     if (!exists) {
-      imageExists= await ic.downloadAndCacheImage(widget.relativePath, widget.bookId);
+      imageExists =
+          await ic.downloadAndCacheImage(widget.relativePath, widget.bookId);
     }
     if (imageExists == true) {
       localImagePath = await ic.returnCachedImagePath(widget.bookId);
@@ -49,13 +50,13 @@ class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
       future: gotImage,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          if(snapshot.data==true){
+          if (snapshot.data == true) {
             return Image.file(
               File(localImagePath),
               fit: BoxFit.fill,
             );
-          }
-          else return Image.asset('assets/images/calibre_logo.png', scale: 0.4);
+          } else
+            return Image.asset('assets/images/calibre_logo.png', scale: 0.4);
         } else {
           return Center(
             child: CircularProgressIndicator(),

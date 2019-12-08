@@ -6,13 +6,7 @@ class Authors {
 
   Authors({this.id, this.name, this.sort, this.link});
 
-  static final columns = [
-    "id",
-    "name",
-    "sort",
-    "link"
-  ];
-
+  static final columns = ["id", "name", "sort", "link"];
 
   //  Method to convert sqflite map to the model
   Authors.fromMapObject(Map<String, dynamic> map) {

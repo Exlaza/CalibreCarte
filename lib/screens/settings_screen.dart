@@ -105,7 +105,12 @@ class _SettingsState extends State<Settings> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Icon(Icons.cloud, color: update.tokenExists?Colors.blue:Colors.transparent,),
+                                    Icon(
+                                      Icons.cloud,
+                                      color: update.tokenExists
+                                          ? Colors.blue
+                                          : Colors.transparent,
+                                    ),
                                     Text('Dropbox'),
                                   ],
                                 ),
@@ -125,13 +130,14 @@ class _SettingsState extends State<Settings> {
                         ),
                       ),
                       Consumer<Update>(
-                        builder:
-                        (ctx,update,child)=>Card(
+                        builder: (ctx, update, child) => Card(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30)),
                           child: Column(
                             children: <Widget>[
-                              ListTile(trailing: Text(update.searchFilter??'not selected'),
+                              ListTile(
+                                trailing:
+                                    Text(update.searchFilter ?? 'not selected'),
                                 leading: Icon(Icons.search),
                                 title: Text(
                                   "Search By",
@@ -141,9 +147,9 @@ class _SettingsState extends State<Settings> {
                                       elevation: 10,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                          BorderRadius.circular(5.0)),
+                                              BorderRadius.circular(5.0)),
                                       backgroundColor:
-                                      Colors.grey.withOpacity(0.8),
+                                          Colors.grey.withOpacity(0.8),
                                       context: context,
                                       builder: (_) {
                                         return Container(
@@ -151,16 +157,20 @@ class _SettingsState extends State<Settings> {
                                             children: <Widget>[
                                               ListTile(
                                                 title: Text("Author"),
-                                                onTap: (){
-                                                  saveStringToSP('searchFilter', 'author');
-                                                  update.changeSearchFilter('author');
+                                                onTap: () {
+                                                  saveStringToSP(
+                                                      'searchFilter', 'author');
+                                                  update.changeSearchFilter(
+                                                      'author');
                                                 },
                                               ),
                                               ListTile(
                                                 title: Text("Book Title"),
-                                                onTap: (){
-                                                  saveStringToSP('searchFilter', 'title');
-                                                  update.changeSearchFilter('title');
+                                                onTap: () {
+                                                  saveStringToSP(
+                                                      'searchFilter', 'title');
+                                                  update.changeSearchFilter(
+                                                      'title');
                                                 },
                                               )
                                             ],
@@ -169,74 +179,9 @@ class _SettingsState extends State<Settings> {
                                       });
                                 },
                               )
-//                              Row(
-//                                mainAxisAlignment:
-//                                    MainAxisAlignment.spaceBetween,
-//                                children: <Widget>[
-//                                  Row(
-//                                    mainAxisAlignment: MainAxisAlignment.start,
-//                                    children: <Widget>[
-//                                      Icon(
-//                                        Icons.settings_ethernet,
-//                                        size: 20,
-//                                      ),
-//                                      SizedBox(
-//                                        width: 30,
-//                                      ),
-//                                      Text(
-//                                        'Search Title',
-//                                        style: TextStyle(fontSize: 20),
-//                                      ),
-//                                    ],
-//                                  ),
-//                                  Switch(
-//                                    value: searchTitle,
-//                                    onChanged: (val) {
-//                                      saveSettingsToSharedPrefs(
-//                                          'searchTitle', val);
-//                                      setState(() {
-//                                        searchTitle = val;
-//                                      });
-//                                    },
-//                                  )
-//                                ],
-//                              ),
-//                              Row(
-//                                mainAxisAlignment:
-//                                    MainAxisAlignment.spaceBetween,
-//                                children: <Widget>[
-//                                  Row(
-//                                    mainAxisAlignment: MainAxisAlignment.start,
-//                                    children: <Widget>[
-//                                      Icon(
-//                                        Icons.settings_ethernet,
-//                                        size: 20,
-//                                      ),
-//                                      SizedBox(
-//                                        width: 30,
-//                                      ),
-//                                      Text(
-//                                        'Search Title',
-//                                        style: TextStyle(fontSize: 20),
-//                                      ),
-//                                    ],
-//                                  ),
-//                                  Switch(
-//                                    value: searchAuthor,
-//                                    onChanged: (val) {
-//                                      saveSettingsToSharedPrefs(
-//                                          'searchAuthor', val);
-//                                      setState(() {
-//                                        searchAuthor = val;
-//                                      });
-//                                    },
-//                                  )
-//                                ],
-//                              ),
                             ],
                           ),
                         ),
-
                       ),
                       Container(
                         padding: EdgeInsets.only(left: 4),
@@ -279,8 +224,7 @@ class _SettingsState extends State<Settings> {
                                   Switch(
                                     value: darkMode,
                                     onChanged: (val) {
-                                      saveBoolToSharedPrefs(
-                                          'darkMode', val);
+                                      saveBoolToSharedPrefs('darkMode', val);
                                       setState(() {
                                         darkMode = val;
                                       });

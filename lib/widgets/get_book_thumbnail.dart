@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:calibre_carte/helpers/image_cacher.dart';
 import 'package:flutter/material.dart';
+
 class GetBookThumbnail extends StatefulWidget {
   final int bookId;
   final String relativePath;
-  GetBookThumbnail(this.bookId,this.relativePath);
+
+  GetBookThumbnail(this.bookId, this.relativePath);
+
   @override
   _GetBookThumbnailState createState() => _GetBookThumbnailState();
 }
@@ -20,7 +23,8 @@ class _GetBookThumbnailState extends State<GetBookThumbnail> {
     bool exists = await ic.checkIfCachedThumbnailExists(widget.bookId);
 
     if (!exists) {
-      await ic.downloadAndCacheImageThumbnail(widget.relativePath, widget.bookId);
+      await ic.downloadAndCacheImageThumbnail(
+          widget.relativePath, widget.bookId);
     }
 
     localImagePath = await ic.returnCachedThumbnailPath(widget.bookId);
@@ -39,7 +43,7 @@ class _GetBookThumbnailState extends State<GetBookThumbnail> {
       future: myFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return Image.file(File(localImagePath),fit: BoxFit.fitHeight);
+          return Image.file(File(localImagePath), fit: BoxFit.fitHeight);
         } else {
           return Center(
             child: CircularProgressIndicator(),
