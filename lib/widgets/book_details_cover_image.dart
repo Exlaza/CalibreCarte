@@ -52,8 +52,8 @@ class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == true) {
             return Image.file(
-              File(localImagePath),
-              fit: BoxFit.fitHeight,
+              File(localImagePath),height: MediaQuery.of(context).size.height / 5,
+        width: MediaQuery.of(context).size.width/3.5,fit: BoxFit.fill,
             );
           } else
             return Image.asset('assets/images/calibre_logo.png', scale: 0.4);

@@ -121,19 +121,18 @@ class BooksListView extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Container(
-              height: MediaQuery.of(context).size.height / 5,
-              width: MediaQuery.of(context).size.width/4,
               child: Container(
-                  child: BookDetailsCoverImage(
-                      books[index].id, books[index].path)),
+                child: BookDetailsCoverImage(
+                      books[index].id, books[index].path),
+              ),
             ),
             Container(width: MediaQuery.of(context).size.width/16,),
             Container(
-              width: MediaQuery.of(context).size.width*0.6,
+              width: MediaQuery.of(context).size.width*0.55,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Container(height: 30.0),
+                  Container(height: 35.0),
                   Text(
                     books[index].title,
                     style: headerTextStyle,
