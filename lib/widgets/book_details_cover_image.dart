@@ -53,10 +53,11 @@ class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
           if (snapshot.data == true) {
             return Image.file(
               File(localImagePath),height: MediaQuery.of(context).size.height / 5,
-        width: MediaQuery.of(context).size.width/3.5,fit: BoxFit.fill,
+        width: MediaQuery.of(context).size.width/3.7,fit: BoxFit.fill,
             );
           } else
-            return Image.asset('assets/images/calibre_logo.png', scale: 0.4);
+            return Image.asset('assets/images/calibre_logo.png', height: MediaQuery.of(context).size.height / 5,
+              width: MediaQuery.of(context).size.width/3.7,fit: BoxFit.fill,git);
         } else {
           return Center(
             child: CircularProgressIndicator(),

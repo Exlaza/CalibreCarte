@@ -30,8 +30,8 @@ class BooksListView extends StatelessWidget {
         color: const Color(0xffb6b2df),
         fontSize: 9.0,
         fontWeight: FontWeight.w400);
-    final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 12.0);
-    final headerTextStyle = baseTextStyle.copyWith(
+    final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 12.0, fontFamily: 'Montserrat');
+    final headerTextStyle = baseTextStyle.copyWith(fontFamily: 'Montserrat',
         color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600);
 
     Widget _planetValue({String value, String image}) {
@@ -59,6 +59,7 @@ class BooksListView extends StatelessWidget {
                       books[index].title,
                       style: headerTextStyle,
                       overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                     ),
                     Container(height: 10.0),
                     Text(
@@ -132,11 +133,11 @@ class BooksListView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Container(height: 35.0),
+                  Container(height: 20.0),
                   Text(
                     books[index].title,
                     style: headerTextStyle,
-                    overflow: TextOverflow.ellipsis,
+                    overflow: TextOverflow.ellipsis,maxLines: 2,
                   ),
                   Container(height: 10.0),
                   Text(
