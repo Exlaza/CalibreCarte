@@ -2,8 +2,10 @@ import 'package:calibre_carte/models/books.dart';
 import 'package:calibre_carte/screens/book_details_screen.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
 import 'package:flutter/material.dart';
+
 class CalibreGridTile extends StatelessWidget {
   final Books book;
+
   CalibreGridTile(this.book);
 
   @override
@@ -16,12 +18,13 @@ class CalibreGridTile extends StatelessWidget {
         );
       }));
     }
+
     return DefaultTextStyle(
       style: const TextStyle(color: Colors.white),
       child: Stack(
         fit: StackFit.expand,
         children: [
-          BookDetailsCoverImage(book.id, book.path,null,null),
+          BookDetailsCoverImage(book.id, book.path, null, null),
 //          _TextualInfo(event),
 //          Positioned(
 //            top: 10.0,
@@ -37,12 +40,30 @@ class CalibreGridTile extends StatelessWidget {
               child: Container(),
             ),
           ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Container(
+              decoration: BoxDecoration(
+//                border: Border.all(),
+                borderRadius: BorderRadius.circular(1),
+                color: Colors.blueGrey.withOpacity(0.8),
+              ),
+              alignment: Alignment.centerLeft,
+              height: MediaQuery.of(context).size.height / 15,
+//              width: MediaQuery.of(context).size.width / 2.4,
+              child: Text(
+                book.title,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                style: TextStyle(fontFamily: 'Montserrat'),
+              ),
+            ),
+          )
         ],
       ),
     );
   }
 }
-
 
 //GestureDetector(
 //onTap: () => viewBookDetails(book.id),
