@@ -80,6 +80,10 @@ flutter:
           weight: 600
         - asset: assets/fonts/Montserrat-Bold.ttf
           weight: 700
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+
   # fonts:
   #   - family: Schyler
   #     fonts:

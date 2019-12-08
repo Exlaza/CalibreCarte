@@ -234,7 +234,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Widget _appBarTitle = const Text("Calibre Carte");
+  Widget _appBarTitle = const Text("Calibre Carte",style: TextStyle(fontFamily: 'Roboto',fontSize: 20),);
 
   @override
   Widget build(BuildContext context) {
@@ -247,8 +247,8 @@ class _MyHomePageState extends State<MyHomePage> {
           appBar: AppBar(
               backgroundColor: Color(0xFF383838),
               title: _appBarTitle,
-              leading:
-                  Image.asset('assets/images/calibre_logo.png', scale: 0.4),
+//              leading:
+//                  Image.asset('assets/images/calibre_logo.png', scale: 0.4),
               actions: <Widget>[
                 // action button
                 IconButton(
@@ -263,12 +263,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     _settingModalBottomSheet(context);
                   },
                 ),
-                IconButton(
-                  icon: Icon(Icons.refresh),
-                  onPressed: () {
-                    update.updateFlagState(true);
-                  },
-                )
+//                IconButton(
+//                  icon: Icon(Icons.refresh),
+//                  onPressed: () {
+//                    update.updateFlagState(true);
+//                  },
+//                )
               ]),
           body: FutureBuilder(
               future: myFuture,
