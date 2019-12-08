@@ -136,7 +136,7 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.4"
+    version: "1.5.0"
   pedantic:
     dependency: transitive
     description:
@@ -239,7 +239,7 @@ packages:
       name: synchronized
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0+2"
+    version: "2.1.1"
   term_glyph:
     dependency: transitive
     description:
@@ -295,7 +295,7 @@ packages:
       name: webview_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.15+1"
+    version: "0.3.17"
 sdks:
   dart: ">=2.5.0 <3.0.0"
-  flutter: ">=1.9.1+hotfix.4 <2.0.0"
+  flutter: ">=1.9.1+hotfix.5 <2.0.0"

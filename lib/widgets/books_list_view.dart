@@ -25,36 +25,135 @@ class BooksListView extends StatelessWidget {
       }));
     }
 
-    Widget tile(int index) {
-      return Card(
-        color: Colors.grey.withOpacity(0.5),
-        elevation: 8,
-        margin: const EdgeInsets.symmetric(
-          vertical: 10,
-          horizontal: 10,
+    final baseTextStyle = const TextStyle(fontFamily: 'Poppins');
+    final regularTextStyle = baseTextStyle.copyWith(
+        color: const Color(0xffb6b2df),
+        fontSize: 9.0,
+        fontWeight: FontWeight.w400);
+    final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 12.0);
+    final headerTextStyle = baseTextStyle.copyWith(
+        color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600);
+
+    Widget _planetValue({String value, String image}) {
+      return Row(children: <Widget>[
+        Icon(Icons.keyboard_arrow_down),
+        Container(width: 8.0),
+        Text("10", style: regularTextStyle),
+      ]);
+    }
+
+    Widget tile(index) {
+      return Container(
+        height: MediaQuery.of(context).size.height / 5,
+        child: Stack(
+          children: <Widget>[
+            Container(
+              child: Container(
+                margin: EdgeInsets.fromLTRB(40.0, 16.0, 10.0, 16.0),
+                constraints: BoxConstraints.expand(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(height: 4.0),
+                    Text(
+                      books[index].title,
+                      style: headerTextStyle,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Container(height: 10.0),
+                    Text(
+                      books[index].author_sort,
+                      style: subHeaderTextStyle,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Container(
+                        margin: EdgeInsets.symmetric(vertical: 8.0),
+                        height: 2.0,
+                        width: 18.0,
+                        color: Color(0xff00c6ff)),
+                  ],
+                ),
+              ),
+              height: 124.0,
+              margin: new EdgeInsets.only(left: 46.0),
+              decoration: new BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.rectangle,
+                borderRadius: new BorderRadius.circular(8.0),
+                boxShadow: <BoxShadow>[
+                  new BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10.0,
+                    offset: new Offset(0.0, 10.0),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              alignment: FractionalOffset.centerLeft,
+              child: Container(
+                  width: MediaQuery.of(context).size.width / 5,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black, width: 4)),
+                  child: BookDetailsCoverImage(
+                      books[index].id, books[index].path)),
+            ),
+          ],
         ),
-        child: ListTile(
-          contentPadding: EdgeInsets.all(5),
-          onTap: () => viewBookDetails(books[index].id),
-          trailing: DownloadIcon(books[index].id),
-//title: Text(books[index]['title'],style:TextStyle(fontWeight: FontWeight.bold)),
-          title: Container(
-              height: 40,
-              width: 240,
-              child: Text(
-                books[index].title,
-                overflow: TextOverflow.ellipsis,
-              )),
-          leading: ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: 100, maxWidth: 50),
-              child:
-                  BookDetailsCoverImage(books[index].id, books[index].path) ??
-                      Text("no image")),
-          subtitle: Text(
-            books[index].author_sort,
-            style: TextStyle(fontWeight: FontWeight.bold),
-            overflow: TextOverflow.ellipsis,
-          ),
+      );
+    }
+
+    Widget coolTile(index) {
+      return Container(
+        height: MediaQuery.of(context).size.height / 5,
+        decoration: new BoxDecoration(
+          color: index % 2 == 0 ? Colors.white : Colors.white70,
+          shape: BoxShape.rectangle,
+          borderRadius: new BorderRadius.circular(8.0),
+          boxShadow: <BoxShadow>[
+            new BoxShadow(
+              color: Colors.black12,
+              blurRadius: 10.0,
+              offset: new Offset(0.0, 10.0),
+            ),
+          ],
+        ),
+        child: Row(
+          children: <Widget>[
+            Container(
+              height: MediaQuery.of(context).size.height / 5,
+              width: MediaQuery.of(context).size.width/4,
+              child: Container(
+                  child: BookDetailsCoverImage(
+                      books[index].id, books[index].path)),
+            ),
+            Container(width: MediaQuery.of(context).size.width/16,),
+            Container(
+              width: MediaQuery.of(context).size.width*0.6,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(height: 30.0),
+                  Text(
+                    books[index].title,
+                    style: headerTextStyle,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Container(height: 10.0),
+                  Text(
+                    books[index].author_sort,
+                    style: subHeaderTextStyle,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Container(
+                      margin: EdgeInsets.symmetric(vertical: 8.0),
+                      height: 2.0,
+                      width: 18.0,
+                      color: Color(0xff00c6ff)),
+                ],
+              ),
+            ),
+          DownloadIcon(books[index].id)],
         ),
       );
     }
@@ -68,7 +167,7 @@ class BooksListView extends StatelessWidget {
                           .title
                           .toLowerCase()
                           .contains(filter.toLowerCase())
-                      ? tile(index)
+                      ? coolTile(index)
                       : Container());
             },
             itemCount: books.length,
@@ -81,7 +180,7 @@ class BooksListView extends StatelessWidget {
                           .title
                           .toLowerCase()
                           .contains(filter.toLowerCase())
-                      ? tile(index)
+                      ? coolTile(index)
                       : Container());
             },
             itemCount: books.length,

@@ -242,65 +242,55 @@ class _MyHomePageState extends State<MyHomePage> {
     String searchFilter = update.searchFilter;
 //    print("rebuilding homepage");
     return Container(
-      child: Stack(
-        children: <Widget>[
-          Image.asset(
-            'assets/images/subtle_wood.png',
-            fit: BoxFit.fill,
-            height: double.infinity,
-            width: double.infinity,
-          ),
-          Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: AppBar(
-                  backgroundColor: Colors.black.withOpacity(0.6),
-                  title: _appBarTitle,
-                  leading:
-                      Image.asset('assets/images/calibre_logo.png', scale: 0.4),
-                  actions: <Widget>[
-                    // action button
-                    IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () {
-                        _searchPressed(searchFilter);
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.more_vert),
-                      onPressed: () {
-                        _settingModalBottomSheet(context);
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.refresh),
-                      onPressed: () {
-                        update.updateFlagState(true);
-                      },
-                    )
-                  ]),
-              body: FutureBuilder(
-                  future: myFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (update.tokenExists == true) {
-                        return BooksView(
-                          layout,
-                          filter,
-                          sortDirection: sortDirection,
-                          sortOption: sortOption,
-                          update: update,
-                        );
-                      } else {
-                        return Center(
-                          child: Text('Please Connect to dropbox'),
-                        );
-                      }
-                    } else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  })),
-        ],
-      ),
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+              backgroundColor: Color(0xFF383838),
+              title: _appBarTitle,
+              leading:
+                  Image.asset('assets/images/calibre_logo.png', scale: 0.4),
+              actions: <Widget>[
+                // action button
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    _searchPressed(searchFilter);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.more_vert),
+                  onPressed: () {
+                    _settingModalBottomSheet(context);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.refresh),
+                  onPressed: () {
+                    update.updateFlagState(true);
+                  },
+                )
+              ]),
+          body: FutureBuilder(
+              future: myFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (update.tokenExists == true) {
+                    return BooksView(
+                      layout,
+                      filter,
+                      sortDirection: sortDirection,
+                      sortOption: sortOption,
+                      update: update,
+                    );
+                  } else {
+                    return Center(
+                      child: Text('Please Connect to dropbox'),
+                    );
+                  }
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              })),
     );
   }
 }
