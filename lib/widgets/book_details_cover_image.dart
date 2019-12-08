@@ -7,8 +7,10 @@ import 'package:calibre_carte/helpers/image_cacher.dart';
 class BookDetailsCoverImage extends StatefulWidget {
   final int bookId;
   final String relativePath;
+  final height;
+  final width;
 
-  BookDetailsCoverImage(this.bookId, this.relativePath);
+  BookDetailsCoverImage(this.bookId, this.relativePath,this.height,this.width);
 
   @override
   _BookDetailsCoverImageState createState() => _BookDetailsCoverImageState();
@@ -51,13 +53,14 @@ class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == true) {
-            return Image.file(
-              File(localImagePath),height: MediaQuery.of(context).size.height / 5,
-              width: MediaQuery.of(context).size.width/3.7,fit: BoxFit.fill,
+            return widget.height==null?Image.file(
+                File(localImagePath)):Image.file(
+              File(localImagePath),height: widget.height,
+              width:widget.width,fit: BoxFit.fill,
             );
           } else
-            return Image.asset('assets/images/calibre_logo.png', height: MediaQuery.of(context).size.height / 5,
-                width: MediaQuery.of(context).size.width/3.7,fit: BoxFit.fill);
+            return widget.height==null?Image.asset('assets/images/calibre_logo.png', height: widget.height,
+                width:widget.width,fit: BoxFit.fill):Image.asset('assets/images/calibre_logo.png');
         } else {
           return Center(
             child: CircularProgressIndicator(),

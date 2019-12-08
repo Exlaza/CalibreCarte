@@ -49,7 +49,7 @@ class BooksCarouselView extends StatelessWidget {
                                     ),
                                     child: Container(
                                       child:
-                                          BookDetailsCoverImage(i.id, i.path),
+                                          BookDetailsCoverImage(i.id, i.path,null,null),
                                       key: Key(i.title),
                                     )),
                               ),
@@ -80,7 +80,7 @@ class BooksCarouselView extends StatelessWidget {
                                     ),
                                     child: Container(
                                       child:
-                                          BookDetailsCoverImage(i.id, i.path),
+                                          BookDetailsCoverImage(i.id, i.path,null,null),
                                       key: Key(i.title),
                                     )),
                               ),
@@ -118,7 +118,7 @@ class BooksCarouselView extends StatelessWidget {
                                     ),
                                     child: Container(
                                       child:
-                                          BookDetailsCoverImage(i.id, i.path),
+                                          BookDetailsCoverImage(i.id, i.path,null,null),
                                       key: Key(i.author_sort),
                                     )),
                               ),
@@ -149,7 +149,7 @@ class BooksCarouselView extends StatelessWidget {
                                     ),
                                     child: Container(
                                       child:
-                                          BookDetailsCoverImage(i.id, i.path),
+                                          BookDetailsCoverImage(i.id, i.path,null,null),
                                       key: Key(i.author_sort),
                                     )),
                               ),

@@ -211,7 +211,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                                 top: Radius.circular(15),
                                 bottom: Radius.circular(15)),
                             child: BookDetailsCoverImage(
-                                widget.bookId, bookDetails.path),
+                                widget.bookId, bookDetails.path,null,null),
                           ),
                         ),
                         DefaultTabController(

@@ -41,7 +41,7 @@ class CalibreGridTile extends StatelessWidget {
                 width: MediaQuery.of(context).size.width / 3,
                 child: Container(
                     key: Key(book.title),
-                    child: BookDetailsCoverImage(book.id, book.path) ??
+                    child: BookDetailsCoverImage(book.id, book.path,null,null) ??
                         Text("no image")),
               ),
             ],

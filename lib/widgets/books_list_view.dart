@@ -42,24 +42,104 @@ class BooksListView extends StatelessWidget {
       ]);
     }
 
-    Widget tile(index) {
-      return Container(
-        height: MediaQuery.of(context).size.height / 5,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              child: Container(
-                margin: EdgeInsets.fromLTRB(40.0, 16.0, 10.0, 16.0),
-                constraints: BoxConstraints.expand(),
+//    Widget tile(index) {
+//      return Container(
+//        height: MediaQuery.of(context).size.height / 5,
+//        child: Stack(
+//          children: <Widget>[
+//            Container(
+//              child: Container(
+//                margin: EdgeInsets.fromLTRB(40.0, 16.0, 10.0, 16.0),
+//                constraints: BoxConstraints.expand(),
+//                child: Column(
+//                  crossAxisAlignment: CrossAxisAlignment.start,
+//                  children: <Widget>[
+//                    Container(height: 4.0),
+//                    Text(
+//                      books[index].title,
+//                      style: headerTextStyle,
+//                      overflow: TextOverflow.ellipsis,
+//                      maxLines: 2,
+//                    ),
+//                    Container(height: 10.0),
+//                    Text(
+//                      books[index].author_sort,
+//                      style: subHeaderTextStyle,
+//                      overflow: TextOverflow.ellipsis,
+//                    ),
+//                    Container(
+//                        margin: EdgeInsets.symmetric(vertical: 8.0),
+//                        height: 2.0,
+//                        width: 18.0,
+//                        color: Color(0xff00c6ff)),
+//                  ],
+//                ),
+//              ),
+//              height: 124.0,
+//              margin: new EdgeInsets.only(left: 46.0),
+//              decoration: new BoxDecoration(
+//                color: Colors.white,
+//                shape: BoxShape.rectangle,
+//                borderRadius: new BorderRadius.circular(8.0),
+//                boxShadow: <BoxShadow>[
+//                  new BoxShadow(
+//                    color: Colors.black12,
+//                    blurRadius: 10.0,
+//                    offset: new Offset(0.0, 10.0),
+//                  ),
+//                ],
+//              ),
+//            ),
+//            Container(
+//              alignment: FractionalOffset.centerLeft,
+//              child: Container(
+//                  width: MediaQuery.of(context).size.width / 5,
+//                  decoration: BoxDecoration(
+//                      border: Border.all(color: Colors.black, width: 4)),
+//                  child: BookDetailsCoverImage(
+//                      books[index].id, books[index].path)),
+//            ),
+//          ],
+//        ),
+//      );
+//    }
+
+    Widget coolTile(index) {
+      return GestureDetector(
+        onTap:() => viewBookDetails(books[index].id),
+        child: Container(
+          height: MediaQuery.of(context).size.height / 5,
+          decoration: new BoxDecoration(
+            color: index % 2 == 0 ? Colors.white : Colors.white70,
+            shape: BoxShape.rectangle,
+            borderRadius: new BorderRadius.circular(8.0),
+            boxShadow: <BoxShadow>[
+              new BoxShadow(
+                color: Colors.black12,
+                blurRadius: 10.0,
+                offset: new Offset(0.0, 10.0),
+              ),
+            ],
+          ),
+          child: Row(
+            children: <Widget>[
+              Container(
+                child: Container(
+                  child: BookDetailsCoverImage(
+                        books[index].id, books[index].path,MediaQuery.of(context).size.height / 5, MediaQuery.of(context).size.width/3.7),
+                ),
+              ),
+              Container(width: MediaQuery.of(context).size.width/16,),
+              Container(
+                width: MediaQuery.of(context).size.width*0.55,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Container(height: 4.0),
+                    Container(height: 20.0),
                     Text(
                       books[index].title,
                       style: headerTextStyle,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,maxLines: 2,
                     ),
                     Container(height: 10.0),
                     Text(
@@ -75,85 +155,8 @@ class BooksListView extends StatelessWidget {
                   ],
                 ),
               ),
-              height: 124.0,
-              margin: new EdgeInsets.only(left: 46.0),
-              decoration: new BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.rectangle,
-                borderRadius: new BorderRadius.circular(8.0),
-                boxShadow: <BoxShadow>[
-                  new BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 10.0,
-                    offset: new Offset(0.0, 10.0),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              alignment: FractionalOffset.centerLeft,
-              child: Container(
-                  width: MediaQuery.of(context).size.width / 5,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 4)),
-                  child: BookDetailsCoverImage(
-                      books[index].id, books[index].path)),
-            ),
-          ],
-        ),
-      );
-    }
-
-    Widget coolTile(index) {
-      return Container(
-        height: MediaQuery.of(context).size.height / 5,
-        decoration: new BoxDecoration(
-          color: index % 2 == 0 ? Colors.white : Colors.white70,
-          shape: BoxShape.rectangle,
-          borderRadius: new BorderRadius.circular(8.0),
-          boxShadow: <BoxShadow>[
-            new BoxShadow(
-              color: Colors.black12,
-              blurRadius: 10.0,
-              offset: new Offset(0.0, 10.0),
-            ),
-          ],
-        ),
-        child: Row(
-          children: <Widget>[
-            Container(
-              child: Container(
-                child: BookDetailsCoverImage(
-                      books[index].id, books[index].path),
-              ),
-            ),
-            Container(width: MediaQuery.of(context).size.width/16,),
-            Container(
-              width: MediaQuery.of(context).size.width*0.55,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(height: 20.0),
-                  Text(
-                    books[index].title,
-                    style: headerTextStyle,
-                    overflow: TextOverflow.ellipsis,maxLines: 2,
-                  ),
-                  Container(height: 10.0),
-                  Text(
-                    books[index].author_sort,
-                    style: subHeaderTextStyle,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Container(
-                      margin: EdgeInsets.symmetric(vertical: 8.0),
-                      height: 2.0,
-                      width: 18.0,
-                      color: Color(0xff00c6ff)),
-                ],
-              ),
-            ),
-          DownloadIcon(books[index].id)],
+            DownloadIcon(books[index].id)],
+          ),
         ),
       );
     }
@@ -162,7 +165,7 @@ class BooksListView extends StatelessWidget {
         ? ListView.builder(
             itemBuilder: (ctx, index) {
               return filter == null
-                  ? tile(index)
+                  ? coolTile(index)
                   : (books[index]
                           .title
                           .toLowerCase()
@@ -175,7 +178,7 @@ class BooksListView extends StatelessWidget {
         : ListView.builder(
             itemBuilder: (ctx, index) {
               return filter == null
-                  ? tile(index)
+                  ? coolTile(index)
                   : (books[index]
                           .title
                           .toLowerCase()
