@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:calibre_carte/helpers/book_downloader.dart';
 import 'package:calibre_carte/helpers/data_provider.dart';
 import 'package:calibre_carte/models/data.dart';
@@ -38,7 +40,7 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
     showDialog(
         context: context,
         builder: (_) {
-          return DownloadingProgress(widget.relativePath, fileName,context);
+          return DownloadingProgress(widget.relativePath, fileName, context);
         }).then((_) {
       Navigator.of(context).pop();
     });
@@ -49,6 +51,15 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
     // TODO: implement initState
     super.initState();
     myFuture = getBookDataFormats();
+  }
+
+  Future<bool> checkNet() async {
+    try {
+      var result = await InternetAddress.lookup('https://api.dropboxapi.com');
+      return true;
+    } on SocketException catch (_) {
+      return false;
+    }
   }
 
   @override
@@ -64,7 +75,15 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
                 return FlatButton(
                   child: Text(element["format"]),
                   onPressed: () {
-                    bookDownloader(element["name"],widget.oldContext);
+                    checkNet().then((val) {
+                      if (val == true) {
+                        bookDownloader(element["name"], context);
+                      } else
+                        {Navigator.of(context).pop();
+                          Scaffold.of(widget.oldContext).showSnackBar(SnackBar(
+                          content: Text("No internet"),
+                        ));}
+                    });
                   },
                 );
               }).toList(),

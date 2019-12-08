@@ -44,6 +44,9 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
       });
       return true;
     } catch (e) {
+      setState(() {
+        progress="ERROR";
+      });
       return false;
     }
   }
