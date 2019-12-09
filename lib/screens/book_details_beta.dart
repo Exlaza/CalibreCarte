@@ -121,12 +121,12 @@ class _BookDetailsScreenBetaState extends State<BookDetailsScreenBeta> {
                 ),
                 Text(
                   bookDetails.title,
-                  style: TextStyle(fontFamily: 'Montserrat', fontSize: 20),
+                  style: TextStyle(fontFamily: 'Montserrat', fontSize: 20),textAlign: TextAlign.center,
                 ),
                 SizedBox(
                   height: 5,
                 ),
-                Text(authorText,
+                Text(authorText,textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontSize: 15,
@@ -145,7 +145,7 @@ class _BookDetailsScreenBetaState extends State<BookDetailsScreenBeta> {
                         Text(
                           "Next",
                           style:
-                          TextStyle(fontFamily: 'Montserrat', fontSize: 25),
+                          TextStyle(fontFamily: 'Montserrat', fontSize: 25),textAlign: TextAlign.center
                         ),
                         IconButton(
                           icon: Icon(Icons.navigate_next),
