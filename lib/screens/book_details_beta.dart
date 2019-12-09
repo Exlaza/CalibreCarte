@@ -164,12 +164,13 @@ class _BookDetailsScreenBetaState extends State<BookDetailsScreenBeta> {
       ),
     );
   }
-
   Widget description() {
+    var didslide=MediaQuery.of(context).size.width/2;
+
     return Container(
-      child: Row(children: <Widget>[
+      child: Stack(children: <Widget>[
         leftTile(),
-        GestureDetector(
+        Row(children: <Widget>[Container(width: didslide,),GestureDetector(
           child: Container(
             child:     SingleChildScrollView(
                 padding: EdgeInsets.all(15),
@@ -189,7 +190,7 @@ class _BookDetailsScreenBetaState extends State<BookDetailsScreenBeta> {
             height: MediaQuery.of(context).size.height,
             color: Colors.black.withOpacity(0.3), alignment: Alignment.bottomRight,
           ),
-        )
+        )],)
       ]),
     );
   }

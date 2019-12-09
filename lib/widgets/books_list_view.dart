@@ -1,5 +1,6 @@
 import 'package:calibre_carte/models/books.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
+import 'package:calibre_carte/screens/book_details_Ekansh.dart';
 import 'package:calibre_carte/screens/book_details_beta.dart';
 import 'package:calibre_carte/screens/book_details_screen.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
@@ -20,7 +21,7 @@ class BooksListView extends StatelessWidget {
     void viewBookDetails(int bookId) {
 //      print(bookId);
       Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-        return BookDetailsScreenBeta(
+        return BookDetailsScreenEkansh(
           bookId: bookId,
         );
       }));
