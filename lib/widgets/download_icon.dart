@@ -44,14 +44,17 @@ class _DownloadIconState extends State<DownloadIcon> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data == true) {
-              return Icon(
-                Icons.done,
-                color: Colors.blue,
+              return CircleAvatar(radius: 10,backgroundColor: Color(0xffFFE06F),
+                child: Icon(
+                  Icons.done,
+                  color: Colors.white,size: 15,
+                ),
               );
-            } else
+            }
+            else
               return Icon(
-                Icons.done,
-                color: Colors.black12,
+                Icons.done,color: Colors.transparent,
+//                  color: Colors.grey.withOpacity(0.3),size: 15,
               );
           } else
             return Icon(

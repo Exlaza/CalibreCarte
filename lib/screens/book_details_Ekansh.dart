@@ -119,16 +119,10 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
 
 // TODO: change sizes
   Widget rightTile() {
-    var width = MediaQuery.of(context).size.width -
-        MediaQuery.of(context).size.width / 1.5;
     var totalHeight = MediaQuery.of(context).size.height -
         appbar.preferredSize.height -
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
-    var color = Color(0xffFED962);
-    var altColor = Color(0xffFFE06F);
-    var activeIcon = Colors.black;
-    var inactiveIcon = Colors.grey;
     return FutureBuilder(
       future: mySecondFuture,
       builder: (context, snapshot) {
