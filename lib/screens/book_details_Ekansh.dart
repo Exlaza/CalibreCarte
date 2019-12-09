@@ -214,7 +214,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
               width: width,
               height: width,
               child: IconButton(
-                icon: Icon(Icons.file_download),
+                icon: Icon(Icons.file_download,color: Colors.black,),
                 iconSize: 40,
               )),
         ),
@@ -234,7 +234,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
                   color: Colors.blueGrey,
                   boxShadow: [BoxShadow(blurRadius:10)]),
               child: IconButton(
-                icon: Icon(Icons.description),
+                icon: Icon(Icons.description,color: Colors.grey.withOpacity(0.5),),
                 iconSize: 40,
               ),
             ),
@@ -256,7 +256,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
                   color: Colors.brown,
                   boxShadow: [BoxShadow(blurRadius:10)]),
               child: IconButton(
-                icon: Icon(Icons.chrome_reader_mode),
+                icon: Icon(Icons.chrome_reader_mode,color: Colors.grey.withOpacity(0.5)),
                 iconSize: 40,
               ),
             ),
@@ -274,10 +274,10 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
               height: width,
 //              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: Colors.black,
                   boxShadow: [BoxShadow(blurRadius:10)]),
               child: IconButton(
-                icon: Icon(Icons.delete),
+                icon: Icon(Icons.delete,color: Colors.grey.withOpacity(0.5)),
                 iconSize: 40,
               ),
             ),
