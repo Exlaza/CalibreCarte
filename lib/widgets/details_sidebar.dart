@@ -9,7 +9,7 @@ class DetailsSidebar extends StatelessWidget {
   final bookId;
   final bookDetails;
   final bookComments;
-  final downloaded;
+  final bool downloaded;
   final dataFormatsFileNameMap;
   final Function checkCopies;
 
@@ -24,7 +24,8 @@ class DetailsSidebar extends StatelessWidget {
       this.totalHeight,
       this.bookId,
       this.bookComments,
-      this.bookDetails,this.checkCopies});
+      this.bookDetails,
+      this.checkCopies});
 
   deleteAllLocalCopies() async {
     BookDownloader bd = BookDownloader();
@@ -87,10 +88,12 @@ class DetailsSidebar extends StatelessWidget {
           GestureDetector(
             onTap: () {
               showDialog(
-                  context: context,
-                  builder: (_) =>
-                      SelectFormatDialog(bookId, bookDetails.path, context));
-              checkCopies();
+                      context: context,
+                      builder: (_) =>
+                          SelectFormatDialog(bookId, bookDetails.path, context))
+                  .then((_) {
+                checkCopies();
+              });
             },
             child: Container(
                 decoration:
@@ -140,11 +143,14 @@ class DetailsSidebar extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: downloaded? (() {
-              showDialog(
-                  context: context,
-                  builder: (_) => OpenFormatDialog(bookId, bookDetails.path));
-            }):(()=>{}),
+            onTap: downloaded
+                ? (() {
+                    showDialog(
+                        context: context,
+                        builder: (_) =>
+                            OpenFormatDialog(bookId, bookDetails.path));
+                  })
+                : (() => {}),
             child: Container(
               padding: EdgeInsets.all(10),
               // TODO: change sizes
@@ -158,15 +164,18 @@ class DetailsSidebar extends StatelessWidget {
 //                boxShadow: [BoxShadow(blurRadius: 10)],
               ),
               child: IconButton(
-                icon: Icon(Icons.chrome_reader_mode, color: downloaded?activeIcon:inactiveIcon),
+                icon: Icon(Icons.chrome_reader_mode,
+                    color: downloaded ? activeIcon : inactiveIcon),
                 iconSize: 40,
               ),
             ),
           ),
           GestureDetector(
-            onTap: downloaded?(() async {
-              deleteAllLocalCopies();
-            }):(()=>{}),
+            onTap: downloaded
+                ? (() async {
+                    deleteAllLocalCopies();
+                  })
+                : (() => {}),
             child: Container(
               padding: EdgeInsets.all(10),
               // TODO: change sizes
@@ -181,7 +190,8 @@ class DetailsSidebar extends StatelessWidget {
 //                BoxShadow(blurRadius: 10),
                   ]),
               child: IconButton(
-                icon: Icon(Icons.delete, color: downloaded?activeIcon:inactiveIcon),
+                icon: Icon(Icons.delete,
+                    color: downloaded ? activeIcon : inactiveIcon),
                 iconSize: 40,
               ),
             ),
