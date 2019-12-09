@@ -256,24 +256,27 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
                       showDialog(
                           context: context, builder: (_) => descriptionPopup());
                     },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      // TODO: change sizes
+                    child: Tooltip(
+                      message: "Open book description",
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        // TODO: change sizes
 
-                      width: width,
-                      height: totalHeight / 4,
+                        width: width,
+                        height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 1),
-                        color: altColor,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1),
+                          color: altColor,
 //                boxShadow: [BoxShadow(blurRadius: 10)],
-                      ),
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.description,
-                          color: Colors.black,
                         ),
-                        iconSize: 40,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.description,
+                            color: Colors.black,
+                          ),
+                          iconSize: 40,
+                        ),
                       ),
                     ),
                   ),
@@ -342,113 +345,128 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                              context: context,
-                              builder: (_) => SelectFormatDialog(
-                                  widget.bookId, bookDetails.path, context))
-                          .then((_) {
-                        setState(() {
-                          mySecondFuture = checkIfLocalCopyExists();
+                  Tooltip(
+                    message: "Download",
+                    preferBelow: false,
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                                context: context,
+                                builder: (_) => SelectFormatDialog(
+                                    widget.bookId, bookDetails.path, context))
+                            .then((_) {
+                          setState(() {
+                            mySecondFuture = checkIfLocalCopyExists();
+                          });
                         });
-                      });
-                    },
-                    child: Container(
-                        decoration: BoxDecoration(
-                            border: Border(bottom: BorderSide(width: 1,color: Colors.white), top: BorderSide(width: 1,color: Colors.white)), color: color
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                              border: Border(bottom: BorderSide(width: 1,color: Colors.white), top: BorderSide(width: 1,color: Colors.white)), color: color
 //                  boxShadow: [BoxShadow(blurRadius: 10)],
+                              ),
+                          padding: EdgeInsets.all(10),
+                          // TODO: change sizes
+
+                          width: width,
+                          height: totalHeight / 4,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.file_download,
+                              color: Colors.black,
                             ),
+                            iconSize: 40,
+                          )),
+                    ),
+                  ),
+                  Tooltip(
+                    message: "Book Description",
+                    preferBelow: false,
+                    child: GestureDetector(
+                      onTap: () {
+                        print("describe");
+                        showDialog(
+                            context: context, builder: (_) => descriptionPopup());
+                      },
+                      child: Container(
                         padding: EdgeInsets.all(10),
                         // TODO: change sizes
 
                         width: width,
                         height: totalHeight / 4,
+//              padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(width: 1,color: Colors.white)),
+                          color: altColor,
+//                boxShadow: [BoxShadow(blurRadius: 10)],
+                        ),
                         child: IconButton(
                           icon: Icon(
-                            Icons.file_download,
-                            color: Colors.black,
+                            Icons.description,
+                            color: Colors.grey.withOpacity(0.5),
                           ),
                           iconSize: 40,
-                        )),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      print("describe");
-                      showDialog(
-                          context: context, builder: (_) => descriptionPopup());
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      // TODO: change sizes
-
-                      width: width,
-                      height: totalHeight / 4,
-//              padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1,color: Colors.white)),
-                        color: altColor,
-//                boxShadow: [BoxShadow(blurRadius: 10)],
-                      ),
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.description,
-                          color: Colors.grey.withOpacity(0.5),
                         ),
-                        iconSize: 40,
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (_) => OpenFormatDialog(
-                              widget.bookId, bookDetails.path));
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      // TODO: change sizes
+                  Tooltip(
+                    message: "Open local copy",
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => OpenFormatDialog(
+                                widget.bookId, bookDetails.path));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        // TODO: change sizes
 
-                      width: width,
-                      height: totalHeight / 4,
+                        width: width,
+                        height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1,color: Colors.white)),
-                        color: color,
+                        decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(width: 1,color: Colors.white)),
+                          color: color,
 //                boxShadow: [BoxShadow(blurRadius: 10)],
-                      ),
-                      child: IconButton(
-                        icon: Icon(Icons.chrome_reader_mode,
-                            color: Colors.grey.withOpacity(0.5)),
-                        iconSize: 40,
+                        ),
+                        child: IconButton(
+                          icon: Icon(Icons.chrome_reader_mode,
+                              color: Colors.grey.withOpacity(0.5)),
+                          iconSize: 40,
+                        ),
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (_) => SelectFormatDialog(
-                              widget.bookId, bookDetails.path, context));
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      // TODO: change sizes
+                  Tooltip(
+                    message: "Delete local copy",
+                    preferBelow: false,
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) => SelectFormatDialog(
+                                widget.bookId, bookDetails.path, context));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        // TODO: change sizes
 
-                      width: width,
-                      height: totalHeight / 4,
+                        width: width,
+                        height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(width: 1,color: Colors.white),),
-                          color: altColor,
-                          boxShadow: [
+                        decoration: BoxDecoration(
+                            border: Border(bottom: BorderSide(width: 1,color: Colors.white),),
+                            color: altColor,
+                            boxShadow: [
 //                BoxShadow(blurRadius: 10),
-                          ]),
-                      child: IconButton(
-                        icon: Icon(Icons.delete,
-                            color: Colors.grey.withOpacity(0.5)),
-                        iconSize: 40,
+                            ]),
+                        child: IconButton(
+                          icon: Icon(Icons.delete,
+                              color: Colors.grey.withOpacity(0.5)),
+                          iconSize: 40,
+                        ),
                       ),
                     ),
                   )
