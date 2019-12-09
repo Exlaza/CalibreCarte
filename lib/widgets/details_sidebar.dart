@@ -15,8 +15,8 @@ class DetailsSidebar extends StatelessWidget {
 
   var color = Color(0xffFED962);
   var altColor = Color(0xffFFE06F);
-  var activeIcon = Colors.black;
-  var inactiveIcon = Colors.grey;
+  var activeIcon = Colors.white;
+  var inactiveIcon = Colors.grey.withOpacity(0.3);
 
   DetailsSidebar(
       {this.dataFormatsFileNameMap,
