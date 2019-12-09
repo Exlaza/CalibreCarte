@@ -116,8 +116,11 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           // TODO: change sizes
-          BookDetailsCoverImage(
-              widget.bookId, bookDetails.path, bottomSize, width),
+          Container(
+            child: BookDetailsCoverImage(
+                widget.bookId, bookDetails.path, bottomSize-1, width),
+          ),
+          Container(height: 1,color: Colors.black,width: width,),
           Container(
             child: Column(
               children: <Widget>[
@@ -154,7 +157,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
                       Container(
                         width: width / 2,
                         height: (bottomSize * 0.25),
-                        color: Colors.black,
+                        color: Color(0xFF002242),
                         child: Icon(
                           Icons.arrow_back,
                           color: Colors.white,
@@ -163,7 +166,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
                       Container(
                         height: (bottomSize * 0.25),
                         width: width / 2,
-                        color: Colors.black,
+                        color: Color(0xFF002242),
                         child: Icon(
                           Icons.arrow_forward,
                           color: Colors.white,
@@ -198,8 +201,10 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
         appbar.preferredSize.height -
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
-    var color = Color(0xff8C1C38);
-    var altColor = Color(0xff5D1326);
+    var color = Color(0xffFED962);
+    var altColor = Color(0xffFFE06F);
+    var activeIcon=Colors.black;
+    var inactiveIcon=Colors.grey;
     return FutureBuilder(
       future: mySecondFuture,
       builder: (context, snapshot) {
@@ -610,7 +615,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
   }
 
   var appbar = AppBar(
-    backgroundColor: Colors.black,
+    backgroundColor: Color(0xff002242),
     title: Text('Details'),
   );
 
