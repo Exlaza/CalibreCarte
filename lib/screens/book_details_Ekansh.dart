@@ -97,12 +97,11 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     myFuture = getBookDetails();
     mySecondFuture = checkIfLocalCopyExists();
   }
-
+// TODO: change sizes
   Widget leftTile() {
     var bottomSize =
         MediaQuery.of(context).size.height / 2 - appbar.preferredSize.height;
@@ -110,6 +109,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          // TODO: change sizes
           BookDetailsCoverImage(
               widget.bookId,
               bookDetails.path,
@@ -148,6 +148,8 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
                 ),
               ],
             ),
+            // TODO: change sizes
+
             width: MediaQuery.of(context).size.width / 2,
             height: (MediaQuery.of(context).size.height -
                     appbar.preferredSize.height) /
@@ -163,10 +165,12 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
       child: Row(children: <Widget>[leftTile(), rightTile()]),
     );
   }
-
+// TODO: change sizes
   Widget rightTile() {
     return Container(
       padding: EdgeInsets.only(top: 20),
+      // TODO: change sizes
+
       width: MediaQuery.of(context).size.width / 2,
       height:
           (MediaQuery.of(context).size.height - appbar.preferredSize.height),
@@ -181,6 +185,8 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
             },
             child: Container(
               padding: EdgeInsets.all(10),
+              // TODO: change sizes
+
               width: MediaQuery.of(context).size.width / 2,
               height: MediaQuery.of(context).size.height / 8,
 //              padding: EdgeInsets.all(10),
@@ -197,6 +203,8 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
           GestureDetector(
             child: Container(
               padding: EdgeInsets.all(10),
+              // TODO: change sizes
+
               width: MediaQuery.of(context).size.width / 2,
               height: MediaQuery.of(context).size.height / 8,
               color: Colors.blueGrey.withOpacity(0.5),
@@ -211,7 +219,9 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
           ),
           GestureDetector(
             child: Container(
-              width: MediaQuery.of(context).size.width / 2,
+              // TODO: change sizes
+
+            width: MediaQuery.of(context).size.width / 2,
               height: MediaQuery.of(context).size.height / 8,
               padding: EdgeInsets.all(10),
               color: Colors.blueGrey.withOpacity(0.5),
@@ -272,86 +282,6 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: appbar,
-//      floatingActionButton: FutureBuilder(
-//          future: mySecondFuture,
-//          builder: (context, snapshot) {
-//            if (snapshot.connectionState == ConnectionState.done) {
-//              if (snapshot.data) {
-//                return Column(
-//                  crossAxisAlignment: CrossAxisAlignment.end,
-//                  mainAxisSize: MainAxisSize.min,
-//                  children: <Widget>[
-//                    SizedBox(
-//                      height: 40,
-//                      width: 40,
-//                      child: FloatingActionButton(
-//                          heroTag: "2",
-//                          onPressed: () {
-//                            showDialog(
-//                                context: context,
-//                                builder: (_) => OpenFormatDialog(
-//                                    widget.bookId, bookDetails.path));
-//                          },
-//                          child: Icon(Icons.library_books)),
-//                    ),
-//                    SizedBox(
-//                      height: 10,
-//                    ),
-//                    Row(
-//                      mainAxisAlignment: MainAxisAlignment.end,
-//                      crossAxisAlignment: CrossAxisAlignment.end,
-//                      children: <Widget>[
-//                        SizedBox(
-//                            height: 40,
-//                            width: 40,
-//                            child: FloatingActionButton(
-//                              onPressed: () async {
-//                                deleteAllLocalCopies();
-//                              },
-//                              heroTag: "1",
-//                              child: Icon(
-//                                Icons.delete,
-//                              ),
-//                            )),
-//                        SizedBox(
-//                          width: 10,
-//                        ),
-//                        FloatingActionButton(
-//                          heroTag: "0",
-//                          onPressed: () {
-//                            showDialog(
-//                                context: context,
-//                                builder: (_) => SelectFormatDialog(
-//                                    widget.bookId, bookDetails.path, context));
-//                          },
-//                          child: Icon(Icons.file_download),
-//                        )
-//                      ],
-//                    )
-//                  ],
-//                );
-//              } else {
-//                return FloatingActionButton(
-//                  child: Icon(Icons.file_download),
-//                  onPressed: () {
-//                    showDialog(
-//                            context: context,
-//                            builder: (_) => SelectFormatDialog(
-//                                widget.bookId, bookDetails.path, context))
-//                        .then((_) {
-//                      setState(() {
-//                        mySecondFuture = checkIfLocalCopyExists();
-//                      });
-//                    });
-//                  },
-//                );
-//              }
-//            } else {
-//              return FloatingActionButton(
-//                child: Icon(Icons.file_download),
-//              );
-//            }
-//          }),
       body: FutureBuilder<void>(
           future: myFuture,
           builder: (context, snapshot) {
