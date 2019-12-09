@@ -101,29 +101,28 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
     myFuture = getBookDetails();
     mySecondFuture = checkIfLocalCopyExists();
   }
+
 // TODO: change sizes
   Widget leftTile() {
-    var bottomSize =
-        MediaQuery.of(context).size.height / 2 - appbar.preferredSize.height;
+    var totalHeight = MediaQuery.of(context).size.height -
+        appbar.preferredSize.height -
+        MediaQuery.of(context).padding.top -
+        MediaQuery.of(context).padding.bottom;
+    var bottomSize = totalHeight / 2;
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           // TODO: change sizes
-          BookDetailsCoverImage(
-              widget.bookId,
-              bookDetails.path,
-              MediaQuery.of(context).size.height / 2 -
-                  appbar.preferredSize.height,
+          BookDetailsCoverImage(widget.bookId, bookDetails.path, bottomSize,
               MediaQuery.of(context).size.width / 2),
           Container(
             color: Colors.black.withOpacity(0.2),
-            padding: EdgeInsets.all(10),
             child: Column(
               children: <Widget>[
                 Container(
                   alignment: Alignment.center,
-                  height: bottomSize * 3 / 4,
+                  height: (bottomSize *0.75),
                   child: Text(
                     bookDetails.title,
                     style: TextStyle(fontFamily: 'Montserrat', fontSize: 25),
@@ -133,7 +132,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
                   ),
                 ),
                 Container(
-                  height: bottomSize / 4,
+                  height: (bottomSize*0.25),
                   alignment: Alignment.topLeft,
                   child: Text(
                     authorText,
@@ -151,9 +150,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
             // TODO: change sizes
 
             width: MediaQuery.of(context).size.width / 2,
-            height: (MediaQuery.of(context).size.height -
-                    appbar.preferredSize.height) /
-                2,
+            height: bottomSize,
           ),
         ],
       ),
@@ -165,6 +162,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
       child: Row(children: <Widget>[leftTile(), rightTile()]),
     );
   }
+
 // TODO: change sizes
   Widget rightTile() {
     return Container(
@@ -181,7 +179,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
           GestureDetector(
             onTap: () {
               print("describe");
-              showDialog(context: context, builder:(_)=> descriptionPopup());
+              showDialog(context: context, builder: (_) => descriptionPopup());
             },
             child: Container(
               padding: EdgeInsets.all(10),
@@ -221,7 +219,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
             child: Container(
               // TODO: change sizes
 
-            width: MediaQuery.of(context).size.width / 2,
+              width: MediaQuery.of(context).size.width / 2,
               height: MediaQuery.of(context).size.height / 8,
               padding: EdgeInsets.all(10),
               color: Colors.blueGrey.withOpacity(0.5),
@@ -244,31 +242,36 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
   }
 
   Widget descriptionPopup() {
-    return Scaffold(backgroundColor:Colors.black.withOpacity(0.2),
+    return Scaffold(
+      backgroundColor: Colors.black.withOpacity(0.2),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-           Navigator.of(context).pop();
+            Navigator.of(context).pop();
           },
           child: Icon(Icons.arrow_back)),
       body: Container(
-          child:SingleChildScrollView(
-              padding: EdgeInsets.all(15),
-              child: Container(
-                child: bookComments != null
-                    ? Text(
-                    bookComments.text,style:
-                TextStyle(fontSize: 20, fontFamily: 'Montserrat',color: Colors.white)
-                )
-                    : Container( alignment: Alignment.center,
-                  child: Text(
-                    'No description',textAlign: TextAlign.start,
-                    style:
-                    TextStyle(fontSize: 20, fontFamily: 'Montserrat',color: Colors.white),
-                  ),
-                ),
-              )),
-
-        ),
+        child: SingleChildScrollView(
+            padding: EdgeInsets.all(15),
+            child: Container(
+              child: bookComments != null
+                  ? Text(bookComments.text,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Montserrat',
+                          color: Colors.white))
+                  : Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'No description',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'Montserrat',
+                            color: Colors.white),
+                      ),
+                    ),
+            )),
+      ),
     );
   }
 
