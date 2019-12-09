@@ -234,7 +234,8 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Widget _appBarTitle = const Text("Calibre Carte",style: TextStyle(fontFamily: 'Roboto',fontSize: 20),);
+  Widget _appBarTitle = const Text("Calibre Carte",style: TextStyle(fontFamily: 'Montserrat',
+      color: Color(0xffFED962)),);
 
   @override
   Widget build(BuildContext context) {
@@ -245,7 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
-              backgroundColor: Color(0xFF383838),
+              backgroundColor: Color(0xff002242),
               title: _appBarTitle,
 //              leading:
 //                  Image.asset('assets/images/calibre_logo.png', scale: 0.4),
