@@ -45,17 +45,17 @@ class _DownloadIconState extends State<DownloadIcon> {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data == true) {
               return Icon(
-                Icons.file_download,
+                Icons.done,
                 color: Colors.blue,
               );
             } else
               return Icon(
-                Icons.file_download,
+                Icons.done,
                 color: Colors.black12,
               );
           } else
             return Icon(
-              Icons.file_download,
+              Icons.done,
               color: Colors.transparent,
             );
         });
