@@ -255,8 +255,8 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
             padding: EdgeInsets.all(15),
             child: Container(
               child: bookComments != null
-                  ? Text(bookComments.text,
-                      style: TextStyle(
+                  ? Html(data: bookComments.text,
+                      defaultTextStyle: TextStyle(
                           fontSize: 20,
                           fontFamily: 'Montserrat',
                           color: Colors.white))
