@@ -104,6 +104,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
 
 // TODO: change sizes
   Widget leftTile() {
+    var width = MediaQuery.of(context).size.width / 1.5;
     var totalHeight = MediaQuery.of(context).size.height -
         appbar.preferredSize.height -
         MediaQuery.of(context).padding.top -
@@ -114,15 +115,14 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           // TODO: change sizes
-          BookDetailsCoverImage(widget.bookId, bookDetails.path, bottomSize,
-              MediaQuery.of(context).size.width / 1.5),
+          BookDetailsCoverImage(
+              widget.bookId, bookDetails.path, bottomSize, width),
           Container(
-            color: Colors.black.withOpacity(0.2),
             child: Column(
               children: <Widget>[
                 Container(
                   alignment: Alignment.center,
-                  height: (bottomSize *0.75),
+                  height: (bottomSize * 0.5),
                   child: Text(
                     bookDetails.title,
                     style: TextStyle(fontFamily: 'Montserrat', fontSize: 25),
@@ -132,11 +132,11 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
                   ),
                 ),
                 Container(
-                  height: (bottomSize*0.25),
-                  alignment: Alignment.topLeft,
+                  height: (bottomSize * 0.25),
+                  alignment: Alignment.topCenter,
                   child: Text(
                     authorText,
-                    textAlign: TextAlign.start,
+                    textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                         fontFamily: 'Montserrat',
@@ -145,11 +145,37 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
                     maxLines: 2,
                   ),
                 ),
+                Container(
+                  height: (bottomSize * 0.25),
+                  alignment: Alignment.topCenter,
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        width: width / 2,
+                        height: (bottomSize * 0.25),
+                        color: Colors.black,
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Container(
+                        height: (bottomSize * 0.25),
+                        width: width / 2,
+                        color: Colors.black,
+                        child: Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
+                  ),
+                )
               ],
             ),
             // TODO: change sizes
 
-            width: MediaQuery.of(context).size.width / 1.5,
+            width: width,
             height: bottomSize,
           ),
         ],
@@ -165,18 +191,33 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
 
 // TODO: change sizes
   Widget rightTile() {
+    var width = MediaQuery.of(context).size.width -
+        MediaQuery.of(context).size.width / 1.5;
     return Container(
-      padding: EdgeInsets.only(top: 20),
       // TODO: change sizes
 
-      width: MediaQuery.of(context).size.width / 3,
+      width: width,
       height:
           (MediaQuery.of(context).size.height - appbar.preferredSize.height),
       color: Colors.black.withOpacity(0.3),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[GestureDetector(
+          child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.deepOrange,
+                  boxShadow: [BoxShadow(blurRadius: 10)]),
+              padding: EdgeInsets.all(10),
+              // TODO: change sizes
+
+              width: width,
+              height: width,
+              child: IconButton(
+                icon: Icon(Icons.file_download),
+                iconSize: 40,
+              )),
+        ),
           GestureDetector(
             onTap: () {
               print("describe");
@@ -186,57 +227,67 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
               padding: EdgeInsets.all(10),
               // TODO: change sizes
 
-              width: MediaQuery.of(context).size.width / 3,
-              height: MediaQuery.of(context).size.height / 8,
+              width: width,
+              height: width,
 //              padding: EdgeInsets.all(10),
-              color: Colors.blueGrey.withOpacity(0.5),
-              child: Text(
-                "Description",
-                style: TextStyle(fontFamily: 'Montserrat', fontSize: 25),
+              decoration: BoxDecoration(
+                  color: Colors.blueGrey.withOpacity(0.5),
+                  boxShadow: [BoxShadow(blurRadius:10)]),
+              child: IconButton(
+                icon: Icon(Icons.description),
+                iconSize: 40,
               ),
             ),
           ),
 //          SizedBox(
 //            height: MediaQuery.of(context).size.height / 32,
 //          ),
-          GestureDetector(
-            child: Container(
-              padding: EdgeInsets.all(10),
-              // TODO: change sizes
 
-              width: MediaQuery.of(context).size.width / 2,
-              height: MediaQuery.of(context).size.height / 8,
-              color: Colors.blueGrey.withOpacity(0.5),
-              child: Text(
-                "Download",
-                style: TextStyle(fontFamily: 'Montserrat', fontSize: 25),
-              ),
-            ),
-          ),
 //          SizedBox(
 //            height: MediaQuery.of(context).size.height / 32,
 //          ),
           GestureDetector(
+            onTap: () {
+              print("describe");
+              showDialog(context: context, builder: (_) => descriptionPopup());
+            },
             child: Container(
+              padding: EdgeInsets.all(10),
               // TODO: change sizes
 
-              width: MediaQuery.of(context).size.width / 2,
-              height: MediaQuery.of(context).size.height / 8,
-              padding: EdgeInsets.all(10),
-              color: Colors.blueGrey.withOpacity(0.5),
-              child: Row(
-                children: <Widget>[
-                  Text("Next",
-                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 25),
-                      textAlign: TextAlign.center),
-                  IconButton(
-                    icon: Icon(Icons.navigate_next),
-                    iconSize: 40,
-                  )
-                ],
+              width: width,
+              height: width,
+//              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: Colors.brown.withOpacity(0.5),
+                  boxShadow: [BoxShadow(blurRadius:10)]),
+              child: IconButton(
+                icon: Icon(Icons.chrome_reader_mode),
+                iconSize: 40,
               ),
             ),
           ),
+          GestureDetector(
+            onTap: () {
+              print("describe");
+              showDialog(context: context, builder: (_) => descriptionPopup());
+            },
+            child: Container(
+              padding: EdgeInsets.all(10),
+              // TODO: change sizes
+
+              width: width,
+              height: width,
+//              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.5),
+                  boxShadow: [BoxShadow(blurRadius:10)]),
+              child: IconButton(
+                icon: Icon(Icons.delete),
+                iconSize: 40,
+              ),
+            ),
+          )
         ],
       ),
     );
