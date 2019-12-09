@@ -32,9 +32,13 @@ class BooksListView extends StatelessWidget {
         color: const Color(0xffb6b2df),
         fontSize: 9.0,
         fontWeight: FontWeight.w400);
-    final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 12.0, fontFamily: 'Montserrat');
-    final headerTextStyle = baseTextStyle.copyWith(fontFamily: 'Montserrat',
-        color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600);
+    final subHeaderTextStyle =
+        regularTextStyle.copyWith(fontSize: 12.0, fontFamily: 'Montserrat');
+    final headerTextStyle = baseTextStyle.copyWith(
+        fontFamily: 'Montserrat',
+        color: Colors.black,
+        fontSize: 18.0,
+        fontWeight: FontWeight.w600);
 
     Widget _planetValue({String value, String image}) {
       return Row(children: <Widget>[
@@ -46,7 +50,7 @@ class BooksListView extends StatelessWidget {
 
     Widget coolTile(index) {
       return GestureDetector(
-        onTap:() => viewBookDetails(books[index].id),
+        onTap: () => viewBookDetails(books[index].id),
         child: Container(
           height: MediaQuery.of(context).size.height / 5,
           decoration: new BoxDecoration(
@@ -66,12 +70,17 @@ class BooksListView extends StatelessWidget {
               Container(
                 child: Container(
                   child: BookDetailsCoverImage(
-                        books[index].id, books[index].path,MediaQuery.of(context).size.height / 5, MediaQuery.of(context).size.width/3.7),
+                      books[index].id,
+                      books[index].path,
+                      MediaQuery.of(context).size.height / 5,
+                      MediaQuery.of(context).size.width / 3.7),
                 ),
               ),
-              Container(width: MediaQuery.of(context).size.width/16,),
               Container(
-                width: MediaQuery.of(context).size.width*0.55,
+                width: MediaQuery.of(context).size.width / 16,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.55,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -79,7 +88,8 @@ class BooksListView extends StatelessWidget {
                     Text(
                       books[index].title,
                       style: headerTextStyle,
-                      overflow: TextOverflow.ellipsis,maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                     ),
                     Container(height: 10.0),
                     Text(
@@ -88,14 +98,17 @@ class BooksListView extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Container(
-                        margin: EdgeInsets.symmetric(vertical: 8.0),
-                        height: 2.0,
-                        width: 18.0,
-                        color: Color(0xff00c6ff)),
+                      margin: EdgeInsets.symmetric(vertical: 8.0),
+                      height: 2.0,
+                      width: 18.0,
+                      color: Color(0xff00c6ff),
+                    ),
+                    SizedBox(height: 30,),
+                    DownloadIcon(books[index].id),
                   ],
                 ),
               ),
-            DownloadIcon(books[index].id)],
+            ],
           ),
         ),
       );
