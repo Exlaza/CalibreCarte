@@ -105,6 +105,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
 // TODO: change sizes
   Widget leftTile() {
     var width = MediaQuery.of(context).size.width / 1.5;
+
     var totalHeight = MediaQuery.of(context).size.height -
         appbar.preferredSize.height -
         MediaQuery.of(context).padding.top -
@@ -193,6 +194,10 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
   Widget rightTile() {
     var width = MediaQuery.of(context).size.width -
         MediaQuery.of(context).size.width / 1.5;
+    var totalHeight = MediaQuery.of(context).size.height -
+        appbar.preferredSize.height -
+        MediaQuery.of(context).padding.top -
+        MediaQuery.of(context).padding.bottom;
     return Container(
       // TODO: change sizes
 
@@ -203,43 +208,26 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[GestureDetector(
-          child: Container(
-              decoration: BoxDecoration(
+        children: <Widget>[
+          GestureDetector(
+            child: Container(
+                decoration: BoxDecoration(
                   color: Colors.deepOrange,
-                  boxShadow: [BoxShadow(blurRadius: 10)]),
-              padding: EdgeInsets.all(10),
-              // TODO: change sizes
+//                  boxShadow: [BoxShadow(blurRadius: 10)],
+                ),
+                padding: EdgeInsets.all(10),
+                // TODO: change sizes
 
-              width: width,
-              height: width,
-              child: IconButton(
-                icon: Icon(Icons.file_download,color: Colors.black,),
-                iconSize: 40,
-              )),
-        ),
-          GestureDetector(
-            onTap: () {
-              print("describe");
-              showDialog(context: context, builder: (_) => descriptionPopup());
-            },
-            child: Container(
-              padding: EdgeInsets.all(10),
-              // TODO: change sizes
-
-              width: width,
-              height: width,
-//              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: Colors.blueGrey,
-                  boxShadow: [BoxShadow(blurRadius:10)]),
-              child: IconButton(
-                icon: Icon(Icons.description,color: Colors.grey.withOpacity(0.5),),
-                iconSize: 40,
-              ),
-            ),
+                width: width,
+                height: totalHeight/4,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.file_download,
+                    color: Colors.black,
+                  ),
+                  iconSize: 40,
+                )),
           ),
-
           GestureDetector(
             onTap: () {
               print("describe");
@@ -250,13 +238,17 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
               // TODO: change sizes
 
               width: width,
-              height: width,
+              height: totalHeight/4,
 //              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: Colors.brown,
-                  boxShadow: [BoxShadow(blurRadius:10)]),
+                color: Colors.blueGrey,
+//                boxShadow: [BoxShadow(blurRadius: 10)],
+              ),
               child: IconButton(
-                icon: Icon(Icons.chrome_reader_mode,color: Colors.grey.withOpacity(0.5)),
+                icon: Icon(
+                  Icons.description,
+                  color: Colors.grey.withOpacity(0.5),
+                ),
                 iconSize: 40,
               ),
             ),
@@ -271,13 +263,36 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
               // TODO: change sizes
 
               width: width,
-              height: width,
+              height: totalHeight/4,
 //              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: Colors.black,
-                  boxShadow: [BoxShadow(blurRadius:10)]),
+                color: Colors.brown,
+//                boxShadow: [BoxShadow(blurRadius: 10)],
+              ),
               child: IconButton(
-                icon: Icon(Icons.delete,color: Colors.grey.withOpacity(0.5)),
+                icon: Icon(Icons.chrome_reader_mode,
+                    color: Colors.grey.withOpacity(0.5)),
+                iconSize: 40,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              print("describe");
+              showDialog(context: context, builder: (_) => descriptionPopup());
+            },
+            child: Container(
+              padding: EdgeInsets.all(10),
+              // TODO: change sizes
+
+              width: width,
+              height: totalHeight/4,
+//              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(color: Colors.black, boxShadow: [
+//                BoxShadow(blurRadius: 10),
+              ]),
+              child: IconButton(
+                icon: Icon(Icons.delete, color: Colors.grey.withOpacity(0.5)),
                 iconSize: 40,
               ),
             ),
@@ -300,7 +315,8 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
             padding: EdgeInsets.all(15),
             child: Container(
               child: bookComments != null
-                  ? Html(data: bookComments.text,
+                  ? Html(
+                      data: bookComments.text,
                       defaultTextStyle: TextStyle(
                           fontSize: 20,
                           fontFamily: 'Montserrat',
