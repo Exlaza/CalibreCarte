@@ -199,113 +199,378 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
     var color = Color(0xff8C1C38);
-    var altColor= Color(0xff5D1326);
-    return Container(
-      // TODO: change sizes
+    var altColor = Color(0xff5D1326);
+    return FutureBuilder(
+      future: mySecondFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data) {
+            return Container(
+              // TODO: change sizes
 
-      width: width,
-      height:
-          (MediaQuery.of(context).size.height - appbar.preferredSize.height),
-      color: Colors.black.withOpacity(0.3),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          GestureDetector(
-            child: Container(
-                decoration:
-                    BoxDecoration(border: Border.all(width: 1), color: color
+              width: width,
+              height: (MediaQuery.of(context).size.height -
+                  appbar.preferredSize.height),
+              color: Colors.black.withOpacity(0.3),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) => SelectFormatDialog(
+                              widget.bookId, bookDetails.path, context));
+                    },
+                    child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(width: 1), color: color
 //                  boxShadow: [BoxShadow(blurRadius: 10)],
-                        ),
-                padding: EdgeInsets.all(10),
-                // TODO: change sizes
+                            ),
+                        padding: EdgeInsets.all(10),
+                        // TODO: change sizes
 
-                width: width,
-                height: totalHeight / 4,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.file_download,
-                    color: Colors.black,
+                        width: width,
+                        height: totalHeight / 4,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.file_download,
+                            color: Colors.black,
+                          ),
+                          iconSize: 40,
+                        )),
                   ),
-                  iconSize: 40,
-                )),
-          ),
-          GestureDetector(
-            onTap: () {
-              print("describe");
-              showDialog(context: context, builder: (_) => descriptionPopup());
-            },
-            child: Container(
-              padding: EdgeInsets.all(10),
-              // TODO: change sizes
+                  GestureDetector(
+                    onTap: () {
+                      print("describe");
+                      showDialog(
+                          context: context, builder: (_) => descriptionPopup());
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      // TODO: change sizes
 
-              width: width,
-              height: totalHeight / 4,
+                      width: width,
+                      height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                border: Border.all(width: 1),
-                color: altColor,
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1),
+                        color: altColor,
 //                boxShadow: [BoxShadow(blurRadius: 10)],
-              ),
-              child: IconButton(
-                icon: Icon(
-                  Icons.description,
-                  color: Colors.grey.withOpacity(0.5),
-                ),
-                iconSize: 40,
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              print("describe");
-              showDialog(context: context, builder: (_) => descriptionPopup());
-            },
-            child: Container(
-              padding: EdgeInsets.all(10),
-              // TODO: change sizes
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.description,
+                          color: Colors.black,
+                        ),
+                        iconSize: 40,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) => OpenFormatDialog(
+                              widget.bookId, bookDetails.path));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      // TODO: change sizes
 
-              width: width,
-              height: totalHeight / 4,
+                      width: width,
+                      height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                border: Border.all(width: 1),
-                color: color,
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1),
+                        color: color,
 //                boxShadow: [BoxShadow(blurRadius: 10)],
-              ),
-              child: IconButton(
-                icon: Icon(Icons.chrome_reader_mode,
-                    color: Colors.grey.withOpacity(0.5)),
-                iconSize: 40,
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              print("describe");
-              showDialog(context: context, builder: (_) => descriptionPopup());
-            },
-            child: Container(
-              padding: EdgeInsets.all(10),
-              // TODO: change sizes
+                      ),
+                      child: IconButton(
+                        icon:
+                            Icon(Icons.chrome_reader_mode, color: Colors.black),
+                        iconSize: 40,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) => SelectFormatDialog(
+                              widget.bookId, bookDetails.path, context));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      // TODO: change sizes
 
-              width: width,
-              height: totalHeight / 4,
+                      width: width,
+                      height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  border: Border.all(width: 1),
-                  color: altColor,
-                  boxShadow: [
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1),
+                          color: altColor,
+                          boxShadow: [
 //                BoxShadow(blurRadius: 10),
-                  ]),
-              child: IconButton(
-                icon: Icon(Icons.delete, color: Colors.grey.withOpacity(0.5)),
-                iconSize: 40,
+                          ]),
+                      child: IconButton(
+                        icon: Icon(Icons.delete, color: Colors.black),
+                        iconSize: 40,
+                      ),
+                    ),
+                  )
+                ],
               ),
+            );
+          } else {
+            return Container(
+              // TODO: change sizes
+
+              width: width,
+              height: (MediaQuery.of(context).size.height -
+                  appbar.preferredSize.height),
+              color: Colors.black.withOpacity(0.3),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                              context: context,
+                              builder: (_) => SelectFormatDialog(
+                                  widget.bookId, bookDetails.path, context))
+                          .then((_) {
+                        setState(() {
+                          mySecondFuture = checkIfLocalCopyExists();
+                        });
+                      });
+                    },
+                    child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(width: 1), color: color
+//                  boxShadow: [BoxShadow(blurRadius: 10)],
+                            ),
+                        padding: EdgeInsets.all(10),
+                        // TODO: change sizes
+
+                        width: width,
+                        height: totalHeight / 4,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.file_download,
+                            color: Colors.black,
+                          ),
+                          iconSize: 40,
+                        )),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      print("describe");
+                      showDialog(
+                          context: context, builder: (_) => descriptionPopup());
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      // TODO: change sizes
+
+                      width: width,
+                      height: totalHeight / 4,
+//              padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1),
+                        color: altColor,
+//                boxShadow: [BoxShadow(blurRadius: 10)],
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.description,
+                          color: Colors.grey.withOpacity(0.5),
+                        ),
+                        iconSize: 40,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) => OpenFormatDialog(
+                              widget.bookId, bookDetails.path));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      // TODO: change sizes
+
+                      width: width,
+                      height: totalHeight / 4,
+//              padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 1),
+                        color: color,
+//                boxShadow: [BoxShadow(blurRadius: 10)],
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.chrome_reader_mode,
+                            color: Colors.grey.withOpacity(0.5)),
+                        iconSize: 40,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) => SelectFormatDialog(
+                              widget.bookId, bookDetails.path, context));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      // TODO: change sizes
+
+                      width: width,
+                      height: totalHeight / 4,
+//              padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1),
+                          color: altColor,
+                          boxShadow: [
+//                BoxShadow(blurRadius: 10),
+                          ]),
+                      child: IconButton(
+                        icon: Icon(Icons.delete,
+                            color: Colors.grey.withOpacity(0.5)),
+                        iconSize: 40,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          }
+        } else {
+          return Container(
+            // TODO: change sizes
+
+            width: width,
+            height: (MediaQuery.of(context).size.height -
+                appbar.preferredSize.height),
+            color: Colors.black.withOpacity(0.3),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) => SelectFormatDialog(
+                            widget.bookId, bookDetails.path, context));
+                  },
+                  child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1), color: color
+//                  boxShadow: [BoxShadow(blurRadius: 10)],
+                          ),
+                      padding: EdgeInsets.all(10),
+                      // TODO: change sizes
+
+                      width: width,
+                      height: totalHeight / 4,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.file_download,
+                          color: Colors.grey.withOpacity(0.5),
+                        ),
+                        iconSize: 40,
+                      )),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    print("describe");
+                    showDialog(
+                        context: context, builder: (_) => descriptionPopup());
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    // TODO: change sizes
+
+                    width: width,
+                    height: totalHeight / 4,
+//              padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1),
+                      color: altColor,
+//                boxShadow: [BoxShadow(blurRadius: 10)],
+                    ),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.description,
+                        color: Colors.grey.withOpacity(0.5),
+                      ),
+                      iconSize: 40,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) =>
+                            OpenFormatDialog(widget.bookId, bookDetails.path));
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    // TODO: change sizes
+
+                    width: width,
+                    height: totalHeight / 4,
+//              padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1),
+                      color: color,
+//                boxShadow: [BoxShadow(blurRadius: 10)],
+                    ),
+                    child: IconButton(
+                      icon: Icon(Icons.chrome_reader_mode,
+                          color: Colors.grey.withOpacity(0.5)),
+                      iconSize: 40,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) => SelectFormatDialog(
+                            widget.bookId, bookDetails.path, context));
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    // TODO: change sizes
+
+                    width: width,
+                    height: totalHeight / 4,
+//              padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 1),
+                        color: altColor,
+                        boxShadow: [
+//                BoxShadow(blurRadius: 10),
+                        ]),
+                    child: IconButton(
+                      icon: Icon(Icons.delete,
+                          color: Colors.grey.withOpacity(0.5)),
+                      iconSize: 40,
+                    ),
+                  ),
+                )
+              ],
             ),
-          )
-        ],
-      ),
+          );
+        }
+      },
     );
   }
 

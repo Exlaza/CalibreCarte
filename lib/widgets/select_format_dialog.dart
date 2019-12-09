@@ -55,7 +55,8 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
 
   Future<bool> checkNet() async {
     try {
-      var result = await InternetAddress.lookup('https://api.dropboxapi.com');
+      var result = await InternetAddress.lookup('www.google.com');
+//      print("internet is $result");
       return true;
     } on SocketException catch (_) {
       return false;
@@ -79,7 +80,9 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
                       if (val == true) {
                         bookDownloader(element["name"], context);
                       } else
-                        {Navigator.of(context).pop();
+                        {
+//                          print("came here");
+                          Navigator.of(context).pop();
                           Scaffold.of(widget.oldContext).showSnackBar(SnackBar(
                           content: Text("No internet"),
                         ));}
