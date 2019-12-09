@@ -201,7 +201,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
           (MediaQuery.of(context).size.height - appbar.preferredSize.height),
       color: Colors.black.withOpacity(0.3),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[GestureDetector(
           child: Container(
@@ -231,7 +231,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
               height: width,
 //              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: Colors.blueGrey.withOpacity(0.5),
+                  color: Colors.blueGrey,
                   boxShadow: [BoxShadow(blurRadius:10)]),
               child: IconButton(
                 icon: Icon(Icons.description),
@@ -239,13 +239,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
               ),
             ),
           ),
-//          SizedBox(
-//            height: MediaQuery.of(context).size.height / 32,
-//          ),
 
-//          SizedBox(
-//            height: MediaQuery.of(context).size.height / 32,
-//          ),
           GestureDetector(
             onTap: () {
               print("describe");
@@ -259,7 +253,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
               height: width,
 //              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: Colors.brown.withOpacity(0.5),
+                  color: Colors.brown,
                   boxShadow: [BoxShadow(blurRadius:10)]),
               child: IconButton(
                 icon: Icon(Icons.chrome_reader_mode),
@@ -280,7 +274,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
               height: width,
 //              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.5),
+                  color: Colors.grey,
                   boxShadow: [BoxShadow(blurRadius:10)]),
               child: IconButton(
                 icon: Icon(Icons.delete),
