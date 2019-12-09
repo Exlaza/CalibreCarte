@@ -199,6 +199,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
     var color = Color(0xff8C1C38);
+    var altColor= Color(0xff5D1326);
     return Container(
       // TODO: change sizes
 
@@ -243,7 +244,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
 //              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                 border: Border.all(width: 1),
-                color: color,
+                color: altColor,
 //                boxShadow: [BoxShadow(blurRadius: 10)],
               ),
               child: IconButton(
@@ -293,7 +294,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
 //              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                   border: Border.all(width: 1),
-                  color: color,
+                  color: altColor,
                   boxShadow: [
 //                BoxShadow(blurRadius: 10),
                   ]),
