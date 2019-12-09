@@ -115,7 +115,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
         children: <Widget>[
           // TODO: change sizes
           BookDetailsCoverImage(widget.bookId, bookDetails.path, bottomSize,
-              MediaQuery.of(context).size.width / 2),
+              MediaQuery.of(context).size.width / 1.5),
           Container(
             color: Colors.black.withOpacity(0.2),
             child: Column(
@@ -149,7 +149,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
             ),
             // TODO: change sizes
 
-            width: MediaQuery.of(context).size.width / 2,
+            width: MediaQuery.of(context).size.width / 1.5,
             height: bottomSize,
           ),
         ],
@@ -169,11 +169,12 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
       padding: EdgeInsets.only(top: 20),
       // TODO: change sizes
 
-      width: MediaQuery.of(context).size.width / 2,
+      width: MediaQuery.of(context).size.width / 3,
       height:
           (MediaQuery.of(context).size.height - appbar.preferredSize.height),
       color: Colors.black.withOpacity(0.3),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           GestureDetector(
@@ -185,7 +186,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
               padding: EdgeInsets.all(10),
               // TODO: change sizes
 
-              width: MediaQuery.of(context).size.width / 2,
+              width: MediaQuery.of(context).size.width / 3,
               height: MediaQuery.of(context).size.height / 8,
 //              padding: EdgeInsets.all(10),
               color: Colors.blueGrey.withOpacity(0.5),
@@ -195,9 +196,9 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
               ),
             ),
           ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height / 32,
-          ),
+//          SizedBox(
+//            height: MediaQuery.of(context).size.height / 32,
+//          ),
           GestureDetector(
             child: Container(
               padding: EdgeInsets.all(10),
@@ -212,9 +213,9 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
               ),
             ),
           ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height / 32,
-          ),
+//          SizedBox(
+//            height: MediaQuery.of(context).size.height / 32,
+//          ),
           GestureDetector(
             child: Container(
               // TODO: change sizes
