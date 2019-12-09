@@ -211,15 +211,15 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
         children: <Widget>[
           GestureDetector(
             child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.deepOrange,
+                decoration: BoxDecoration(border: Border.all( width: 1),
+                  color:  Color(0xffBE402B)
 //                  boxShadow: [BoxShadow(blurRadius: 10)],
                 ),
                 padding: EdgeInsets.all(10),
                 // TODO: change sizes
 
                 width: width,
-                height: totalHeight/4,
+                height: totalHeight / 4,
                 child: IconButton(
                   icon: Icon(
                     Icons.file_download,
@@ -238,10 +238,10 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
               // TODO: change sizes
 
               width: width,
-              height: totalHeight/4,
+              height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.blueGrey,
+              decoration: BoxDecoration(border: Border.all( width: 1),
+                color:  Color(0xffBE402B),
 //                boxShadow: [BoxShadow(blurRadius: 10)],
               ),
               child: IconButton(
@@ -263,10 +263,10 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
               // TODO: change sizes
 
               width: width,
-              height: totalHeight/4,
+              height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.brown,
+              decoration: BoxDecoration(border: Border.all( width: 1),
+                color: Color(0xffBE402B),
 //                boxShadow: [BoxShadow(blurRadius: 10)],
               ),
               child: IconButton(
@@ -286,9 +286,9 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
               // TODO: change sizes
 
               width: width,
-              height: totalHeight/4,
+              height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(color: Colors.black, boxShadow: [
+              decoration: BoxDecoration(border: Border.all( width: 1),color: Color(0xffBE402B), boxShadow: [
 //                BoxShadow(blurRadius: 10),
               ]),
               child: IconButton(
