@@ -110,7 +110,7 @@ class _BookDetailsScreenBetaState extends State<BookDetailsScreenBeta> {
           BookDetailsCoverImage(
               widget.bookId,
               bookDetails.path,
-              MediaQuery.of(context).size.height / 2,
+              MediaQuery.of(context).size.height / 2-appbar.preferredSize.height,
               MediaQuery.of(context).size.width / 2),
           Container(
             color: Colors.black.withOpacity(0.2),
@@ -145,7 +145,7 @@ class _BookDetailsScreenBetaState extends State<BookDetailsScreenBeta> {
                         Text(
                           "Next",
                           style:
-                              TextStyle(fontFamily: 'Montserrat', fontSize: 25),
+                          TextStyle(fontFamily: 'Montserrat', fontSize: 25),
                         ),
                         IconButton(
                           icon: Icon(Icons.navigate_next),
@@ -158,7 +158,7 @@ class _BookDetailsScreenBetaState extends State<BookDetailsScreenBeta> {
               ],
             ),
             width: MediaQuery.of(context).size.width / 2,
-            height: MediaQuery.of(context).size.height / 2.7,
+            height: (MediaQuery.of(context).size.height-appbar.preferredSize.height) / 2,
           ),
         ],
       ),
@@ -268,15 +268,15 @@ class _BookDetailsScreenBetaState extends State<BookDetailsScreenBeta> {
       ),
     );
   }
-
+var appbar=AppBar(
+  backgroundColor: Colors.transparent,
+  title: Text('Details'),
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text('Details'),
-      ),
+      appBar: appbar ,
       floatingActionButton: FutureBuilder(
           future: mySecondFuture,
           builder: (context, snapshot) {
