@@ -118,9 +118,13 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
           // TODO: change sizes
           Container(
             child: BookDetailsCoverImage(
-                widget.bookId, bookDetails.path, bottomSize-1, width),
+                widget.bookId, bookDetails.path, bottomSize - 1, width),
           ),
-          Container(height: 1,color: Colors.black,width: width,),
+          Container(
+            height: 1,
+            color: Colors.black,
+            width: width,
+          ),
           Container(
             child: Column(
               children: <Widget>[
@@ -160,7 +164,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
                         color: Color(0xFF002242),
                         child: Icon(
                           Icons.arrow_back,
-                          color: Colors.white,
+                          color: Color(0xffFED962),
                         ),
                       ),
                       Container(
@@ -169,7 +173,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
                         color: Color(0xFF002242),
                         child: Icon(
                           Icons.arrow_forward,
-                          color: Colors.white,
+                          color: Color(0xffFED962),
                         ),
                       )
                     ],
@@ -203,8 +207,8 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
         MediaQuery.of(context).padding.bottom;
     var color = Color(0xffFED962);
     var altColor = Color(0xffFFE06F);
-    var activeIcon=Colors.black;
-    var inactiveIcon=Colors.grey;
+    var activeIcon = Colors.black;
+    var inactiveIcon = Colors.grey;
     return FutureBuilder(
       future: mySecondFuture,
       builder: (context, snapshot) {
@@ -330,8 +334,6 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
             );
           } else {
             return Container(
-              // TODO: change sizes
-
               width: width,
               height: (MediaQuery.of(context).size.height -
                   appbar.preferredSize.height),
@@ -354,7 +356,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
                     },
                     child: Container(
                         decoration: BoxDecoration(
-                            border: Border.all(width: 1), color: color
+                            border: Border(bottom: BorderSide(width: 1,color: Colors.white), top: BorderSide(width: 1,color: Colors.white)), color: color
 //                  boxShadow: [BoxShadow(blurRadius: 10)],
                             ),
                         padding: EdgeInsets.all(10),
@@ -384,7 +386,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
                       height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        border: Border.all(width: 1),
+                        border: Border(bottom: BorderSide(width: 1,color: Colors.white)),
                         color: altColor,
 //                boxShadow: [BoxShadow(blurRadius: 10)],
                       ),
@@ -412,7 +414,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
                       height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        border: Border.all(width: 1),
+                        border: Border(bottom: BorderSide(width: 1,color: Colors.white)),
                         color: color,
 //                boxShadow: [BoxShadow(blurRadius: 10)],
                       ),
@@ -438,7 +440,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
                       height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                          border: Border.all(width: 1),
+                          border: Border(bottom: BorderSide(width: 1,color: Colors.white),),
                           color: altColor,
                           boxShadow: [
 //                BoxShadow(blurRadius: 10),
@@ -616,7 +618,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
 
   var appbar = AppBar(
     backgroundColor: Color(0xff002242),
-    title: Text('Details'),
+    title: Text('Details',style: TextStyle(fontFamily: 'Montserrat',color: Color(0xffFED962),),)
   );
 
   @override
