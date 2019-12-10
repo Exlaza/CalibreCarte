@@ -12,6 +12,19 @@ class BooksListView extends StatelessWidget {
   final String filter;
   final List<Books> books;
 
+  static final baseTextStyle = const TextStyle(fontFamily: 'Poppins');
+  static final regularTextStyle = baseTextStyle.copyWith(
+      color: const Color(0xffb6b2df),
+      fontSize: 9.0,
+      fontWeight: FontWeight.w400);
+  static final subHeaderTextStyle =
+  regularTextStyle.copyWith(fontSize: 12.0, fontFamily: 'Montserrat');
+  final headerTextStyle = baseTextStyle.copyWith(
+      fontFamily: 'Montserrat',
+      color: Colors.black,
+      fontSize: 18.0,
+      fontWeight: FontWeight.w600);
+
   BooksListView(this.filter, this.books);
 
   @override
@@ -25,27 +38,6 @@ class BooksListView extends StatelessWidget {
           bookId: bookId,
         );
       }));
-    }
-
-    final baseTextStyle = const TextStyle(fontFamily: 'Poppins');
-    final regularTextStyle = baseTextStyle.copyWith(
-        color: const Color(0xffb6b2df),
-        fontSize: 9.0,
-        fontWeight: FontWeight.w400);
-    final subHeaderTextStyle =
-        regularTextStyle.copyWith(fontSize: 12.0, fontFamily: 'Montserrat');
-    final headerTextStyle = baseTextStyle.copyWith(
-        fontFamily: 'Montserrat',
-        color: Colors.black,
-        fontSize: 18.0,
-        fontWeight: FontWeight.w600);
-
-    Widget _planetValue({String value, String image}) {
-      return Row(children: <Widget>[
-        Icon(Icons.keyboard_arrow_down),
-        Container(width: 8.0),
-        Text("10", style: regularTextStyle),
-      ]);
     }
 
     Widget coolTile(index) {
