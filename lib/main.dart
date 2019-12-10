@@ -41,7 +41,7 @@ class _MyAppState extends State<MyApp> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return ChangeNotifierProvider(
-            builder: (_) => Update(tokenExists, searchFilter),
+            create: (_) => Update(tokenExists, searchFilter),
             child: MaterialApp(
               title: "Calibre Carte",
               theme: ThemeData(primarySwatch: Colors.blueGrey),
