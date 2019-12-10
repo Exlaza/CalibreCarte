@@ -1,11 +1,7 @@
 import 'package:calibre_carte/models/books.dart';
+import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
-import 'package:calibre_carte/screens/book_details_Ekansh.dart';
-import 'package:calibre_carte/screens/book_details_beta.dart';
-import 'package:calibre_carte/screens/book_details_screen.dart';
-import 'package:calibre_carte/widgets/book_details_cover_image.dart';
 import 'package:calibre_carte/widgets/cool_tile.dart';
-import 'package:calibre_carte/widgets/download_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +13,7 @@ class BooksListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+//    TODO: Can definitely improve this piece of code
     Update update = Provider.of(context);
     return update.searchFilter == 'title'
         ? ListView.builder(

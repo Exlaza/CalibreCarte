@@ -1,8 +1,10 @@
 import 'package:calibre_carte/helpers/text_style.dart';
+import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/screens/book_details_Ekansh.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
 import 'package:calibre_carte/widgets/download_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CoolTile extends StatelessWidget {
   final index;
@@ -12,11 +14,19 @@ class CoolTile extends StatelessWidget {
 
   void viewBookDetails(int bookId, BuildContext context) {
 //      print(bookId);
+    BookDetailsNavigation bn = Provider.of<BookDetailsNavigation>(context, listen: false);
+    bn.bookID = bookId;
+    bn.booksList = books;
+    bn.index = index;
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-      return BookDetailsScreenEkansh(
-        bookId: bookId,
+      return Consumer<BookDetailsNavigation>(
+        builder: (ctx, bookNav, child) => BookDetailsScreenEkansh(
+          bookId: bookNav.bookID != null ? bookNav.bookID : bookId ,
+        ),
       );
-    }));
+    })).then((_){
+      bn.bookID = null;
+    });
   }
 
   @override

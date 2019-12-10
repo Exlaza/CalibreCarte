@@ -1,16 +1,33 @@
+import 'package:calibre_carte/models/books.dart';
 import 'package:flutter/material.dart';
 
 class BookDetailsNavigation with ChangeNotifier {
-  int currentIndex;
+  int index;
+  List<Books> booksList;
+  int bookID;
 
   void incrementIndex() {
-    currentIndex = currentIndex + 1;
-    notifyListeners();
+    print("Incrementing index");
+    if (index < booksList.length - 1) {
+      index = index + 1;
+      setBookID();
+      notifyListeners();
+    }
+  }
+
+  void setBookID() {
+    print("Setting book ID");
+    bookID = booksList[index].id;
+    print(bookID);
   }
 
   void decrementIndex() {
-    currentIndex = currentIndex + 1;
-    notifyListeners();
+    print("Decrementing index");
+    if (index > 0) {
+      index = index - 1;
+      setBookID();
+      notifyListeners();
+    }
   }
 
 }

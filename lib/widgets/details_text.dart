@@ -1,4 +1,6 @@
+import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BookDetailsText extends StatelessWidget {
   final bottomSize;
@@ -11,6 +13,7 @@ class BookDetailsText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BookDetailsNavigation bn= Provider.of<BookDetailsNavigation>(context, listen: false);
     return Container(
       child: Column(
         children: <Widget>[
@@ -55,22 +58,28 @@ class BookDetailsText extends StatelessWidget {
             alignment: Alignment.topCenter,
             child: Row(
               children: <Widget>[
-                Container(
-                  width: width / 2,
-                  height: (bottomSize * 0.15),
-                  color: Color(0xFF002242),
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Color(0xffFED962),
+                GestureDetector(
+                  onTap: bn.decrementIndex,
+                  child: Container(
+                    width: width / 2,
+                    height: (bottomSize * 0.15),
+                    color: Color(0xFF002242),
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Color(0xffFED962),
+                    ),
                   ),
                 ),
-                Container(
-                  height: (bottomSize * 0.15),
-                  width: width / 2,
-                  color: Color(0xFF002242),
-                  child: Icon(
-                    Icons.arrow_forward,
-                    color: Color(0xffFED962),
+                GestureDetector(
+                  onTap: bn.incrementIndex,
+                  child: Container(
+                    height: (bottomSize * 0.15),
+                    width: width / 2,
+                    color: Color(0xFF002242),
+                    child: Icon(
+                      Icons.arrow_forward,
+                      color: Color(0xffFED962),
+                    ),
                   ),
                 )
               ],

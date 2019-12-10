@@ -1,4 +1,5 @@
 import 'package:calibre_carte/homepage.dart';
+import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/book_details_screen.dart';
 import 'package:calibre_carte/screens/settings_screen.dart';
@@ -40,8 +41,15 @@ class _MyAppState extends State<MyApp> {
       future: myFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return ChangeNotifierProvider(
-            create: (_) => Update(tokenExists, searchFilter),
+          return MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (_) => Update(tokenExists, searchFilter),
+              ),
+              ChangeNotifierProvider(
+                create: (_) => BookDetailsNavigation(),
+              )
+            ],
             child: MaterialApp(
               title: "Calibre Carte",
               theme: ThemeData(primarySwatch: Colors.blueGrey),

@@ -93,6 +93,19 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
     mySecondFuture = checkIfLocalCopyExists();
   }
 
+  @override
+  void didUpdateWidget(BookDetailsScreenEkansh oldWidget){
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.bookId == widget.bookId){
+      return;
+    }
+
+    myFuture = getBookDetails().then((_){
+      mySecondFuture = checkIfLocalCopyExists();
+    });
+//    mySecondFuture = checkIfLocalCopyExists();
+  }
+
   Widget description() {
     var totalHeight = MediaQuery.of(context).size.height -
         appbar.preferredSize.height -
