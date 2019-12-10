@@ -5,7 +5,9 @@ class BookDetailsText extends StatelessWidget {
   final width;
   final bookDetails;
   final authorText;
-  BookDetailsText(this.bottomSize, this.width, this.bookDetails, this.authorText);
+
+  BookDetailsText(
+      this.bottomSize, this.width, this.bookDetails, this.authorText);
 
   @override
   Widget build(BuildContext context) {
