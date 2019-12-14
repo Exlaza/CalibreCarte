@@ -32,6 +32,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   List<String> dirNames = [];
   int noOfCalibreLibs;
   bool hasChanged;
+  Completer<List<Widget>> _responseCompleter = Completer();
 
   Future<bool> loadingToken() async {
     String temp;
@@ -131,6 +132,73 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     }
   }
 
+  Future<List<Widget>> refreshLibrary(
+      BuildContext context, Update update) async {
+
+    print("Inside refresh Library for some reason");
+    Map<String, String> pathNameMap = Map();
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    var token = sp.getString('token');
+
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text("Refreshing Libraries..."),
+    ));
+
+    var response = await _makePostRequest(token);
+    if (response == null) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text("No internet"),
+      ));
+      List<Widget> l = [Text("Here is my list of wisgets")];
+      return l;
+    }
+    print("Internet check done");
+
+    //Make a map Map<String, String> First value is the base path in lower case
+    // Second Value is the name of the Folder(Library)
+    // I have to convert string response.body to json
+    Map<String, dynamic> responseJson = jsonDecode(response.body);
+    if (responseJson['matches'].length != 0) {
+      responseJson['matches'].forEach((element) {
+        if (element["metadata"]["metadata"]["name"] == "metadata.db") {
+          String libPath = element["metadata"]["metadata"]["path_display"];
+          libPath = libPath.replaceAll('metadata.db', "");
+          List<String> directories =
+              element["metadata"]["metadata"]["path_display"].split('/');
+          String libName = directories.elementAt(directories.length - 2);
+          pathNameMap.putIfAbsent(libPath, () => libName);
+        }
+      });
+      storeIntInSharedPrefs('noOfCalibreLibs', pathNameMap.length);
+      pathNameMap.keys.toList().asMap().forEach((index, path) {
+        String keyName = 'calibre_lib_path_$index';
+        String libName = 'calibre_lib_name_$index';
+        storeStringInSharedPrefs(keyName, path);
+        storeStringInSharedPrefs(libName, pathNameMap[path]);
+      });
+      List<Widget> columnChildren = pathNameMap.keys.toList().map((element) {
+        return ListTile(
+            onTap: () {
+              selectingCalibreLibrary(element, pathNameMap[element], update);
+              setState(() {
+                myFuture = loadingToken();
+              });
+            },
+            title: Text(
+              pathNameMap[element],
+              style: TextStyle(fontSize: 30, fontStyle: FontStyle.italic),
+            ));
+      }).toList();
+      print(columnChildren);
+      return columnChildren;
+    } else {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text("No libraries found"),
+      ));
+      return [Text("No libraries found")];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
@@ -140,8 +208,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == false) {
             return ConnectButton(() {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                 return DropboxAuthentication(
                   selectedUrl: url,
                 );
@@ -161,6 +228,17 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                   selected_calibre_lib_dir == null
                       ? Text("no directory selected")
                       : ExpansionTile(
+                          onExpansionChanged: (bool value) {
+                            if (value) {
+                              setState(() {
+                                if (_responseCompleter.isCompleted) {
+                                  _responseCompleter = Completer();
+                                }
+                              });
+                              _responseCompleter.complete(refreshLibrary(context, update));
+                              print("Getting Expansion Item ");
+                            }
+                          },
                           title: Card(
                             elevation: 0.0,
                             child: InkWell(
@@ -189,7 +267,19 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                               ),
                             ),
                           ),
-                          children: <Widget>[Text("work in progress")],
+                          children: <Widget>[
+                            FutureBuilder(
+                                future: _responseCompleter.future,
+                                builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
+                                  if (snapshot.connectionState == ConnectionState.done) {
+                                    return Column(children: snapshot.data);
+                                  } else {
+                                    return const Center(
+                                      child: const Text('Loading...'),
+                                    );
+                                  }
+                                })
+                          ],
                         ),
                   RefreshButton(),
                   LogoutButton(() {
