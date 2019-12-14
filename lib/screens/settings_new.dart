@@ -1,6 +1,6 @@
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/connect_dropbox_screen.dart';
-import 'package:calibre_carte/widgets/cloud_settings.dart';
+import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/cloud_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
