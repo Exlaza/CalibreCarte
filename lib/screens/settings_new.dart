@@ -1,5 +1,6 @@
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/connect_dropbox_screen.dart';
+import 'package:calibre_carte/widgets/cloud_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,18 +42,21 @@ class _SettingsNewState extends State<SettingsNew> {
       child: InkWell(
         onTap: onClicked,
         child: Container(
-          padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
           child: Column(
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(settingName,
-                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 15)),
-                  Icon(
+                  Row(
+                    children: <Widget>[Icon(
                     settingIcon,
                     color: Color(0xffFED962),
                   ),
+                      SizedBox(width: 10,),Text(settingName,
+                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 15)),
+                    ],)
+                  , IconButton(icon: Icon(Icons.navigate_next),)
                 ],
               ),
             ],
@@ -106,15 +110,7 @@ class _SettingsNewState extends State<SettingsNew> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   _settingGroup("Cloud"),
-                  _settingsCard('Dropbox',
-                      update.tokenExists ? Icons.cloud_done : Icons.cloud_off,
-                      () {
-//                            print('Tap is not working');
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
-                      return DropboxSignIn();
-                    }));
-                  }),
+                 CloudSettings(),
                   _settingGroup("Search"),
                   Consumer<Update>(
                     builder: (ctx, update, child) => Card(
