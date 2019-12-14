@@ -1,6 +1,7 @@
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/connect_dropbox_screen.dart';
 import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/cloud_settings.dart';
+import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/search_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -112,68 +113,7 @@ class _SettingsNewState extends State<SettingsNew> {
                   _settingGroup("Cloud"),
                  CloudSettings(),
                   _settingGroup("Search"),
-                  Consumer<Update>(
-                    builder: (ctx, update, child) => Card(
-                      elevation: 0.0,
-//                      shape: RoundedRectangleBorder(
-//                          borderRadius: BorderRadius.circular(30)),
-                      child: InkWell(
-                        onTap: () {
-                          showModalBottomSheet(
-                              elevation: 10,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0)),
-                              backgroundColor: Colors.grey.withOpacity(0.8),
-                              context: context,
-                              builder: (_) {
-                                return Container(
-                                  child: Wrap(
-                                    children: <Widget>[
-                                      ListTile(
-                                        title: Text("Author"),
-                                        onTap: () {
-                                          saveStringToSP(
-                                              'searchFilter', 'author');
-                                          update.changeSearchFilter('author');
-                                        },
-                                      ),
-                                      ListTile(
-                                        title: Text("Book Title"),
-                                        onTap: () {
-                                          saveStringToSP(
-                                              'searchFilter', 'title');
-                                          update.changeSearchFilter('title');
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                );
-                              });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text('Search By',
-                                      style: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          fontSize: 15)),
-                                  Icon(
-                                    Icons.search,
-                                    color: Color(0xffFED962),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                 SearchDropdown(),
                   _settingGroup("Other"),
                   Card(
                     elevation: 0.0,
