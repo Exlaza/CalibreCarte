@@ -35,19 +35,42 @@ class _SettingsNewState extends State<SettingsNew> {
     _prefs.setString(settingName, val);
   }
 
-//  I needed to save Future builder in an instance because that was the only way, to prevent Future builder from firing again and again
-//  Here's the thing. If you give it a function the future: property in future builder assumes that you are returning a new instance of future
-//  For future builder this is akin to saying build it again
-//  I don't want to build Future builder again, just the switch component part of the already shown widget.
-//  This is a very subtle distinction which took 2 hrs of google searching to finally figure out what was wrong
-//  One more error that you have to take care of is that a value in switch bool should not be None. There is a possibility that
-//  While returning from shared preferences, you get the yellow screen if that is None
+  Widget _settingsCard(settingName, settingIcon, Function onClicked) {
+    return Card(
+      elevation: 0.0,
+      child: InkWell(
+        onTap: onClicked,
+        child: Container(
+          padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(settingName,
+                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 15)),
+                  Icon(
+                    settingIcon,
+                    color: Color(0xffFED962),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-//  I cannot delegate it to a variable above the return statement because this will lead to the yellow scren becuse flutter tries to build that before it goes to the return
-//  Part of the
-//  And while the build is definitely called. We don't update the whole page, becuase the future builder know the future returned
-//  Has not changed
-//  So we can also shave a few miliseconds from that if we
+  Widget _settingGroup(groupName) {
+    return Container(
+        padding: EdgeInsets.only(left: 4),
+        child: Text(
+          groupName,
+          style: TextStyle(
+              fontFamily: 'Montserrat', color: Colors.grey, fontSize: 25),
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,73 +105,29 @@ class _SettingsNewState extends State<SettingsNew> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                      padding: EdgeInsets.only(left: 4),
-                      child: Text(
-                        'Cloud',
-                        style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            color: Colors.grey,
-                            fontSize: 25),
-                      )),
-                  Card(
-                    elevation: 0.0,
-                    child: InkWell(
-                      onTap: () {
+                  _settingGroup("Cloud"),
+                  _settingsCard('Dropbox',
+                      update.tokenExists ? Icons.cloud_done : Icons.cloud_off,
+                      () {
 //                            print('Tap is not working');
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return DropboxSignIn();
-                        }));
-                      },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text('Dropbox',
-                                    style: TextStyle(
-                                      fontFamily: 'Montserrat',fontSize: 15
-                                    )),
-                                Icon(update.tokenExists
-                                      ? Icons.cloud_done
-                                      : Icons.cloud_off, color: Color(0xffFED962),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                    child: Text(
-                      'Search',
-                      style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          color: Colors.grey,
-                          fontSize: 25),
-                    ),
-                  ),
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      return DropboxSignIn();
+                    }));
+                  }),
+                  _settingGroup("Search"),
                   Consumer<Update>(
-                    builder: (ctx, update, child) => Card( elevation: 0.0,
+                    builder: (ctx, update, child) => Card(
+                      elevation: 0.0,
 //                      shape: RoundedRectangleBorder(
 //                          borderRadius: BorderRadius.circular(30)),
-                      child:  InkWell(
+                      child: InkWell(
                         onTap: () {
                           showModalBottomSheet(
                               elevation: 10,
                               shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(5.0)),
-                              backgroundColor:
-                              Colors.grey.withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(5.0)),
+                              backgroundColor: Colors.grey.withOpacity(0.8),
                               context: context,
                               builder: (_) {
                                 return Container(
@@ -159,8 +138,7 @@ class _SettingsNewState extends State<SettingsNew> {
                                         onTap: () {
                                           saveStringToSP(
                                               'searchFilter', 'author');
-                                          update.changeSearchFilter(
-                                              'author');
+                                          update.changeSearchFilter('author');
                                         },
                                       ),
                                       ListTile(
@@ -168,8 +146,7 @@ class _SettingsNewState extends State<SettingsNew> {
                                         onTap: () {
                                           saveStringToSP(
                                               'searchFilter', 'title');
-                                          update.changeSearchFilter(
-                                              'title');
+                                          update.changeSearchFilter('title');
                                         },
                                       )
                                     ],
@@ -182,16 +159,16 @@ class _SettingsNewState extends State<SettingsNew> {
                           child: Column(
                             children: <Widget>[
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text('Search By',
                                       style: TextStyle(
-                                        fontFamily: 'Montserrat',fontSize: 15
-                                      )),
+                                          fontFamily: 'Montserrat',
+                                          fontSize: 15)),
                                   Icon(
                                     Icons.search,
-                                    color: Color(0xffFED962)
-                                        ,
+                                    color: Color(0xffFED962),
                                   ),
                                 ],
                               ),
@@ -201,18 +178,9 @@ class _SettingsNewState extends State<SettingsNew> {
                       ),
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.only(left: 4),
-                    child: Text(
-                      'Other',
-
-          style: TextStyle(
-          fontFamily: 'Montserrat',
-          color: Colors.grey,
-          fontSize: 25),
-                    ),
-                  ),
-                  Card(elevation: 0.0,
+                  _settingGroup("Other"),
+                  Card(
+                    elevation: 0.0,
 //                    shape: RoundedRectangleBorder(
 //                        borderRadius: BorderRadius.circular(30)),
                     child: Container(
@@ -228,21 +196,15 @@ class _SettingsNewState extends State<SettingsNew> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
-//                                  Icon(
-//                                    Icons.wb_sunny,
-//                                    size: 20,
-//                                  ),
-//                                  SizedBox(
-//                                    width: 30,
-//                                  ),
                                   Text(
                                     'Dark Mode',
                                     style: TextStyle(
-                                        fontFamily: 'Montserrat',fontSize: 15),
+                                        fontFamily: 'Montserrat', fontSize: 15),
                                   ),
                                 ],
                               ),
-                              Switch( activeColor: Color(0xffFED962),
+                              Switch(
+                                activeColor: Color(0xffFED962),
                                 value: darkMode,
                                 onChanged: (val) {
                                   saveBoolToSharedPrefs('darkMode', val);
@@ -270,25 +232,4 @@ class _SettingsNewState extends State<SettingsNew> {
   }
 }
 
-class SearchSettingRowTrigger extends StatelessWidget {
-  final bool boolTriggerValue;
 
-  SearchSettingRowTrigger(this.boolTriggerValue);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        Icon(
-          Icons.settings_ethernet,
-        ),
-        Text('Search Title'),
-        Switch(
-          value: boolTriggerValue,
-          onChanged: (val) {},
-        )
-      ],
-    );
-  }
-}
