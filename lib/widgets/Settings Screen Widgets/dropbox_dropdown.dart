@@ -176,18 +176,21 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
         storeStringInSharedPrefs(libName, pathNameMap[path]);
       });
       List<Widget> columnChildren = pathNameMap.keys.toList().map((element) {
-        return ListTile(
+        return InkWell(
             onTap: () {
               selectingCalibreLibrary(element, pathNameMap[element], update);
               setState(() {
                 myFuture = loadingToken();
               });
             },
-            title: Text(
-              pathNameMap[element],
-                style: TextStyle(
-                fontFamily: 'Montserrat',
-                fontSize: 15),
+            child: Container(
+              padding: EdgeInsets.fromLTRB(60, 10, 20, 10),
+              child: Text(
+                pathNameMap[element],
+                  style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 15),
+              ),
             ));
       }).toList();
       print(columnChildren);
@@ -246,7 +249,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                             child: InkWell(
                               onTap: () {},
                               child: Container(
-                                padding: EdgeInsets.fromLTRB(10, 10, 20, 10),
+                                padding: EdgeInsets.fromLTRB(30, 10, 20, 10),
                                 child: Column(
                                   children: <Widget>[
                                     Row(

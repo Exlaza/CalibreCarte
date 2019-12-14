@@ -44,7 +44,7 @@ class _SettingsNewState extends State<SettingsNew> {
       child: InkWell(
         onTap: onClicked,
         child: Container(
-          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+//          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
           child: Column(
             children: <Widget>[
               Row(
@@ -70,7 +70,7 @@ class _SettingsNewState extends State<SettingsNew> {
 
   Widget _settingGroup(groupName) {
     return Container(
-        padding: EdgeInsets.only(left: 4),
+//        padding: EdgeInsets.only(left: 4),
         child: Text(
           groupName,
           style: TextStyle(
@@ -123,7 +123,7 @@ class _SettingsNewState extends State<SettingsNew> {
                       child: InkWell(
                         onTap: (){},
                         child: Container(
-                          padding: EdgeInsets.fromLTRB(30, 10, 20, 10),
+//                          padding: EdgeInsets.fromLTRB(30, 10, 20, 10),
                           child: Column(
                             children: <Widget>[
                               Row(
@@ -149,7 +149,7 @@ class _SettingsNewState extends State<SettingsNew> {
                       child: InkWell(
                         onTap: (){},
                         child: Container(
-                          padding: EdgeInsets.fromLTRB(30, 10, 20, 10),
+//                          padding: EdgeInsets.fromLTRB(30, 10, 20, 10),
                           child: Column(
                             children: <Widget>[
                               Row(

@@ -71,7 +71,7 @@ class RefreshButton extends StatelessWidget {
           );
         },
         child: Container(
-          padding: EdgeInsets.fromLTRB(30, 10, 20, 10),
+          padding: EdgeInsets.fromLTRB(50, 10, 20, 10),
           child: Column(
             children: <Widget>[
               Row(

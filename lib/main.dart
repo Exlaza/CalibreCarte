@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
             ],
             child: MaterialApp(
               title: "Calibre Carte",
-              theme: ThemeData(primarySwatch: Colors.blueGrey),
+              theme: ThemeData(primarySwatch: Colors.blueGrey, dividerColor: Colors.transparent),
               home: MyHomePage(),
               routes: {
                 BookDetailsScreen.routeName: (ctx) => BookDetailsScreen(),
