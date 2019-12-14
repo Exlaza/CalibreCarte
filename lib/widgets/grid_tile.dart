@@ -46,28 +46,31 @@ class CalibreGridTile extends StatelessWidget {
               child: Container(),
             ),
           ),
-//          DownloadIcon(),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              decoration: BoxDecoration(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              DownloadIcon(book.id),
+              Container(
+                decoration: BoxDecoration(
 //                border: Border.all(),
-                borderRadius: BorderRadius.circular(1),
-                color: Colors.black.withOpacity(0.6),
-              ),
-              alignment: Alignment.centerLeft,
-              height: MediaQuery.of(context).size.height / 15,
+                  borderRadius: BorderRadius.circular(1),
+                  color: Colors.black.withOpacity(0.6),
+                ),
+                alignment: Alignment.centerLeft,
+                height: MediaQuery.of(context).size.height / 15,
 //              width: MediaQuery.of(context).size.width / 2.4,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  book.title,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  style: TextStyle(fontFamily: 'Montserrat'),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    book.title,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: TextStyle(fontFamily: 'Montserrat'),
+                  ),
                 ),
               ),
-            ),
+            ],
           )
         ],
       ),
