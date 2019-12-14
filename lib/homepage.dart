@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:calibre_carte/providers/update_provider.dart';
+import 'package:calibre_carte/screens/settings_new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
@@ -93,11 +94,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   showSettings(BuildContext context) {
     Navigator.of(context).pop();
-    Navigator.pushNamed(context, "/settings").then((_) {
-//      setState(() {
-//        myFuture = getTokenFromPreferences();
-//      });
-    });
+//    Navigator.pushNamed(context, "/settings").then((_) {
+////      setState(() {
+////        myFuture = getTokenFromPreferences();
+////      });
+//    });
+
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) {
+      return SettingsNew();
+    }));
   }
 
   void showLayouts(BuildContext context) {

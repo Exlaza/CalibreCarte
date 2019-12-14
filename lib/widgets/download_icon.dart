@@ -53,7 +53,7 @@ class _DownloadIconState extends State<DownloadIcon> {
             }
             else
               return Icon(
-                Icons.done,color: Colors.transparent,
+                  Icons.done,color: Colors.transparent,
 //                  color: Colors.grey.withOpacity(0.3),size: 15,
               );
           } else
