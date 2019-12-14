@@ -2,7 +2,7 @@ import 'package:calibre_carte/homepage.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/book_details_screen.dart';
-import 'package:calibre_carte/screens/settings_screen.dart';
+import 'package:calibre_carte/screens/settings_old.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:calibre_carte/helpers/book_downloader.dart';
-import 'package:calibre_carte/widgets/animated_progressbar.dart';
+import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/animated_progressbar.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 

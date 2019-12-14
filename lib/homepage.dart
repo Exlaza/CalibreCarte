@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:calibre_carte/providers/update_provider.dart';
-import 'package:calibre_carte/screens/settings_new.dart';
+import 'package:calibre_carte/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';

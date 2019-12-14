@@ -10,8 +10,8 @@ import 'package:calibre_carte/models/books_authors_link.dart';
 import 'package:calibre_carte/models/comments.dart';
 import 'package:calibre_carte/models/data.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
-import 'package:calibre_carte/widgets/open_format_dialog.dart';
-import 'package:calibre_carte/widgets/select_format_dialog.dart';
+import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/open_format_dialog.dart';
+import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/select_format_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 

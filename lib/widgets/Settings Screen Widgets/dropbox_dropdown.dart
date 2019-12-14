@@ -134,7 +134,6 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
 
   Future<List<Widget>> refreshLibrary(
       BuildContext context, Update update) async {
-
     print("Inside refresh Library for some reason");
     Map<String, String> pathNameMap = Map();
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -186,7 +185,9 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
             },
             title: Text(
               pathNameMap[element],
-              style: TextStyle(fontSize: 30, fontStyle: FontStyle.italic),
+                style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 15),
             ));
       }).toList();
       print(columnChildren);
@@ -235,7 +236,8 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                                   _responseCompleter = Completer();
                                 }
                               });
-                              _responseCompleter.complete(refreshLibrary(context, update));
+                              _responseCompleter
+                                  .complete(refreshLibrary(context, update));
                               print("Getting Expansion Item ");
                             }
                           },
@@ -270,8 +272,10 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                           children: <Widget>[
                             FutureBuilder(
                                 future: _responseCompleter.future,
-                                builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
-                                  if (snapshot.connectionState == ConnectionState.done) {
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<List<Widget>> snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
                                     return Column(children: snapshot.data);
                                   } else {
                                     return const Center(

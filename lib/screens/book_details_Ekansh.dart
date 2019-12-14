@@ -7,8 +7,8 @@ import 'package:calibre_carte/models/authors.dart';
 import 'package:calibre_carte/models/books_authors_link.dart';
 import 'package:calibre_carte/models/comments.dart';
 import 'package:calibre_carte/models/data.dart';
-import 'package:calibre_carte/widgets/details_lefttile.dart';
-import 'package:calibre_carte/widgets/details_sidebar.dart';
+import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/details_lefttile.dart';
+import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/details_sidebar.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/books_provider.dart';
