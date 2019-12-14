@@ -1,96 +1,79 @@
 import 'package:calibre_carte/models/books.dart';
+import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
+import 'package:calibre_carte/screens/book_details_Ekansh.dart';
 import 'package:calibre_carte/screens/book_details_screen.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
+import 'package:calibre_carte/widgets/download_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CalibreGridTile extends StatelessWidget {
+  final int index;
   final Books book;
+  final List<Books> books;
 
-  CalibreGridTile(this.book);
+  CalibreGridTile(this.index, this.book, this.books);
+
+  void viewBookDetails(int bookId, BuildContext context) {
+    print(bookId);
+    BookDetailsNavigation bn = Provider.of<BookDetailsNavigation>(context, listen: false);
+    bn.bookID = bookId;
+    bn.booksList = books;
+    bn.index = index;
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+      return Consumer<BookDetailsNavigation>(
+        builder: (ctx, bookNav, child) => BookDetailsScreenEkansh(
+          bookId: bookNav.bookID != null ? bookNav.bookID : bookId ,
+        ),
+      );
+    })).then((_){
+      bn.bookID = null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    void viewBookDetails(int bookId) {
-      print(bookId);
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-        return BookDetailsScreen(
-          bookId: bookId,
-        );
-      }));
-    }
-
     return DefaultTextStyle(
       style: const TextStyle(color: Colors.white),
       child: Stack(
         fit: StackFit.expand,
         children: [
           BookDetailsCoverImage(book.id, book.path, null, null),
-//          _TextualInfo(event),
-//          Positioned(
-//            top: 10.0,
-//            child: Visibility(
-//              visible: showReleaseDateInformation,
-//              child: EventReleaseDateInformation(event),
-//            ),
-//          ),
           Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: () => viewBookDetails(book.id),
+              onTap: () => viewBookDetails(book.id, context),
               child: Container(),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              decoration: BoxDecoration(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              DownloadIcon(book.id),
+              Container(
+                decoration: BoxDecoration(
 //                border: Border.all(),
-                borderRadius: BorderRadius.circular(1),
-                color: Colors.black.withOpacity(0.6),
-              ),
-              alignment: Alignment.centerLeft,
-              height: MediaQuery.of(context).size.height / 15,
+                  borderRadius: BorderRadius.circular(1),
+                  color: Colors.black.withOpacity(0.6),
+                ),
+                alignment: Alignment.centerLeft,
+                height: MediaQuery.of(context).size.height / 15,
 //              width: MediaQuery.of(context).size.width / 2.4,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  book.title,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  style: TextStyle(fontFamily: 'Montserrat'),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    book.title,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: TextStyle(fontFamily: 'Montserrat'),
+                  ),
                 ),
               ),
-            ),
+            ],
           )
         ],
       ),
     );
   }
 }
-
-//GestureDetector(
-//onTap: () => viewBookDetails(book.id),
-//child: Card(
-//color: Colors.transparent,
-//margin: const EdgeInsets.symmetric(
-//vertical: 7,
-//horizontal: 5,
-//),
-//elevation: 10,
-//child: Column(
-//crossAxisAlignment: CrossAxisAlignment.start,
-//children: <Widget>[
-//Container(
-//decoration: BoxDecoration(
-//color: Colors.black.withOpacity(0.5),
-//borderRadius: BorderRadius.circular(10),
-//),
-//padding: EdgeInsets.all(0),
-//height: MediaQuery.of(context).size.height / 4,
-//width: MediaQuery.of(context).size.width / 3,
-//child: Container(key:Key(book.title), child: BookDetailsCoverImage(book.id, book.path)),
-//),
-//
-//],
-//)),
-//);
