@@ -34,7 +34,7 @@ class BooksListView extends StatelessWidget {
               return filter == null
                   ? CoolTile(index, books)
                   : (books[index]
-                          .title
+                          .author_sort
                           .toLowerCase()
                           .contains(filter.toLowerCase())
                       ? CoolTile(index, books)
