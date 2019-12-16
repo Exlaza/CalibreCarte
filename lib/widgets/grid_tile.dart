@@ -16,17 +16,18 @@ class CalibreGridTile extends StatelessWidget {
 
   void viewBookDetails(int bookId, BuildContext context) {
     print(bookId);
-    BookDetailsNavigation bn = Provider.of<BookDetailsNavigation>(context, listen: false);
+    BookDetailsNavigation bn =
+        Provider.of<BookDetailsNavigation>(context, listen: false);
     bn.bookID = bookId;
     bn.booksList = books;
     bn.index = index;
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
       return Consumer<BookDetailsNavigation>(
         builder: (ctx, bookNav, child) => BookDetailsScreenEkansh(
-          bookId: bookNav.bookID != null ? bookNav.bookID : bookId ,
+          bookId: bookNav.bookID != null ? bookNav.bookID : bookId,
         ),
       );
-    })).then((_){
+    })).then((_) {
       bn.bookID = null;
     });
   }
@@ -50,7 +51,6 @@ class CalibreGridTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              DownloadIcon(book.id),
               Container(
                 decoration: BoxDecoration(
 //                border: Border.all(),
@@ -60,14 +60,19 @@ class CalibreGridTile extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 height: MediaQuery.of(context).size.height / 15,
 //              width: MediaQuery.of(context).size.width / 2.4,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Text(
-                    book.title,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style: TextStyle(fontFamily: 'Montserrat'),
-                  ),
+                child: Row(
+                  children: <Widget>[
+                    Container(width: MediaQuery.of(context).size.width/2.5,
+                      padding: EdgeInsets.only(left: 3),
+                      child: Text(
+                        book.title,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(fontFamily: 'Montserrat'),
+                      ),
+                    ),
+                    DownloadIcon(book.id),
+                  ],
                 ),
               ),
             ],

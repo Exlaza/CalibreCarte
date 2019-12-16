@@ -72,7 +72,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   selectingCalibreLibrary(key, val, update) {
     storeStringInSharedPrefs('selected_calibre_lib_path', key);
     storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_) {
-      Navigator.of(context).pop();
+//      Navigator.of(context).pop();
       showDialog<void>(
           context: context,
           barrierDismissible: false,
@@ -181,7 +181,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       });
       List<Widget> columnChildren = pathNameMap.keys.toList().map((element) {
         return InkWell(
-            onTap: () {
+            onTap: selected_lib_name == pathNameMap[element] ?(){}:() {
               selectingCalibreLibrary(element, pathNameMap[element], update);
               setState(() {
                 myFuture = loadingToken();
@@ -207,7 +207,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
             ));
       }).toList();
 //      columnChildren.add(SizedBox(height: 8,));
-
+      Scaffold.of(context).removeCurrentSnackBar();
       return columnChildren;
     } else {
       Scaffold.of(context).showSnackBar(SnackBar(
