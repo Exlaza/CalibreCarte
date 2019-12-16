@@ -29,6 +29,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   Future myFuture;
   String dropboxEmail;
   String selected_calibre_lib_dir;
+  String selected_lib_name;
   List<String> dirNames = [];
   int noOfCalibreLibs;
   bool hasChanged;
@@ -41,6 +42,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       dirNames.clear();
       dropboxEmail = sp.getString('dropboxEmail');
       selected_calibre_lib_dir = sp.getString('selected_calibre_lib_path');
+      selected_lib_name=sp.getString('selected_calibre_lib_name');
       noOfCalibreLibs = sp.getInt('noOfCalibreLibs');
       for (int i = 0; i < noOfCalibreLibs; i++) {
         temp = sp.getString('calibre_lib_name_$i');
@@ -112,7 +114,9 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   }
 
   final url =
-      'https://www.dropbox.com/oauth2/authorize?client_id=${DropboxDropdown.clientID}&response_type=token&redirect_uri=${DropboxDropdown.redirectUri}';
+      'https://www.dropbox.com/oauth2/authorize?client_id=${DropboxDropdown
+      .clientID}&response_type=token&redirect_uri=${DropboxDropdown
+      .redirectUri}';
 
   _makePostRequest(token) async {
 //    print(token);
@@ -132,8 +136,8 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     }
   }
 
-  Future<List<Widget>> refreshLibrary(
-      BuildContext context, Update update) async {
+  Future<List<Widget>> refreshLibrary(BuildContext context,
+      Update update) async {
     print("Inside refresh Library for some reason");
     Map<String, String> pathNameMap = Map();
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -163,7 +167,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
           String libPath = element["metadata"]["metadata"]["path_display"];
           libPath = libPath.replaceAll('metadata.db', "");
           List<String> directories =
-              element["metadata"]["metadata"]["path_display"].split('/');
+          element["metadata"]["metadata"]["path_display"].split('/');
           String libName = directories.elementAt(directories.length - 2);
           pathNameMap.putIfAbsent(libPath, () => libName);
         }
@@ -186,14 +190,18 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
             child: Container(
               alignment: Alignment.bottomLeft,
               padding: EdgeInsets.fromLTRB(70, 5, 20, 5),
-              child: Row(
+              child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Icon(Icons.cloud_download, color: Color(0xffFED962)),
-                  SizedBox(width: 10,),
-                  Text(
-                    " ${pathNameMap[element]}",
-                    style: TextStyle(fontFamily: 'Montserrat', fontSize: 15),
-                  )
+                  Row(children: <Widget>[Icon(Icons.cloud_download, color: Color(0xffFED962)),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      " ${pathNameMap[element]}",
+                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 15),
+                    )],),
+                  selected_lib_name == pathNameMap[element] ? Icon(
+                      Icons.done, color: Color(0xffFED962)):Container()
                 ],
               ),
             ));
@@ -235,79 +243,82 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   // TODO: ADD COMPLETER TO GET LIBRARY LIST
+                  RefreshButton(),
                   selected_calibre_lib_dir == null
                       ? Text("no directory selected")
                       : ExpansionTile(
-                          onExpansionChanged: (bool value) {
-                            if (value) {
-                              setState(() {
-                                if (_responseCompleter.isCompleted) {
-                                  _responseCompleter = Completer();
-                                }
-                              });
-                              _responseCompleter
-                                  .complete(refreshLibrary(context, update));
-                              print("Getting Expansion Item ");
-                            }
-                          },
-                          title: Card(
-                            elevation: 0.0,
-                            child: InkWell(
-                              onTap: () {},
-                              child: Container(
-                                padding: EdgeInsets.fromLTRB(30, 10, 20, 0),
-                                child: Column(
-                                  children: <Widget>[
-                                    Row(
-                                      children: <Widget>[
-                                        Icon(
-                                          Icons.folder,
-                                          color: Color(0xffFED962),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text("Change Directory",
-                                            style: TextStyle(
-                                                fontFamily: 'Montserrat',
-                                                fontSize: 15))
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                    onExpansionChanged: (bool value) {
+                      if (value) {
+                        setState(() {
+                          if (_responseCompleter.isCompleted) {
+                            _responseCompleter = Completer();
+                          }
+                        });
+                        _responseCompleter
+                            .complete(refreshLibrary(context, update));
+                        print("Getting Expansion Item ");
+                      }
+                    },
+                    title: Card(
+                      elevation: 0.0,
+                      child: InkWell(
+                        onTap: () {},
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(30, 0, 20, 1),
+                          child: Column(
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.folder,
+                                    color: Color(0xffFED962),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text("Change Directory",
+                                      style: TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          fontSize: 15))
+                                ],
                               ),
-                            ),
+                            ],
                           ),
-                          children: <Widget>[
-                            FutureBuilder(
-                                future: _responseCompleter.future,
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<List<Widget>> snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                    return Column(
-                                      children: <Widget>[
-                                        Column(
-                                          children: snapshot.data,
-                                        ),
-                                        SizedBox(height: 7,),
-                                      ],
-                                    );
-                                  } else {
-                                    return Column(
-                                      children: <Widget>[
-                                        Center(
-                                          child: const Text('Loading...'),
-                                        ),
-                                        SizedBox(height: 7,),
-                                      ],
-                                    );
-                                  }
-                                })
-                          ],
                         ),
-                  RefreshButton(),
-                  SizedBox(height: 4,),
+                      ),
+                    ),
+                    children: <Widget>[
+                      FutureBuilder(
+                          future: _responseCompleter.future,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<Widget>> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              return Column(
+                                children: <Widget>[
+                                  Column(
+                                    children: snapshot.data,
+                                  ),
+                                  SizedBox(
+                                    height: 7,
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return Column(
+                                children: <Widget>[
+                                  Center(
+                                    child: const Text('Loading...'),
+                                  ),
+                                  SizedBox(
+                                    height: 7,
+                                  ),
+                                ],
+                              );
+                            }
+                          })
+                    ],
+                  ),
                   LogoutButton(() {
                     deleteToken();
                     CacheInvalidator.invalidateImagesCache();

@@ -50,7 +50,7 @@ class SearchDropdown extends StatelessWidget {
                         TextStyle(fontFamily: 'Montserrat', fontSize: 15))
                   ],
                 ),
-                update.searchFilter == "author" ? Icon(Icons.done) : Container()
+                update.searchFilter == "author" ? Icon(Icons.done,color:Color(0xffFED962)) : Container()
               ],
             ),
           ),
@@ -73,7 +73,7 @@ class SearchDropdown extends StatelessWidget {
                             TextStyle(fontFamily: 'Montserrat', fontSize: 15))
                   ],
                 ),
-                update.searchFilter == "title" ? Icon(Icons.done) : Container()
+                update.searchFilter == "title" ? Icon(Icons.done,color: Color(0xffFED962),) : Container()
               ],
             ),
           ),
