@@ -33,7 +33,8 @@ class _DarkModeState extends State<DarkMode> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Icon(Icons.wb_sunny, size: 20,),
+                    Icon(Icons.wb_sunny),
+                    SizedBox(width: 10,),
                     Text(
                       ' Dark Mode',
                       style: TextStyle(

@@ -137,6 +137,7 @@ class _SettingsNewState extends State<SettingsNew> {
                               Icons.info_outline,
                               color: Color(0xffFED962),
                             ),
+                            SizedBox(width: 10,),
                             Text(" About",
                                 style: TextStyle(
                                     fontFamily: 'Montserrat', fontSize: 15))
@@ -154,6 +155,7 @@ class _SettingsNewState extends State<SettingsNew> {
                               Icons.help_outline,
                               color: Color(0xffFED962),
                             ),
+                            SizedBox(width: 10,),
                             Text(" Usage Instructions",
                                 style: TextStyle(
                                     fontFamily: 'Montserrat', fontSize: 15))

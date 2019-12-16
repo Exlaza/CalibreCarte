@@ -23,6 +23,7 @@ class SearchDropdown extends StatelessWidget {
                   Icons.search,
                   color: Color(0xffFED962),
                 ),
+                SizedBox(width: 10,),
                 Text(' Search By',
                     style: TextStyle(fontFamily: 'Montserrat', fontSize: 15)),
               ],

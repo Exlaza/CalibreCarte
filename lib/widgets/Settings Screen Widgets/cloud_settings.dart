@@ -21,12 +21,13 @@ class _CloudSettingsState extends State<CloudSettings> {
             child: Column(
               children: <Widget>[
                 Row(
-
                   children: <Widget>[
                     Icon(
                       settingIcon,
                       color: Color(0xffFED962),
-                    ),Text(settingName,
+                    ),
+                    SizedBox(width: 10,),
+                    Text(settingName,
                         style: TextStyle(fontFamily: 'Montserrat', fontSize: 15))
                   ],
                 ),
