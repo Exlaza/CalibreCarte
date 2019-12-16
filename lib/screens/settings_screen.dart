@@ -51,14 +51,22 @@ class _SettingsNewState extends State<SettingsNew> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Row(
-                    children: <Widget>[Icon(
-                    settingIcon,
-                    color: Color(0xffFED962),
+                    children: <Widget>[
+                      Icon(
+                        settingIcon,
+                        color: Color(0xffFED962),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(settingName,
+                          style: TextStyle(
+                              fontFamily: 'Montserrat', fontSize: 15)),
+                    ],
                   ),
-                      SizedBox(width: 10,),Text(settingName,
-                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 15)),
-                    ],)
-                  , IconButton(icon: Icon(Icons.navigate_next),)
+                  IconButton(
+                    icon: Icon(Icons.navigate_next),
+                  )
                 ],
               ),
             ],
@@ -70,7 +78,7 @@ class _SettingsNewState extends State<SettingsNew> {
 
   Widget _settingGroup(groupName) {
     return Container(
-//        padding: EdgeInsets.only(left: 4),
+        padding: EdgeInsets.only(left: 27),
         child: Text(
           groupName,
           style: TextStyle(
@@ -111,63 +119,45 @@ class _SettingsNewState extends State<SettingsNew> {
                 margin: EdgeInsets.fromLTRB(8, 8, 8, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: <Widget>[SizedBox(height: 20,),
                     _settingGroup("Cloud"),
-                   CloudSettings(),
+                    CloudSettings(),
                     _settingGroup("Search"),
-                   SearchDropdown(),
+                    SearchDropdown(),
                     _settingGroup("Appearance"),
-                   DarkMode(darkMode),_settingGroup("Help"),
-                    Card(
-                      elevation: 0.0,
-                      child: InkWell(
-                        onTap: (){},
-                        child: Container(
-//                          padding: EdgeInsets.fromLTRB(30, 10, 20, 10),
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.info_outline,
-                                    color: Color(0xffFED962),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text("About",
-                                      style:
-                                      TextStyle(fontFamily: 'Montserrat', fontSize: 15))
-                                ],
-                              ),
-                            ],
-                          ),
+                    DarkMode(darkMode),
+                    _settingGroup("Help"),
+                    Container(
+                      padding: EdgeInsets.only(left: 25),
+                      child: ListTile(
+                        contentPadding: EdgeInsets.all(0),
+                        title: Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.info_outline,
+                              color: Color(0xffFED962),
+                            ),
+                            Text(" About",
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat', fontSize: 15))
+                          ],
                         ),
                       ),
-                    ),Card(
-                      elevation: 0.0,
-                      child: InkWell(
-                        onTap: (){},
-                        child: Container(
-//                          padding: EdgeInsets.fromLTRB(30, 10, 20, 10),
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.help_outline,
-                                    color: Color(0xffFED962),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text("Usage Instructions",
-                                      style:
-                                      TextStyle(fontFamily: 'Montserrat', fontSize: 15))
-                                ],
-                              ),
-                            ],
-                          ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 25, bottom: 0),
+                      child: ListTile(
+                        contentPadding: EdgeInsets.all(0),
+                        title: Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.help_outline,
+                              color: Color(0xffFED962),
+                            ),
+                            Text(" Usage Instructions",
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat', fontSize: 15))
+                          ],
                         ),
                       ),
                     )
@@ -184,5 +174,3 @@ class _SettingsNewState extends State<SettingsNew> {
     );
   }
 }
-
-

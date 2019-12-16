@@ -18,7 +18,7 @@ class _CloudSettingsState extends State<CloudSettings> {
           child: InkWell(
             onTap: onClicked,
             child: Container(
-              padding: EdgeInsets.fromLTRB(10, 10, 20, 10),
+              padding: EdgeInsets.fromLTRB(8, 10, 20, 10),
               child: Column(
                 children: <Widget>[
                   Row(
@@ -27,8 +27,7 @@ class _CloudSettingsState extends State<CloudSettings> {
                       Icon(
                         settingIcon,
                         color: Color(0xffFED962),
-                      ),
-                      SizedBox(width: 10,),Text(settingName,
+                      ),Text(settingName,
                           style: TextStyle(fontFamily: 'Montserrat', fontSize: 15))
                     ],
                   ),
@@ -46,7 +45,7 @@ class _CloudSettingsState extends State<CloudSettings> {
     Update update = Provider.of(context);
 
     return _settingsCard(
-        'Dropbox', update.tokenExists ? Icons.cloud_done : Icons.cloud_off, () {
+        ' Dropbox', update.tokenExists ? Icons.cloud_done : Icons.cloud_off, () {
 //                            print('Tap is not working');
 
     });

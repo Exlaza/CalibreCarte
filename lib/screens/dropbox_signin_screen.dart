@@ -128,8 +128,9 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Dropbox Login'),
+      appBar: AppBar(backgroundColor: Color(0xff002242),
+        title: Text('Dropbox Login',style: TextStyle(fontFamily: 'Montserrat',
+          color: Color(0xffFED962))),
       ),
       body: IndexedStack(
         index: _stackToView,
@@ -258,6 +259,8 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                         'selected_calibre_lib_name',
                         pathNameMap.values.first,
                       ).then((_) {
+                        update.changeTokenState(true);
+                        update.updateFlagState(true);
                         Navigator.of(context).pop();
                       });
                     }
