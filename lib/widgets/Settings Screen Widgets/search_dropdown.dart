@@ -14,7 +14,7 @@ class SearchDropdown extends StatelessWidget {
     Update update = Provider.of(context);
     return ExpansionTile(
       title: Container(
-        padding: EdgeInsets.fromLTRB(10, 10, 30, 10),
+        padding: EdgeInsets.fromLTRB(0, 10, 30, 10),
         child: Column(
           children: <Widget>[
             Row(
@@ -31,24 +31,57 @@ class SearchDropdown extends StatelessWidget {
         ),
       ),
       children: <Widget>[
-        ListTile(
-          title: Text("Author",
-              style: TextStyle(fontFamily: 'Montserrat', fontSize: 15)),
-          trailing: update.searchFilter == "author" ? Icon(Icons.done) : null,
-          onTap: () {
-            saveStringToSP('searchFilter', 'author');
-            update.changeSearchFilter('author');
-          },
+        Container(
+          padding: EdgeInsets.fromLTRB(46, 7, 17, 10),
+          child: InkWell(
+            onTap: () {
+              saveStringToSP('searchFilter', 'author');
+              update.changeSearchFilter('author');
+            },
+            child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text("Author",
+                    style: TextStyle(fontFamily: 'Montserrat', fontSize: 15)),
+                update.searchFilter == "author" ? Icon(Icons.done) : Container()
+              ],
+            ),
+          ),
+        ), Container(
+          padding: EdgeInsets.fromLTRB(46, 5, 17, 10),
+
+          child: InkWell(
+            onTap: () {
+              saveStringToSP('searchFilter', 'title');
+              update.changeSearchFilter('title');
+            },
+            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text("Title",
+                    style: TextStyle(fontFamily: 'Montserrat', fontSize: 15)),
+                update.searchFilter == "title" ? Icon(Icons.done) : Container()
+              ],
+            ),
+          ),
         ),
-        ListTile(
-          trailing: update.searchFilter == "title" ? Icon(Icons.done) : null,
-          title: Text("Book Title",
-              style: TextStyle(fontFamily: 'Montserrat', fontSize: 15)),
-          onTap: () {
-            saveStringToSP('searchFilter', 'title');
-            update.changeSearchFilter('title');
-          },
-        )
+//        ListTile(
+//          contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+//          title: Text("Author",
+//              style: TextStyle(fontFamily: 'Montserrat', fontSize: 15)),
+//          trailing: update.searchFilter == "author" ? Icon(Icons.done) : null,
+//          onTap: () {
+//            saveStringToSP('searchFilter', 'author');
+//            update.changeSearchFilter('author');
+//          },
+//        ),
+//        ListTile(
+//          trailing: update.searchFilter == "title" ? Icon(Icons.done) : null,
+//          title: Text("Book Title",
+//              style: TextStyle(fontFamily: 'Montserrat', fontSize: 15)),
+//          onTap: () {
+//            saveStringToSP('searchFilter', 'title');
+//            update.changeSearchFilter('title');
+//          },
+//        )
       ],
     );
   }

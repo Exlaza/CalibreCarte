@@ -184,7 +184,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
               });
             },
             child: Container(
-              padding: EdgeInsets.fromLTRB(60, 10, 20, 10),
+              padding: EdgeInsets.fromLTRB(60, 5, 20, 5),
               child: Text(
                 pathNameMap[element],
                   style: TextStyle(
@@ -249,7 +249,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                             child: InkWell(
                               onTap: () {},
                               child: Container(
-                                padding: EdgeInsets.fromLTRB(30, 10, 20, 10),
+                                padding: EdgeInsets.fromLTRB(30, 10, 20, 0),
                                 child: Column(
                                   children: <Widget>[
                                     Row(

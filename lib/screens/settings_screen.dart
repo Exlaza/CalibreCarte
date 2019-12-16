@@ -78,7 +78,7 @@ class _SettingsNewState extends State<SettingsNew> {
 
   Widget _settingGroup(groupName) {
     return Container(
-        padding: EdgeInsets.only(left: 27),
+        padding: EdgeInsets.only(left: 16),
         child: Text(
           groupName,
           style: TextStyle(
@@ -128,7 +128,7 @@ class _SettingsNewState extends State<SettingsNew> {
                     DarkMode(darkMode),
                     _settingGroup("Help"),
                     Container(
-                      padding: EdgeInsets.only(left: 25),
+                      padding: EdgeInsets.only(left: 16),
                       child: ListTile(
                         contentPadding: EdgeInsets.all(0),
                         title: Row(
@@ -145,10 +145,10 @@ class _SettingsNewState extends State<SettingsNew> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.only(left: 25, bottom: 0),
-                      child: ListTile(
-                        contentPadding: EdgeInsets.all(0),
-                        title: Row(
+                      padding: EdgeInsets.only(left: 16, bottom: 0),
+                      child: Container(
+                        padding: EdgeInsets.only(top:4),
+                        child: Row(
                           children: <Widget>[
                             Icon(
                               Icons.help_outline,

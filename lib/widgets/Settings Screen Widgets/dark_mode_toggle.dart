@@ -21,7 +21,7 @@ class _DarkModeState extends State<DarkMode> {
 //                    shape: RoundedRectangleBorder(
 //                        borderRadius: BorderRadius.circular(30)),
       child: Container(
-        padding: EdgeInsets.fromLTRB(22, 10, 30, 10),
+        padding: EdgeInsets.fromLTRB(12, 1, 30, 1),
 //                      decoration: BoxDecoration(
 //                          color: Colors.black87,
 //                         ),
