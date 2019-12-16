@@ -82,7 +82,7 @@ class _SettingsNewState extends State<SettingsNew> {
         child: Text(
           groupName,
           style: TextStyle(
-              fontFamily: 'Montserrat', color: Colors.grey, fontSize: 25),
+              fontFamily: 'Montserrat', color: Colors.grey, fontSize: 20),
         ));
   }
 

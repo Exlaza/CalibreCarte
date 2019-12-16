@@ -183,17 +183,23 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                 myFuture = loadingToken();
               });
             },
-            child: Container(alignment: Alignment.bottomLeft,
+            child: Container(
+              alignment: Alignment.bottomLeft,
               padding: EdgeInsets.fromLTRB(70, 5, 20, 5),
-              child: Row(children: <Widget>[ Icon(Icons.cloud_download, color: Color(0xffFED962)),Text(
-                " ${pathNameMap[element]}",
-                style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 15),
-              )],),
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.cloud_download, color: Color(0xffFED962)),
+                  SizedBox(width: 10,),
+                  Text(
+                    " ${pathNameMap[element]}",
+                    style: TextStyle(fontFamily: 'Montserrat', fontSize: 15),
+                  )
+                ],
+              ),
             ));
       }).toList();
-      print(columnChildren);
+//      columnChildren.add(SizedBox(height: 8,));
+
       return columnChildren;
     } else {
       Scaffold.of(context).showSnackBar(SnackBar(
@@ -279,16 +285,29 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                                     AsyncSnapshot<List<Widget>> snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.done) {
-                                    return Column(children: snapshot.data);
+                                    return Column(
+                                      children: <Widget>[
+                                        Column(
+                                          children: snapshot.data,
+                                        ),
+                                        SizedBox(height: 7,),
+                                      ],
+                                    );
                                   } else {
-                                    return const Center(
-                                      child: const Text('Loading...'),
+                                    return Column(
+                                      children: <Widget>[
+                                        Center(
+                                          child: const Text('Loading...'),
+                                        ),
+                                        SizedBox(height: 7,),
+                                      ],
                                     );
                                   }
                                 })
                           ],
                         ),
                   RefreshButton(),
+                  SizedBox(height: 4,),
                   LogoutButton(() {
                     deleteToken();
                     CacheInvalidator.invalidateImagesCache();
@@ -297,7 +316,10 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                       myFuture = loadingToken();
                       update.changeTokenState(false);
                     });
-                  })
+                  }),
+                  SizedBox(
+                    height: 8,
+                  )
                 ],
               ),
             );
