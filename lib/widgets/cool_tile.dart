@@ -14,17 +14,18 @@ class CoolTile extends StatelessWidget {
 
   void viewBookDetails(int bookId, BuildContext context) {
 //      print(bookId);
-    BookDetailsNavigation bn = Provider.of<BookDetailsNavigation>(context, listen: false);
+    BookDetailsNavigation bn =
+        Provider.of<BookDetailsNavigation>(context, listen: false);
     bn.bookID = bookId;
     bn.booksList = books;
     bn.index = index;
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
       return Consumer<BookDetailsNavigation>(
         builder: (ctx, bookNav, child) => BookDetailsScreenEkansh(
-          bookId: bookNav.bookID != null ? bookNav.bookID : bookId ,
+          bookId: bookNav.bookID != null ? bookNav.bookID : bookId,
         ),
       );
-    })).then((_){
+    })).then((_) {
       bn.bookID = null;
     });
   }
@@ -66,7 +67,7 @@ class CoolTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Container(height: 20.0),
+                  Container(height: 15.0),
                   Text(
                     books[index].title,
                     style: TextStyling.headerTextStyle,
@@ -79,16 +80,17 @@ class CoolTile extends StatelessWidget {
                     style: TextStyling.subHeaderTextStyle,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 8.0),
-                    height: 2.0,
-                    width: 18.0,
-                    color: Color(0xff00c6ff),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 8.0),
+                        height: 2.0,
+                        width: 18.0,
+                        color: Color(0xff00c6ff),
+                      ),Container(height: 2,),DownloadIcon(books[index].id)
+                    ],
                   ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  DownloadIcon(books[index].id),
                 ],
               ),
             ),
