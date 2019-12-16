@@ -183,14 +183,14 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                 myFuture = loadingToken();
               });
             },
-            child: Container(
-              padding: EdgeInsets.fromLTRB(60, 5, 20, 5),
-              child: Text(
-                pathNameMap[element],
-                  style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 15),
-              ),
+            child: Container(alignment: Alignment.bottomLeft,
+              padding: EdgeInsets.fromLTRB(70, 5, 20, 5),
+              child: Row(children: <Widget>[ Icon(Icons.cloud_download, color: Color(0xffFED962)),Text(
+                " ${pathNameMap[element]}",
+                style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 15),
+              )],),
             ));
       }).toList();
       print(columnChildren);

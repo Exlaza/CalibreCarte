@@ -32,32 +32,46 @@ class SearchDropdown extends StatelessWidget {
       ),
       children: <Widget>[
         Container(
-          padding: EdgeInsets.fromLTRB(46, 7, 17, 10),
+          padding: EdgeInsets.fromLTRB(49, 7, 17, 10),
           child: InkWell(
             onTap: () {
               saveStringToSP('searchFilter', 'author');
               update.changeSearchFilter('author');
             },
-            child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text("Author",
-                    style: TextStyle(fontFamily: 'Montserrat', fontSize: 15)),
+                Row(
+                  children: <Widget>[
+                    Icon(Icons.person, color: Color(0xffFED962)),
+                    Text(" Author",
+                        style:
+                        TextStyle(fontFamily: 'Montserrat', fontSize: 15))
+                  ],
+                ),
                 update.searchFilter == "author" ? Icon(Icons.done) : Container()
               ],
             ),
           ),
-        ), Container(
-          padding: EdgeInsets.fromLTRB(46, 5, 17, 10),
-
+        ),
+        Container(
+          padding: EdgeInsets.fromLTRB(49, 5, 17, 10),
           child: InkWell(
             onTap: () {
               saveStringToSP('searchFilter', 'title');
               update.changeSearchFilter('title');
             },
-            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text("Title",
-                    style: TextStyle(fontFamily: 'Montserrat', fontSize: 15)),
+                Row(
+                  children: <Widget>[
+                    Icon(Icons.title, color: Color(0xffFED962)),
+                    Text(" Title",
+                        style:
+                            TextStyle(fontFamily: 'Montserrat', fontSize: 15))
+                  ],
+                ),
                 update.searchFilter == "title" ? Icon(Icons.done) : Container()
               ],
             ),
