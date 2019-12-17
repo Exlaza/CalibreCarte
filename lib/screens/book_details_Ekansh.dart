@@ -35,29 +35,34 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
   List<Map<String, String>> dataFormatsFileNameMap = List();
 
   Future<bool> checkIfLocalCopyExists() async {
+    print(authorText);
     List<Data> dataList = await DataProvider.getDataByBookID(widget.bookId);
+    List<Map<String, String>> dataFormatsFileNameMapTemp = List();
 
     dataList.forEach((element) {
+      print(element.name);
       String fileNameWithExtension =
           element.name + '.' + element.format.toLowerCase();
       Map<String, String> tempMap = {
         "format": element.format,
         "name": fileNameWithExtension
       };
-      dataFormatsFileNameMap.add(tempMap);
+      dataFormatsFileNameMapTemp.add(tempMap);
     });
-//    print('Maybe coming here');
-
     BookDownloader bd = BookDownloader();
-    for (int i = 0; i < dataFormatsFileNameMap.length; i++) {
+
+    for (int i = 0; i < dataFormatsFileNameMapTemp.length; i++) {
+      print(dataFormatsFileNameMapTemp[i]['name']);
       bool exists = await bd
-          .checkIfDownloadedFileExists(dataFormatsFileNameMap[i]['name']);
+          .checkIfDownloadedFileExists(dataFormatsFileNameMapTemp[i]['name']);
       if (exists) {
+        dataFormatsFileNameMap = dataFormatsFileNameMapTemp;
         return true;
       }
     }
-//    print('Coming here');
+    dataFormatsFileNameMap = dataFormatsFileNameMapTemp;
     return false;
+
   }
 
   _checkCopies() {
