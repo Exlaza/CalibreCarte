@@ -1,3 +1,4 @@
+import 'package:calibre_carte/models/publishers.dart';
 import 'package:calibre_carte/models/ratings.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/rating.dart';
@@ -12,9 +13,10 @@ class BookDetailsText extends StatelessWidget {
   final bookDetails;
   final authorText;
   final Ratings rating;
+  final Publishers publishers;
 
-  BookDetailsText(
-      this.bottomSize, this.width, this.bookDetails, this.authorText, this.rating);
+  BookDetailsText(this.bottomSize, this.width, this.bookDetails,
+      this.authorText, this.rating, this.publishers);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class BookDetailsText extends StatelessWidget {
                       bookDetails.title,
                       style: TextStyle(
                           fontFamily: 'Montserrat',
-                          fontSize: 18,
+                          fontSize: 19,
                           color: Color(0xff002242)),
                       textAlign: TextAlign.left,
                     ),
@@ -48,20 +50,55 @@ class BookDetailsText extends StatelessWidget {
                       "by $authorText",
 //              overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: Colors.grey,
+                        color: Color(0xff002242),
                         fontFamily: 'Montserrat',
 //                        fontStyle: FontStyle.italic,
-                        fontSize: 14,
+                        fontSize: 16,
                       ),
 //              maxLines: 2,
                     ),
                   ),
-                  SmoothStarRating(allowHalfRating: false,
+                  publishers == null
+                      ? Container()
+                      : Container(
+                          padding: EdgeInsets.fromLTRB(5, 10, 2, 5),
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Publisher: ${publishers.name}",
+//              overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+//                        fontStyle: FontStyle.italic,
+                              fontSize: 14, color: Color(0xff002242),
+                            ),
+//              maxLines: 2,
+                          ),
+                        ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(5, 10, 2, 20),
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Date Published: ${bookDetails.pubdate.substring(0, 10)}",
+//              overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+//                        fontStyle: FontStyle.italic,
+                        fontSize: 14, color: Color(0xff002242),
+                      ),
+//              maxLines: 2,
+                    ),
+                  ),
+                  SmoothStarRating(
+                    allowHalfRating: false,
                     starCount: 5,
-                    rating: rating==null?5:rating.rating.toDouble(),
-                    color: rating==null? Colors.grey.withOpacity(0.5):Color(0xffFED962),
-                    borderColor: rating==null?Colors.grey.withOpacity(0.5): Color(0xffFFE06F),
-                  )
+                    rating: rating == null ? 5 : (rating.rating / 2).toDouble(),
+                    color: rating == null
+                        ? Colors.grey.withOpacity(0.5)
+                        : Color(0xffFED962),
+                    borderColor: rating == null
+                        ? Colors.grey.withOpacity(0.5)
+                        : Color(0xffFFE06F),
+                  ),
                 ],
               ),
               // TODO: change sizes
