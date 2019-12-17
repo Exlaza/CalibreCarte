@@ -1,3 +1,4 @@
+import 'package:calibre_carte/models/ratings.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
 import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/details_text.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +8,10 @@ class DetailsLeftTile extends StatelessWidget {
   final bookDetails;
   final authorText;
   final totalHeight;
+  final Ratings rating;
 
   DetailsLeftTile(
-      {this.bookId, this.bookDetails, this.authorText, this.totalHeight});
+      {this.bookId, this.bookDetails, this.authorText, this.totalHeight,this.rating});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class DetailsLeftTile extends StatelessWidget {
             color: Colors.black,
             width: width,
           ),
-          BookDetailsText(bottomSize, width, bookDetails, authorText),
+          BookDetailsText(bottomSize, width, bookDetails, authorText, rating),
         ],
       ),
     );

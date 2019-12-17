@@ -3,10 +3,12 @@ import 'package:calibre_carte/helpers/book_author_link_provider.dart';
 import 'package:calibre_carte/helpers/book_downloader.dart';
 import 'package:calibre_carte/helpers/comments_provider.dart';
 import 'package:calibre_carte/helpers/data_provider.dart';
+import 'package:calibre_carte/helpers/ratings_provider.dart';
 import 'package:calibre_carte/models/authors.dart';
 import 'package:calibre_carte/models/books_authors_link.dart';
 import 'package:calibre_carte/models/comments.dart';
 import 'package:calibre_carte/models/data.dart';
+import 'package:calibre_carte/models/ratings.dart';
 import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/details_lefttile.dart';
 import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/details_sidebar.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +29,7 @@ class BookDetailsScreenEkansh extends StatefulWidget {
 
 class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
   Books bookDetails;
+  Ratings rating;
   Comments bookComments;
   Future myFuture;
   String localImagePath;
@@ -35,12 +38,12 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
   List<Map<String, String>> dataFormatsFileNameMap = List();
 
   Future<bool> checkIfLocalCopyExists() async {
-    print(authorText);
+//    print(authorText);
     List<Data> dataList = await DataProvider.getDataByBookID(widget.bookId);
     List<Map<String, String>> dataFormatsFileNameMapTemp = List();
 
     dataList.forEach((element) {
-      print(element.name);
+//      print(element.name);
       String fileNameWithExtension =
           element.name + '.' + element.format.toLowerCase();
       Map<String, String> tempMap = {
@@ -52,7 +55,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
     BookDownloader bd = BookDownloader();
 
     for (int i = 0; i < dataFormatsFileNameMapTemp.length; i++) {
-      print(dataFormatsFileNameMapTemp[i]['name']);
+//      print(dataFormatsFileNameMapTemp[i]['name']);
       bool exists = await bd
           .checkIfDownloadedFileExists(dataFormatsFileNameMapTemp[i]['name']);
       if (exists) {
@@ -89,6 +92,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
     authorText = authors.reduce((v, e) {
       return v + ', ' + e;
     });
+    rating=await RatingsProvider.getRatingByID(widget.bookId, null);
   }
 
   @override
@@ -118,7 +122,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
         MediaQuery.of(context).padding.bottom;
     return Container(
       child: Row(children: <Widget>[
-        DetailsLeftTile(
+        DetailsLeftTile(rating: rating,
           bookId: widget.bookId,
           bookDetails: bookDetails,
           authorText: authorText,
@@ -185,6 +189,7 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: appbar,
