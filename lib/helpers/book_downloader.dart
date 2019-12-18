@@ -67,4 +67,11 @@ class BookDownloader {
     String pathMetadata = join(tempDir.path + "/$fileName");
     return pathMetadata;
   }
+
+  Future<String> returnFileDirectoryExternal(fileName) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    String dd = sp.getString("download_directory");
+    String pathMetadata = join(dd + "/$fileName");
+    return pathMetadata;
+  }
 }
