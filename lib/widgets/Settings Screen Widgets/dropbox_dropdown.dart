@@ -152,7 +152,11 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text("No internet"),
       ));
-      List<Widget> l = [Text("Here is my list of wisgets")];
+      List<Widget> l = [Text("No Internet",style:  TextStyle(
+        fontFamily: 'Montserrat',
+//                        fontStyle: FontStyle.italic,
+        fontSize: 14, color: Colors.grey,
+      ),)];
       return l;
     }
     print("Internet check done");
