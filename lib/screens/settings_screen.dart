@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:calibre_carte/helpers/data_provider.dart';
+import 'package:calibre_carte/models/data.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/connect_dropbox_screen.dart';
 import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/cloud_settings.dart';
@@ -41,6 +43,10 @@ class _SettingsNewState extends State<SettingsNew> {
 
   void saveStringToSP(String settingName, String val) {
     _prefs.setString(settingName, val);
+  }
+
+  String getStringFromSP(String settingName) async {
+    return await _prefs.getString(settingName);
   }
 
   Widget _settingsCard(settingName, settingIcon, Function onClicked) {
@@ -91,23 +97,38 @@ class _SettingsNewState extends State<SettingsNew> {
         ));
   }
 
-
-  selectDirectory(context) async{
+  selectDirectory(context) async {
     Directory exd = await getExternalStorageDirectory();
 
-    Directory newDirectory = await DirectoryPicker.pick(
-        context: context,
-        rootDirectory: exd
-    );
+    Directory newDirectory =
+        await DirectoryPicker.pick(context: context, rootDirectory: exd);
 
     if (newDirectory != null) {
       // Do something with the picked directory
+//      Set the old directory so that I can search for all the downloaded files in the directory
+      String oldDirectoryPath = await _prefs.getString("downloaded_directory");
+//      Set the new directory in the shared preferences.
       saveStringToSP("download_directory", newDirectory.path);
+//      Get the books title and file extensions so that I can search for filenames
+      List<Data> dataList = await DataProvider.getAllBooksData();
+      List<Map<String, String>> dataFormatsFileNameMapTemp = List();
+
+//      For all the filenames in here, I will searhc it one by one and then
+//      rename it to the new one, which is supposedly equivalent as to moving it
+      dataList.forEach((element) {
+        String fNameWithExt = element.name + '.' + element.format.toLowerCase();
+        String pathToSearch = join(oldDirectoryPath, '/$fNameWithExt');
+        String pathToMove = join(newDirectory.path, '/$fNameWithExt');
+        if (File(pathToSearch).existsSync()) {
+          File(pathToSearch).renameSync(pathToMove);
+        }
+      });
+//      Here I also need to move every file that has a title in the database to the new directory
+
     } else {
       // User cancelled without picking any directory
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +214,9 @@ class _SettingsNewState extends State<SettingsNew> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     GestureDetector(
                       onTap: () => selectDirectory(context),
                       child: Container(
