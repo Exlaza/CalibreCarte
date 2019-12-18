@@ -1,18 +1,22 @@
 import 'package:calibre_carte/helpers/authors_provider.dart';
 import 'package:calibre_carte/helpers/book_author_link_provider.dart';
 import 'package:calibre_carte/helpers/book_downloader.dart';
+import 'package:calibre_carte/helpers/book_publisher_link_provider.dart';
+import 'package:calibre_carte/helpers/book_rating_link_provider.dart';
 import 'package:calibre_carte/helpers/comments_provider.dart';
 import 'package:calibre_carte/helpers/data_provider.dart';
+import 'package:calibre_carte/helpers/publishers_provider.dart';
 import 'package:calibre_carte/helpers/ratings_provider.dart';
 import 'package:calibre_carte/models/authors.dart';
 import 'package:calibre_carte/models/books_authors_link.dart';
+import 'package:calibre_carte/models/books_ratings_link.dart';
 import 'package:calibre_carte/models/comments.dart';
 import 'package:calibre_carte/models/data.dart';
+import 'package:calibre_carte/models/publishers.dart';
 import 'package:calibre_carte/models/ratings.dart';
 import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/details_lefttile.dart';
 import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/details_sidebar.dart';
 import 'package:flutter/material.dart';
-
 import '../helpers/books_provider.dart';
 import '../models/books.dart';
 
@@ -30,12 +34,14 @@ class BookDetailsScreenEkansh extends StatefulWidget {
 class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
   Books bookDetails;
   Ratings rating;
+  BooksRatingLink ratingLink;
   Comments bookComments;
   Future myFuture;
   String localImagePath;
   String authorText;
   Future mySecondFuture;
   List<Map<String, String>> dataFormatsFileNameMap = List();
+  Publishers publishers;
 
   Future<bool> checkIfLocalCopyExists() async {
 //    print(authorText);
@@ -65,7 +71,6 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
     }
     dataFormatsFileNameMap = dataFormatsFileNameMapTemp;
     return false;
-
   }
 
   _checkCopies() {
@@ -92,7 +97,8 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
     authorText = authors.reduce((v, e) {
       return v + ', ' + e;
     });
-    rating=await RatingsProvider.getRatingByID(widget.bookId, null);
+    rating = await BooksRatingLinkProvider.getRatingByBookID(widget.bookId);
+    publishers = await BooksPublisherLinkProvider.getPublisherByBookID(widget.bookId);
   }
 
   @override
@@ -103,13 +109,13 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
   }
 
   @override
-  void didUpdateWidget(BookDetailsScreenEkansh oldWidget){
+  void didUpdateWidget(BookDetailsScreenEkansh oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.bookId == widget.bookId){
+    if (oldWidget.bookId == widget.bookId) {
       return;
     }
 
-    myFuture = getBookDetails().then((_){
+    myFuture = getBookDetails().then((_) {
       mySecondFuture = checkIfLocalCopyExists();
     });
 //    mySecondFuture = checkIfLocalCopyExists();
@@ -122,7 +128,10 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
         MediaQuery.of(context).padding.bottom;
     return Container(
       child: Row(children: <Widget>[
-        DetailsLeftTile(rating: rating,
+        DetailsLeftTile(
+          publishers:publishers,
+//          rating: Ratings.fromMapObject({'id':1,'rating':3}),
+          rating: rating,
           bookId: widget.bookId,
           bookDetails: bookDetails,
           authorText: authorText,
@@ -131,9 +140,8 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
         rightTile()
       ]),
     );
-  }
+  } // TODO: change sizes
 
-// TODO: change sizes
   Widget rightTile() {
     var totalHeight = MediaQuery.of(context).size.height -
         appbar.preferredSize.height -
@@ -189,7 +197,6 @@ class _BookDetailsScreenEkanshState extends State<BookDetailsScreenEkansh> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: appbar,
