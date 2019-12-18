@@ -17,32 +17,6 @@ class BookDownloader {
     return sp.getString('selected_calibre_lib_path') ?? '/Calibre Library/';
   }
 
-//  downloadFile(token, path) async {
-//    String url = "https://content.dropboxapi.com/2/files/download";
-//    Map<String, String> headers = {
-//      "Authorization": "Bearer $token",
-//      "Dropbox-API-Arg": jsonEncode({"path": path}),
-//    };
-////    String json = '{"path": $path}'; // make POST request
-//    Response response = await post(
-//      url,
-//      headers: headers,
-//    ); // check the status code for the result
-//    return response;
-//  }
-//
-//  Future<void> downloadAndStoreFile(relativePath, bookID, fileName) async {
-//    String token = await getTokenFromPreferences();
-//    String basePath = await getSelectedLibPathFromSharedPrefs();
-//    String absPath = basePath + relativePath + '/' + fileName;
-//    Response response = await downloadFile(token, absPath);
-//    //Get the bytes, get the temp directory and write a file in temp
-//    List<int> bytes = response.bodyBytes;
-//    Directory tempDir = await getApplicationDocumentsDirectory();
-//    String pathMetadata = join(tempDir.path + "/$fileName");
-//    await File(pathMetadata).writeAsBytes(bytes, flush: true);
-//  }
-
   Future<bool> checkIfDownloadedFileExists(fileName) async {
     String pathMetadata = await returnFileDirectoryExternal(fileName);
     return await File(pathMetadata).exists();
