@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> getTokenAndSearchFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    darkMode = sp.getBool('darkMode')??false;
+    darkMode = sp.getBool('darkMode') ?? false;
     tokenExists = sp.containsKey('token');
     searchFilter = sp.getString('searchFilter') ?? 'title';
 //    Set the default download directory here once if it not set already
@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     super.initState();
     Future<Map<PermissionGroup, PermissionStatus>> permissions =
-    PermissionHandler().requestPermissions([PermissionGroup.storage]);
+        PermissionHandler().requestPermissions([PermissionGroup.storage]);
     myFuture = getTokenAndSearchFromPreferences();
   }
 
@@ -75,8 +75,6 @@ class _MyAppState extends State<MyApp> {
               title: "Calibre Carte",
               theme: ThemeData(
                   primaryColor: Color(0xffFED962),
-                  textTheme: TextTheme(subtitle: TextStyle(
-                      color: darkMode == true ? Colors.white:Colors.black)),
                   dividerColor: Colors.transparent),
               home: MyHomePage(),
               routes: {

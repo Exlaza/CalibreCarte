@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
     showModalBottomSheet(
         elevation: 5,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        backgroundColor: Colors.grey.withOpacity(0.8),
+        backgroundColor: Colors.grey,
         context: context,
         builder: (BuildContext bc) {
           return Container(
@@ -110,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        backgroundColor: Colors.grey.withOpacity(0.8),
+        backgroundColor: Colors.grey,
         context: context,
         builder: (BuildContext bc) {
           return Container(
@@ -123,6 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       layout = "list";
                     });
+                    Navigator.of(context).pop();
                     storeLayout('list');
                   },
                 ),
@@ -133,17 +134,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       layout = "grid";
                     });
+                    Navigator.of(context).pop();
                     storeLayout('grid');
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.view_carousel),
-                  title: Text("Carousel"),
-                  onTap: () {
-                    setState(() {
-                      layout = "carousel";
-                    });
-                    storeLayout('carousel');
                   },
                 )
               ],
@@ -156,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        backgroundColor: Colors.grey.withOpacity(0.8),
+        backgroundColor: Colors.grey,
         context: context,
         builder: (BuildContext bc) {
           return Container(
@@ -186,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        backgroundColor: Colors.grey.withOpacity(0.8),
+        backgroundColor: Colors.grey,
         context: context,
         builder: (BuildContext bc) {
           return Container(
@@ -233,7 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _searchPressed(String searchFil) {
     setState(() {
-      _appBarTitle = new TextField(
+      _appBarTitle = new TextField(style: TextStyle(color: Colors.white),
         controller: controller,
         decoration: new InputDecoration(
             prefixIcon: closeButton(), hintText: 'Search for ${searchFil}s'),

@@ -1,7 +1,6 @@
 import 'package:calibre_carte/helpers/book_author_link_provider.dart';
 import 'package:calibre_carte/models/books_authors_link.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
-import 'package:calibre_carte/widgets/books_carousel_view.dart';
 import 'package:calibre_carte/widgets/books_grid_view.dart';
 import 'package:calibre_carte/widgets/books_list_view.dart';
 import 'package:flutter/material.dart';
@@ -113,7 +112,7 @@ class _BooksViewState extends State<BooksView> {
                 ? BooksListView(widget.filter, books)
                 : (widget.layout == "grid"
                     ? BooksGridView(widget.filter, books)
-                    : BooksCarouselView(widget.filter, books));
+                    : BooksListView(widget.filter, books));
           } else {
             return CircularProgressIndicator();
           }
