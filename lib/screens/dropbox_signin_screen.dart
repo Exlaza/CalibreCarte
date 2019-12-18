@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:calibre_carte/helpers/metadata_cacher.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
@@ -128,11 +129,14 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
     return Scaffold(
-      appBar: AppBar(backgroundColor: Color(0xff002242),iconTheme: IconThemeData(
-        color: Colors.white, //change your color here
-      ),
-        title: Text('Dropbox Login',style: TextStyle(fontFamily: 'Montserrat',
-          color: Color(0xffFED962))),
+      appBar: AppBar(
+        backgroundColor: Color(0xff002242),
+        iconTheme: IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+        title: Text('Dropbox Login',
+            style:
+                TextStyle(fontFamily: 'Montserrat', color: Color(0xffFED962))),
       ),
       body: IndexedStack(
         index: _stackToView,
@@ -225,9 +229,26 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                               selectingCalibreLibrary(
                                   element, pathNameMap[element], update);
                             },
-                            child: Text(
-                              pathNameMap[element],
-                              style: TextStyle(fontSize: 30),
+                            child: Container( padding: EdgeInsets.all(8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.folder,
+                                    color: Color(0xffFED962),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    pathNameMap[element],
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: 'Montserrat',
+                                        color: Color(0xff002242)),
+                                  )
+                                ],
+                              ),
                             ));
                       }).toList();
 
@@ -235,11 +256,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(32),
-                                ),
-                              ),
+
                               contentPadding: EdgeInsets.all(10),
                               content: Container(
                                 width: 300,
@@ -247,13 +264,13 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(width: 2)),
+
                                         child: Text(
                                           'Select Library',
                                           style: TextStyle(
-                                              fontSize: 35,
-                                              fontWeight: FontWeight.bold),
+                                              fontSize: 20,
+                                              fontFamily: 'Montserrat',
+                                              color: Color(0xff002242)),
                                         )),
                                     SizedBox(
                                       height: 20,
