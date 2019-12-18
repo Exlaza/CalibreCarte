@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:calibre_carte/helpers/data_provider.dart';
 import 'package:calibre_carte/models/data.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
-import 'package:calibre_carte/screens/connect_dropbox_screen.dart';
 import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/cloud_settings.dart';
 import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/dark_mode_toggle.dart';
 import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/search_dropdown.dart';
@@ -43,44 +42,6 @@ class _SettingsNewState extends State<SettingsNew> {
 
   void saveStringToSP(String settingName, String val) {
     _prefs.setString(settingName, val);
-  }
-
-  Widget _settingsCard(settingName, settingIcon, Function onClicked) {
-    return Card(
-      elevation: 0.0,
-      child: InkWell(
-        onTap: onClicked,
-        child: Container(
-//          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        settingIcon,
-                        color: Color(0xffFED962),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(settingName,
-                          style: TextStyle(
-                              fontFamily: 'Montserrat', fontSize: 15)),
-                    ],
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.navigate_next),
-                  )
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Widget _settingGroup(groupName) {
