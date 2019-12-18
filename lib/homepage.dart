@@ -35,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Observable(_textUpdates.stream)
         .debounce((_) => TimerStream(true, const Duration(milliseconds: 500)))
         .forEach((s) {
-      if (filter != s) {
+      if ((filter != s) || (filter == "")){
         setState(() {
           filter = s;
         });
