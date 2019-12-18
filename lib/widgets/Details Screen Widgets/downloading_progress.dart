@@ -27,7 +27,7 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
     String token = await bd.getTokenFromPreferences();
     String basePath = await bd.getSelectedLibPathFromSharedPrefs();
     String absPath = basePath + widget.relativePath + '/' + widget.fileName;
-    String savePath = await bd.returnFileDirectory(widget.fileName);
+    String savePath = await bd.returnFileDirectoryExternal(widget.fileName);
 
     Map<String, String> headers = {
       "Authorization": "Bearer $token",

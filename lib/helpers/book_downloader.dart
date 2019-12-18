@@ -44,14 +44,14 @@ class BookDownloader {
 //  }
 
   Future<bool> checkIfDownloadedFileExists(fileName) async {
-    String pathMetadata = await returnFileDirectory(fileName);
+    String pathMetadata = await returnFileDirectoryExternal(fileName);
     return await File(pathMetadata).exists();
   }
 
   checkAndDeleteIfDownloadedFilesExists(fileName) async {
     bool exists = await checkIfDownloadedFileExists(fileName);
     if (exists) {
-      String pathMetadata = await returnFileDirectory(fileName);
+      String pathMetadata = await returnFileDirectoryExternal(fileName);
       await File(pathMetadata).delete();
       return true;
     }
@@ -68,6 +68,7 @@ class BookDownloader {
     SharedPreferences sp = await SharedPreferences.getInstance();
     String dd = sp.getString("download_directory");
     String pathMetadata = join(dd + "/$fileName");
+    print(pathMetadata);
     return pathMetadata;
   }
 }

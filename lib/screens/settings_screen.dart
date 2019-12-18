@@ -81,8 +81,6 @@ class _SettingsNewState extends State<SettingsNew> {
           File(pathToSearch).renameSync(pathToMove);
         }
       });
-//      Here I also need to move every file that has a title in the database to the new directory
-
     } else {
       // User cancelled without picking any directory
     }
