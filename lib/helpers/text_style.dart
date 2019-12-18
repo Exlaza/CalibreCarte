@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TextStyling {
+  bool darkMode;
+  TextStyling(this.darkMode);
   static final baseTextStyle = const TextStyle(fontFamily: 'Poppins');
   static final regularTextStyle = baseTextStyle.copyWith(
       color: const Color(0xffb6b2df),

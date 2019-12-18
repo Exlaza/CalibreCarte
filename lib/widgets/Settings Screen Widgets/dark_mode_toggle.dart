@@ -1,4 +1,6 @@
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class DarkMode extends StatefulWidget {
   bool darkMode;
@@ -16,6 +18,7 @@ class _DarkModeState extends State<DarkMode> {
 
   @override
   Widget build(BuildContext context) {
+    ColorTheme colorTheme=Provider.of(context);
     return  Card(
       elevation: 0.0,
 //                    shape: RoundedRectangleBorder(
@@ -50,6 +53,7 @@ class _DarkModeState extends State<DarkMode> {
                     setState(() {
                       widget.darkMode = val;
                     });
+                    val==true?colorTheme.darkModeOn():colorTheme.darkModeOff();
                   },
                 )
               ],

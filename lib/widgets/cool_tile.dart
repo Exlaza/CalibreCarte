@@ -1,5 +1,6 @@
 import 'package:calibre_carte/helpers/text_style.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/screens/book_details_Ekansh.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
 import 'package:calibre_carte/widgets/download_icon.dart';
@@ -32,14 +33,14 @@ class CoolTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ColorTheme colorTheme=Provider.of(context);
     return GestureDetector(
       onTap: () => viewBookDetails(books[index].id, context),
       child: Container(
         height: MediaQuery.of(context).size.height / 5,
         decoration: new BoxDecoration(
-          color: index % 2 == 0 ? Colors.white : Colors.white70,
+          color: index % 2 == 0 ? colorTheme.tileColor1 : colorTheme.tileColor2,
           shape: BoxShape.rectangle,
-          borderRadius: new BorderRadius.circular(8.0),
           boxShadow: <BoxShadow>[
             new BoxShadow(
               color: Colors.black12,
@@ -70,14 +71,14 @@ class CoolTile extends StatelessWidget {
                   Container(height: 15.0),
                   Text(
                     books[index].title,
-                    style: TextStyling.headerTextStyle,
+                    style: TextStyling.headerTextStyle.copyWith(color: colorTheme.headerText),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                   ),
                   Container(height: 10.0),
                   Text(
                     books[index].author_sort,
-                    style: TextStyling.subHeaderTextStyle,
+                    style: TextStyling.subHeaderTextStyle.copyWith(color: colorTheme.subHeaderText),
                     overflow: TextOverflow.ellipsis,
                   ),
                   Column(

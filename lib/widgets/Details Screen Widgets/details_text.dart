@@ -1,6 +1,7 @@
 import 'package:calibre_carte/models/publishers.dart';
 import 'package:calibre_carte/models/ratings.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/rating.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +21,14 @@ class BookDetailsText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ColorTheme colorTheme = Provider.of(context);
     BookDetailsNavigation bn =
         Provider.of<BookDetailsNavigation>(context, listen: false);
     return Column(
       children: <Widget>[
         Container(
           height: bottomSize * 0.85,
+          color: colorTheme.descriptionBackground,
           child: SingleChildScrollView(
             child: Container(
               width: width,
@@ -39,7 +42,7 @@ class BookDetailsText extends StatelessWidget {
                       style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontSize: 19,
-                          color: Color(0xff002242)),
+                          color: colorTheme.headerText),
                       textAlign: TextAlign.left,
                     ),
                   ),
@@ -50,7 +53,7 @@ class BookDetailsText extends StatelessWidget {
                       "by $authorText",
 //              overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: Color(0xff002242),
+                        color: colorTheme.headerText,
                         fontFamily: 'Montserrat',
 //                        fontStyle: FontStyle.italic,
                         fontSize: 16,
@@ -69,7 +72,7 @@ class BookDetailsText extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: 'Montserrat',
 //                        fontStyle: FontStyle.italic,
-                              fontSize: 14, color: Color(0xff002242),
+                              fontSize: 14, color: colorTheme.subHeaderText,
                             ),
 //              maxLines: 2,
                           ),
@@ -83,7 +86,7 @@ class BookDetailsText extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: 'Montserrat',
 //                        fontStyle: FontStyle.italic,
-                        fontSize: 14, color: Color(0xff002242),
+                        fontSize: 14, color: colorTheme.subHeaderText,
                       ),
 //              maxLines: 2,
                     ),
