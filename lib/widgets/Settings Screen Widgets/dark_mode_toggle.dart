@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class DarkMode extends StatefulWidget {
-  bool darkMode;
-  DarkMode(this.darkMode);
+
 
   @override
   _DarkModeState createState() => _DarkModeState();
@@ -19,11 +18,12 @@ class _DarkModeState extends State<DarkMode> {
   @override
   Widget build(BuildContext context) {
     ColorTheme colorTheme=Provider.of(context);
-    return  Card(
+    return  Card(color: Colors.transparent,
       elevation: 0.0,
 //                    shape: RoundedRectangleBorder(
 //                        borderRadius: BorderRadius.circular(30)),
       child: Container(
+        color: Colors.transparent,
         padding: EdgeInsets.fromLTRB(12, 1, 30, 1),
 //                      decoration: BoxDecoration(
 //                          color: Colors.black87,
@@ -36,24 +36,26 @@ class _DarkModeState extends State<DarkMode> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Icon(Icons.wb_sunny),
+                    Icon(Icons.wb_sunny, color: colorTheme.headerText,),
                     SizedBox(width: 10,),
                     Text(
                       ' Dark Mode',
                       style: TextStyle(
-                          fontFamily: 'Montserrat', fontSize: 15),
+                          fontFamily: 'Montserrat', fontSize: 15, color: colorTheme.headerText),
                     ),
                   ],
                 ),
                 Switch(
                   activeColor: Color(0xffFED962),
-                  value: widget.darkMode,
+                  value: colorTheme.darkMode,
                   onChanged: (val) {
+//                    print("dark mode clicked");
                     saveBoolToSharedPrefs('darkMode', val);
-                    setState(() {
-                      widget.darkMode = val;
-                    });
+//                    setState(() {
+//                      widget.darkMode = val;
+//                    });
                     val==true?colorTheme.darkModeOn():colorTheme.darkModeOff();
+//                    print("dark mode done");
                   },
                 )
               ],

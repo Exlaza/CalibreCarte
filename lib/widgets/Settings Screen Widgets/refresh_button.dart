@@ -1,4 +1,5 @@
 import 'package:calibre_carte/helpers/metadata_cacher.dart';
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +7,8 @@ class RefreshButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Update update= Provider.of(context);
-    return Card(
+    ColorTheme colorTheme=Provider.of(context);
+    return Card( color: Colors.transparent,
       elevation: 0.0,
       child: InkWell(
         onTap: () {
@@ -70,7 +72,7 @@ class RefreshButton extends StatelessWidget {
             },
           );
         },
-        child: Container(
+        child: Container( color: Colors.transparent,
           padding: EdgeInsets.fromLTRB(46, 1, 20, 0),
           child: Column(
             children: <Widget>[
@@ -85,7 +87,7 @@ class RefreshButton extends StatelessWidget {
                   ),
                   Text("Refresh library",
                       style: TextStyle(
-                          fontFamily: 'Montserrat', fontSize: 15))
+                          fontFamily: 'Montserrat', fontSize: 15,color: colorTheme.headerText))
                 ],
               ),
             ],

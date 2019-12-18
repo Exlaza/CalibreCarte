@@ -7,6 +7,7 @@ class ColorTheme with ChangeNotifier{
   Color _tileColor2;
   Color _descriptionBackground;
   Color _settingsBackground;
+  Color _settingsTile;
   Color _headerText;
   Color _subHeaderText;
   ColorTheme(this._darkMode){
@@ -17,6 +18,7 @@ class ColorTheme with ChangeNotifier{
       _settingsBackground=Colors.black54;
       _headerText=Colors.white;
       _subHeaderText=Color(0xffFED962);
+      _settingsTile=Colors.grey;
     }
     else{
       _tileColor1= Colors.white;
@@ -25,6 +27,7 @@ class ColorTheme with ChangeNotifier{
       _settingsBackground=Colors.white;
       _headerText=Color(0xff002242);
       _subHeaderText=Color(0xffb6b2df);
+      _settingsTile=Colors.white;
     }
   }
 
@@ -39,6 +42,7 @@ class ColorTheme with ChangeNotifier{
     _settingsBackground=Colors.black54;
     _headerText=Colors.white;
     _subHeaderText=Color(0xffFED962);
+    _settingsTile=Colors.grey;
     notifyListeners();
   }
 
@@ -50,8 +54,11 @@ class ColorTheme with ChangeNotifier{
     _settingsBackground=Colors.white;
     _headerText=Color(0xff002242);
     _subHeaderText=Color(0xffb6b2df);
+    _settingsTile=Colors.white;
     notifyListeners();
   }
+
+  Color get settingsTile => _settingsTile;
 
   Color get tileColor1 => _tileColor1;
 

@@ -1,3 +1,4 @@
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,72 +13,87 @@ class SearchDropdown extends StatelessWidget {
     }
 
     Update update = Provider.of(context);
-    return ExpansionTile(
-      title: Container(
-        padding: EdgeInsets.fromLTRB(0, 10, 30, 10),
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Icon(
-                  Icons.search,
-                  color: Color(0xffFED962),
-                ),
-                SizedBox(width: 10,),
-                Text(' Search By',
-                    style: TextStyle(fontFamily: 'Montserrat', fontSize: 15)),
-              ],
-            ),
-          ],
-        ),
-      ),
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.fromLTRB(49, 7, 17, 10),
-          child: InkWell(
-            onTap: () {
-              saveStringToSP('searchFilter', 'author');
-              update.changeSearchFilter('author');
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Icon(Icons.person, color: Color(0xffFED962)),
-                    Text(" Author",
-                        style:
-                        TextStyle(fontFamily: 'Montserrat', fontSize: 15))
-                  ],
-                ),
-                update.searchFilter == "author" ? Icon(Icons.done,color:Color(0xffFED962)) : Container()
-              ],
-            ),
+    ColorTheme colorTheme = Provider.of(context);
+    return Theme(
+      data: ThemeData(unselectedWidgetColor: colorTheme.headerText, accentColor: Colors.grey, dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        title: Container( color: Colors.transparent,
+          padding: EdgeInsets.fromLTRB(0, 10, 30, 10),
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.search,
+                    color: Color(0xffFED962),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(' Search By',
+                      style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 15,
+                          color: colorTheme.headerText)),
+                ],
+              ),
+            ],
           ),
         ),
-        Container(
-          padding: EdgeInsets.fromLTRB(49, 5, 17, 10),
-          child: InkWell(
-            onTap: () {
-              saveStringToSP('searchFilter', 'title');
-              update.changeSearchFilter('title');
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Icon(Icons.title, color: Color(0xffFED962)),
-                    Text(" Title",
-                        style:
-                            TextStyle(fontFamily: 'Montserrat', fontSize: 15))
-                  ],
-                ),
-                update.searchFilter == "title" ? Icon(Icons.done,color: Color(0xffFED962),) : Container()
-              ],
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.fromLTRB(49, 7, 17, 10),
+            child: InkWell(
+              onTap: () {
+                saveStringToSP('searchFilter', 'author');
+                update.changeSearchFilter('author');
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.person, color: Color(0xffFED962)),
+                      Text(" Author",
+                          style:
+                              TextStyle(fontFamily: 'Montserrat', fontSize: 15,color: colorTheme.headerText))
+                    ],
+                  ),
+                  update.searchFilter == "author"
+                      ? Icon(Icons.done, color: Color(0xffFED962))
+                      : Container()
+                ],
+              ),
             ),
           ),
-        ),
+          Container(
+            padding: EdgeInsets.fromLTRB(49, 5, 17, 10),
+            child: InkWell(
+              onTap: () {
+                saveStringToSP('searchFilter', 'title');
+                update.changeSearchFilter('title');
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.title, color: Color(0xffFED962)),
+                      Text(" Title",
+                          style:
+                              TextStyle(fontFamily: 'Montserrat', fontSize: 15,color: colorTheme.headerText))
+                    ],
+                  ),
+                  update.searchFilter == "title"
+                      ? Icon(
+                          Icons.done,
+                          color: Color(0xffFED962),
+                        )
+                      : Container()
+                ],
+              ),
+            ),
+          ),
 //        ListTile(
 //          contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
 //          title: Text("Author",
@@ -97,7 +113,8 @@ class SearchDropdown extends StatelessWidget {
 //            update.changeSearchFilter('title');
 //          },
 //        )
-      ],
+        ],
+      ),
     );
   }
 }

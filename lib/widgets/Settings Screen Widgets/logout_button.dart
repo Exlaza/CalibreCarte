@@ -1,16 +1,19 @@
 import 'dart:math';
 
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 class LogoutButton extends StatelessWidget {
   Function logout;
   LogoutButton(this.logout);
   @override
   Widget build(BuildContext context) {
-    return  Card(
+    ColorTheme colorTheme=Provider.of(context);
+    return  Card( color: Colors.transparent,
       elevation: 0.0,
       child: InkWell(
         onTap: logout,
-        child: Container(
+        child: Container( color: Colors.transparent,
           padding: EdgeInsets.fromLTRB(46, 0, 20, 5),
           child: Column(
             children: <Widget>[
@@ -25,7 +28,7 @@ class LogoutButton extends StatelessWidget {
                   ),
                   Text("Logout",
                       style: TextStyle(
-                          fontFamily: 'Montserrat', fontSize: 15))
+                          fontFamily: 'Montserrat', fontSize: 15,color: colorTheme.headerText))
                 ],
               ),
             ],

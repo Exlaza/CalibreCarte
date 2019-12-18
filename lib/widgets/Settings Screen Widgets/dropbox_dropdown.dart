@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:calibre_carte/helpers/cache_invalidator.dart';
 import 'package:calibre_carte/helpers/metadata_cacher.dart';
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/dropbox_signin_screen.dart';
 import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/connect_button.dart';
@@ -137,7 +138,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   }
 
   Future<List<Widget>> refreshLibrary(BuildContext context,
-      Update update) async {
+      Update update, ColorTheme colorTheme) async {
     print("Inside refresh Library for some reason");
     Map<String, String> pathNameMap = Map();
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -202,7 +203,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                     ),
                     Text(
                       " ${pathNameMap[element]}",
-                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 15),
+                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 15,color: colorTheme.headerText),
                     )],),
                   selected_lib_name == pathNameMap[element] ? Icon(
                       Icons.done, color: Color(0xffFED962)):Container()
@@ -224,6 +225,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   @override
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
+    ColorTheme colorTheme=Provider.of(context);
     return FutureBuilder(
       future: myFuture,
       builder: (context, snapshot) {
@@ -259,15 +261,15 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                           }
                         });
                         _responseCompleter
-                            .complete(refreshLibrary(context, update));
-                        print("Getting Expansion Item ");
+                            .complete(refreshLibrary(context, update,colorTheme));
+//                        print("Getting Expansion Item ");
                       }
                     },
-                    title: Card(
+                    title: Card( color: Colors.transparent,
                       elevation: 0.0,
                       child: InkWell(
                         onTap: () {},
-                        child: Container(
+                        child: Container( color: Colors.transparent,
                           padding: EdgeInsets.fromLTRB(30, 0, 20, 1),
                           child: Column(
                             children: <Widget>[
@@ -280,8 +282,8 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  Text("Change Directory",
-                                      style: TextStyle(
+                                  Text("Change Library",
+                                      style: TextStyle(color: colorTheme.headerText,
                                           fontFamily: 'Montserrat',
                                           fontSize: 15))
                                 ],

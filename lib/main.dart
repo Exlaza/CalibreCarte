@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:calibre_carte/homepage.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
@@ -22,24 +21,26 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool tokenExists;
-  bool darkMode;
   String searchFilter;
   Future myFuture;
+  bool darkMode;
 
   Future<void> getTokenAndSearchFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
+    darkMode = sp.getBool('darkMode');
     tokenExists = sp.containsKey('token');
     searchFilter = sp.getString('searchFilter') ?? 'title';
-    darkMode=sp.getBool('darkMode')??false;
 //    Set the default download directory here once if it not set already
     if (!sp.containsKey("downloaded_directory")) {
       Directory defaultDownloadDirectory = await getExternalStorageDirectory();
 //      Creating books if that doesn't exist
-      if(!Directory("${defaultDownloadDirectory.path}/books").existsSync()){
-        Directory("${defaultDownloadDirectory.path}/books").createSync(recursive: true);
+      if (!Directory("${defaultDownloadDirectory.path}/books").existsSync()) {
+        Directory("${defaultDownloadDirectory.path}/books")
+            .createSync(recursive: true);
       }
 
-      sp.setString("download_directory", defaultDownloadDirectory.path + "/books");
+      sp.setString(
+          "download_directory", defaultDownloadDirectory.path + "/books");
     }
   }
 
@@ -47,7 +48,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future<Map<PermissionGroup, PermissionStatus>> permissions = PermissionHandler().requestPermissions([PermissionGroup.storage]);
+    Future<Map<PermissionGroup, PermissionStatus>> permissions =
+        PermissionHandler().requestPermissions([PermissionGroup.storage]);
     myFuture = getTokenAndSearchFromPreferences();
   }
 
@@ -65,11 +67,15 @@ class _MyAppState extends State<MyApp> {
               ChangeNotifierProvider(
                 create: (_) => BookDetailsNavigation(),
               ),
-              ChangeNotifierProvider(create: (_)=>ColorTheme(darkMode),)
+              ChangeNotifierProvider(
+                create: (_) => ColorTheme(darkMode),
+              )
             ],
             child: MaterialApp(
               title: "Calibre Carte",
-              theme: ThemeData(primarySwatch: Colors.blueGrey, dividerColor: Colors.transparent),
+              theme: ThemeData(
+                  primarySwatch: Colors.blueGrey,
+                  dividerColor: Colors.transparent),
               home: MyHomePage(),
               routes: {
                 BookDetailsScreen.routeName: (ctx) => BookDetailsScreen(),

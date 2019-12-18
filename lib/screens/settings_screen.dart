@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/helpers/data_provider.dart';
 import 'package:calibre_carte/models/data.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
@@ -89,11 +90,12 @@ class _SettingsNewState extends State<SettingsNew> {
   @override
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
+    ColorTheme colorTheme = Provider.of(context);
     Widget loadingWidget = Center(
       child: CircularProgressIndicator(),
     );
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorTheme.settingsBackground,
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
@@ -127,7 +129,35 @@ class _SettingsNewState extends State<SettingsNew> {
                     _settingGroup("Search"),
                     SearchDropdown(),
                     _settingGroup("Appearance"),
-                    DarkMode(darkMode),
+                    DarkMode(),
+                    _settingGroup("Download Directory"),
+                    GestureDetector(
+                      onTap: () => selectDirectory(context),
+                      child: Container(
+                        child: Container(
+                          padding: EdgeInsets.only(left: 16),
+                          child: ListTile(
+                            contentPadding: EdgeInsets.all(0),
+                            title: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.folder_open,
+                                  color: Color(0xffFED962),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(" Select Download Directory",
+                                    style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 15,
+                                        color: colorTheme.headerText))
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                     _settingGroup("Help"),
                     Container(
                       padding: EdgeInsets.only(left: 16),
@@ -144,7 +174,9 @@ class _SettingsNewState extends State<SettingsNew> {
                             ),
                             Text(" About",
                                 style: TextStyle(
-                                    fontFamily: 'Montserrat', fontSize: 15))
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 15,
+                                    color: colorTheme.headerText))
                           ],
                         ),
                       ),
@@ -164,20 +196,13 @@ class _SettingsNewState extends State<SettingsNew> {
                             ),
                             Text(" Usage Instructions",
                                 style: TextStyle(
-                                    fontFamily: 'Montserrat', fontSize: 15))
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 15,
+                                    color: colorTheme.headerText))
                           ],
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    GestureDetector(
-                      onTap: () => selectDirectory(context),
-                      child: Container(
-                        child: Text("Pick directroy with this"),
-                      ),
-                    )
                   ],
                 ),
               ),
