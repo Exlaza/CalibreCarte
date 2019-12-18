@@ -6,6 +6,7 @@ import 'package:calibre_carte/screens/settings_old.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:simple_permissions/simple_permissions.dart';
 
 void main() async {
   runApp(MyApp());
@@ -36,7 +37,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-//    print("REBUILDING APP");
+//    SimplePermissions.requestPermission(Permission.ReadExternalStorage);
+//    SimplePermissions.requestPermission(Permission.WriteExternalStorage);
     return FutureBuilder(
       future: myFuture,
       builder: (context, snapshot) {

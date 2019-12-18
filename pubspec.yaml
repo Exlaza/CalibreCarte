@@ -35,6 +35,8 @@ dependencies:
   provider: ^3.1.0+1
   rxdart: ^0.22.6
   smooth_star_rating: ^1.0.3
+#  simple_permissions: ^0.1.9
+#  folder_picker: ^0.3.0
 
 
   # The following adds the Cupertino Icons font to your application.
