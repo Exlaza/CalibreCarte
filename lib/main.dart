@@ -34,7 +34,12 @@ class _MyAppState extends State<MyApp> {
 //    Set the default download directory here once if it not set already
     if (!sp.containsKey("downloaded_directory")) {
       Directory defaultDownloadDirectory = await getExternalStorageDirectory();
-      sp.setString("download_directory", defaultDownloadDirectory.path);
+//      Creating books if that doesn't exist
+      if(!Directory("${defaultDownloadDirectory.path}/books").existsSync()){
+        Directory("${defaultDownloadDirectory.path}/books").createSync(recursive: true);
+      }
+
+      sp.setString("download_directory", defaultDownloadDirectory.path + "/books");
     }
   }
 
