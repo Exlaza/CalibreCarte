@@ -47,14 +47,14 @@ class _DarkModeState extends State<DarkMode> {
                 ),
                 Switch(
                   activeColor: Color(0xffFED962),
-                  value: colorTheme.darkMode,
-                  onChanged: (val) {
+                  value: colorTheme.darkMode != null ? colorTheme.darkMode : false,
+                  onChanged: (val) async{
 //                    print("dark mode clicked");
                     saveBoolToSharedPrefs('darkMode', val);
 //                    setState(() {
 //                      widget.darkMode = val;
 //                    });
-                    val==true?colorTheme.darkModeOn():colorTheme.darkModeOff();
+                    val==true ? colorTheme.darkModeOn() : colorTheme.darkModeOff();
 //                    print("dark mode done");
                   },
                 )
