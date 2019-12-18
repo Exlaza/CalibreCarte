@@ -225,7 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _searchPressed(String searchFil) {
     setState(() {
-      _appBarTitle = new TextField(style: TextStyle(color: Colors.white),
+      _appBarTitle = new TextField(style: TextStyle(color: Colors.white), autofocus: true,
         controller: controller,
         decoration: new InputDecoration(
             prefixIcon: closeButton(), hintText: 'Search for ${searchFil}s'),
