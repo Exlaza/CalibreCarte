@@ -10,6 +10,7 @@ class ColorTheme with ChangeNotifier{
   Color _settingsTile;
   Color _headerText;
   Color _subHeaderText;
+  Color _iconColor=Color(0xffFED962);
   ColorTheme(this._darkMode){
     if(_darkMode==true){
       _tileColor1=Colors.black87;
@@ -31,6 +32,8 @@ class ColorTheme with ChangeNotifier{
     }
   }
 
+
+  Color get iconColor => _iconColor;
 
   bool get darkMode => _darkMode;
 

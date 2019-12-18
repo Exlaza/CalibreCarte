@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     super.initState();
     Future<Map<PermissionGroup, PermissionStatus>> permissions =
-        PermissionHandler().requestPermissions([PermissionGroup.storage]);
+    PermissionHandler().requestPermissions([PermissionGroup.storage]);
     myFuture = getTokenAndSearchFromPreferences();
   }
 
@@ -74,7 +74,9 @@ class _MyAppState extends State<MyApp> {
             child: MaterialApp(
               title: "Calibre Carte",
               theme: ThemeData(
-                  primarySwatch: Colors.blueGrey,
+                  primaryColor: Color(0xffFED962),
+                  textTheme: TextTheme(subtitle: TextStyle(
+                      color: darkMode == true ? Colors.white:Colors.black)),
                   dividerColor: Colors.transparent),
               home: MyHomePage(),
               routes: {

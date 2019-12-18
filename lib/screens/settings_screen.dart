@@ -55,11 +55,12 @@ class _SettingsNewState extends State<SettingsNew> {
         ));
   }
 
-  selectDirectory(context) async {
+  selectDirectory(context, ColorTheme colorTheme) async {
     Directory exd = await getExternalStorageDirectory();
 
-    Directory newDirectory =
-        await DirectoryPicker.pick(context: context, rootDirectory: exd);
+    Directory newDirectory = await DirectoryPicker.pick(
+        context: context,
+        rootDirectory: exd,backgroundColor: colorTheme.darkMode?Colors.grey:Colors.white);
 
     if (newDirectory != null) {
       // Do something with the picked directory
@@ -132,7 +133,7 @@ class _SettingsNewState extends State<SettingsNew> {
                     DarkMode(),
                     _settingGroup("Download Directory"),
                     GestureDetector(
-                      onTap: () => selectDirectory(context),
+                      onTap: () => selectDirectory(context, colorTheme),
                       child: Container(
                         child: Container(
                           padding: EdgeInsets.only(left: 16),
