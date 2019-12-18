@@ -102,10 +102,13 @@ class _SettingsNewState extends State<SettingsNew> {
 
     if (newDirectory != null) {
       // Do something with the picked directory
+      saveStringToSP("download_directory", newDirectory.path);
     } else {
       // User cancelled without picking any directory
     }
   }
+
+
   @override
   Widget build(BuildContext context) {
 //    print('Building asettings for no reason');
