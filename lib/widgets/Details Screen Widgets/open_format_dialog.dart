@@ -49,7 +49,7 @@ class _OpenFormatDialogState extends State<OpenFormatDialog> {
 
   Future<void> bookOpen(fileName) async {
     BookDownloader bd = BookDownloader();
-    String fileDirectory = await bd.returnFileDirectory(fileName);
+    String fileDirectory = await bd.returnFileDirectoryExternal(fileName);
 
     OpenFile.open(fileDirectory);
   }
