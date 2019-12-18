@@ -3,7 +3,6 @@ import 'package:calibre_carte/homepage.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
-import 'package:calibre_carte/screens/book_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -77,9 +76,7 @@ class _MyAppState extends State<MyApp> {
                   primaryColor: Color(0xffFED962),
                   dividerColor: Colors.transparent),
               home: MyHomePage(),
-              routes: {
-                BookDetailsScreen.routeName: (ctx) => BookDetailsScreen(),
-              },
+
             ),
           );
         } else {

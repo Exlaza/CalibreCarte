@@ -128,7 +128,9 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
     return Scaffold(
-      appBar: AppBar(backgroundColor: Color(0xff002242),
+      appBar: AppBar(backgroundColor: Color(0xff002242),iconTheme: IconThemeData(
+        color: Colors.white, //change your color here
+      ),
         title: Text('Dropbox Login',style: TextStyle(fontFamily: 'Montserrat',
           color: Color(0xffFED962))),
       ),

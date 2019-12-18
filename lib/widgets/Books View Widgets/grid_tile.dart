@@ -1,6 +1,5 @@
 import 'package:calibre_carte/models/books.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
-import 'package:calibre_carte/screens/book_details_Ekansh.dart';
 import 'package:calibre_carte/screens/book_details_screen.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
 import 'package:calibre_carte/widgets/download_icon.dart';
@@ -23,7 +22,7 @@ class CalibreGridTile extends StatelessWidget {
     bn.index = index;
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
       return Consumer<BookDetailsNavigation>(
-        builder: (ctx, bookNav, child) => BookDetailsScreenEkansh(
+        builder: (ctx, bookNav, child) => BookDetailsScreen(
           bookId: bookNav.bookID != null ? bookNav.bookID : bookId,
         ),
       );
