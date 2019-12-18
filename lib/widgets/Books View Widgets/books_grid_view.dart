@@ -1,6 +1,6 @@
 import 'package:calibre_carte/models/books.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
-import 'package:calibre_carte/widgets/grid_tile.dart';
+import 'package:calibre_carte/widgets/Books%20View%20Widgets/grid_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
