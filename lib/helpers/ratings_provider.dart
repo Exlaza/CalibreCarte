@@ -23,7 +23,7 @@ class RatingsProvider {
         return Ratings.fromMapObject(maps.first);
       }
     } catch (e) {
-      print("rating error $e");
+//      print("rating error $e");
     }
     return null;
   }

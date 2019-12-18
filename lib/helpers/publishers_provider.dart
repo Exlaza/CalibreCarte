@@ -4,7 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import 'db_helper.dart';
 
 class PublishersProvider {
-  static String tableName = 'Publishers';
+  static String tableName = 'publishers';
 
   static Future<Publishers> getFirstPublisher() async {
     Database db = await DatabaseHelper.instance.db;
@@ -14,14 +14,17 @@ class PublishersProvider {
 
   static Future<Publishers> getPublisherByID(int id, cols) async {
     Database db = await DatabaseHelper.instance.db;
-    List<Map> maps = await db.query(tableName,
-        columns: cols ? cols : Publishers.columns,
-        where: '${Publishers.columns[0]} = ?',
-        whereArgs: [id]);
-    if (maps.length > 0) {
-      return Publishers.fromMapObject(maps.first);
+    try {
+      List<Map> maps = await db.query(tableName,
+          columns: cols!=null ? cols : Publishers.columns,
+          where: '${Publishers.columns[0]} = ?',
+          whereArgs: [id]);
+      if (maps.length > 0) {
+        return Publishers.fromMapObject(maps.first);
+      }
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 
   static Future<List<Publishers>> getAllPublishers() async {
