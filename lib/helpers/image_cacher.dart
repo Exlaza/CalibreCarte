@@ -56,7 +56,7 @@ class ImageCacher {
     Response response = await downloadCoverImage(token, absPath);
     //Get the bytes, get the temp directory and write a file in temp
     if (response.statusCode != 200) {
-      print(response.statusCode);
+//      print(response.statusCode);
       return false;
     }
     List<int> bytes = response.bodyBytes;

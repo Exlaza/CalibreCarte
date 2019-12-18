@@ -115,7 +115,7 @@ class DetailsSidebar extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              print("describe");
+//              print("describe");
               showDialog(context: context, builder: (_) => descriptionPopup());
             },
             child: Tooltip(

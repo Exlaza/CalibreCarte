@@ -135,8 +135,10 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
           color: Colors.white, //change your color here
         ),
         title: Text('Dropbox Login',
-            style:
-                TextStyle(fontFamily: 'Montserrat', color: Color(0xffFED962))),
+            style: TextStyle(
+              fontFamily: 'Montserrat',
+color: Colors.white
+            )),
       ),
       body: IndexedStack(
         index: _stackToView,
@@ -229,7 +231,8 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                               selectingCalibreLibrary(
                                   element, pathNameMap[element], update);
                             },
-                            child: Container( padding: EdgeInsets.all(8),
+                            child: Container(
+                              padding: EdgeInsets.all(8),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
@@ -256,7 +259,6 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-
                               contentPadding: EdgeInsets.all(10),
                               content: Container(
                                 width: 300,
@@ -264,14 +266,13 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     Container(
-
                                         child: Text(
-                                          'Select Library',
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontFamily: 'Montserrat',
-                                              color: Color(0xff002242)),
-                                        )),
+                                      'Select Library',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: 'Montserrat',
+                                          color: Color(0xff002242)),
+                                    )),
                                     SizedBox(
                                       height: 20,
                                     ),

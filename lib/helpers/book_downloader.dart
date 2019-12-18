@@ -42,7 +42,7 @@ class BookDownloader {
     SharedPreferences sp = await SharedPreferences.getInstance();
     String dd = sp.getString("download_directory");
     String pathMetadata = join(dd + "/$fileName");
-    print(pathMetadata);
+//    print(pathMetadata);
     return pathMetadata;
   }
 }

@@ -217,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
       icon: Icon(Icons.close),
       onPressed: () {
         _appBarTitle = Text("Calibre Carte",style: TextStyle(fontFamily: 'Montserrat',
-            color: Color(0xffFED962)),);
+            color: Colors.white),);
         controller.clear();
       },
     );
@@ -234,7 +234,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _appBarTitle = const Text("Calibre Carte",style: TextStyle(fontFamily: 'Montserrat',
-      color: Color(0xffFED962)),);
+      color: Colors.white),);
 
   @override
   Widget build(BuildContext context) {

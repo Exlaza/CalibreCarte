@@ -139,7 +139,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
 
   Future<List<Widget>> refreshLibrary(BuildContext context,
       Update update, ColorTheme colorTheme) async {
-    print("Inside refresh Library for some reason");
+//    print("Inside refresh Library for some reason");
     Map<String, String> pathNameMap = Map();
     SharedPreferences sp = await SharedPreferences.getInstance();
     var token = sp.getString('token');
@@ -160,7 +160,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       ),)];
       return l;
     }
-    print("Internet check done");
+//    print("Internet check done");
 
     //Make a map Map<String, String> First value is the base path in lower case
     // Second Value is the name of the Folder(Library)

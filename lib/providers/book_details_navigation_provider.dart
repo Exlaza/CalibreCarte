@@ -7,7 +7,7 @@ class BookDetailsNavigation with ChangeNotifier {
   int bookID;
 
   void incrementIndex() {
-    print("Incrementing index");
+//    print("Incrementing index");
     if (index < booksList.length - 1) {
       index = index + 1;
       setBookID();
@@ -16,13 +16,13 @@ class BookDetailsNavigation with ChangeNotifier {
   }
 
   void setBookID() {
-    print("Setting book ID");
+//    print("Setting book ID");
     bookID = booksList[index].id;
-    print(bookID);
+//    print(bookID);
   }
 
   void decrementIndex() {
-    print("Decrementing index");
+//    print("Decrementing index");
     if (index > 0) {
       index = index - 1;
       setBookID();

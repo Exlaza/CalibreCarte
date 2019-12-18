@@ -14,7 +14,7 @@ class CalibreGridTile extends StatelessWidget {
   CalibreGridTile(this.index, this.book, this.books);
 
   void viewBookDetails(int bookId, BuildContext context) {
-    print(bookId);
+//    print(bookId);
     BookDetailsNavigation bn =
         Provider.of<BookDetailsNavigation>(context, listen: false);
     bn.bookID = bookId;

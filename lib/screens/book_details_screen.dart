@@ -195,7 +195,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
         'Details',
         style: TextStyle(
           fontFamily: 'Montserrat',
-          color: Color(0xffFED962),
+          color: Colors.white,
         ),
       ));
 

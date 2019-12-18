@@ -21,6 +21,7 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
   bool downloading = false;
   double perc = 0.0;
   String url = "https://content.dropboxapi.com/2/files/download";
+  CancelToken cancelToken = CancelToken();
 
   Future<bool> downloadFile() async {
     BookDownloader bd = BookDownloader();
@@ -36,8 +37,9 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
 //    print('Coming till here');
     Dio d = Dio();
     try {
-      await d.download(url, savePath, options: Options(headers: headers),
-          onReceiveProgress: (rec, total) {
+      await d.download(url, savePath,
+          options: Options(headers: headers),
+          cancelToken: cancelToken, onReceiveProgress: (rec, total) {
 //            print("Rec: $rec, Total: $total");
         setState(() {
           perc = (rec / total);
@@ -48,10 +50,14 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
       return true;
     } catch (e) {
       setState(() {
-        progress="ERROR";
+        progress = "ERROR";
       });
       return false;
     }
+  }
+
+  void _cancelDownload(){
+    cancelToken.cancel("cancelled");
   }
 
   @override
@@ -70,10 +76,32 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text("Your progress", style: TextStyle(fontSize: 10),),
-      contentPadding: EdgeInsets.only(top: 0, left: 23, right: 23, bottom: 23),
-      content: AnimatedProgressbar(value: perc, height: 12,),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: AlertDialog(
+        title: Text(
+          "Your progress",
+          style: TextStyle(fontSize: 10),
+        ),
+        contentPadding: EdgeInsets.only(top: 0, left: 23, right: 23, bottom: 23),
+        content: Container( height: 100,
+          child: Column(
+            children: <Widget>[
+              AnimatedProgressbar(
+                value: perc,
+                height: 12,
+              ),
+              InkWell(
+                onTap: () {_cancelDownload(); },
+                child: Container(
+                    padding:
+                        EdgeInsets.only(top: 25, left: 23, right: 23, bottom: 10),
+                    child: Text("Cancel")),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
