@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> getTokenAndSearchFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    darkMode = sp.getBool('darkMode') ?? false;
+    darkMode = sp.getBool('darkMode')??false;
     tokenExists = sp.containsKey('token');
     searchFilter = sp.getString('searchFilter') ?? 'title';
 //    Set the default download directory here once if it not set already

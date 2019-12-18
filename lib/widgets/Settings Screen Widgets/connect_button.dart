@@ -1,9 +1,12 @@
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 class ConnectButton extends StatelessWidget {
   Function connect;
   ConnectButton(this.connect);
   @override
   Widget build(BuildContext context) {
+    ColorTheme colorTheme= Provider.of(context);
     return InkWell(
       onTap: connect,
       child: Container(
@@ -21,7 +24,7 @@ class ConnectButton extends StatelessWidget {
                 ),
                 Text("Connect Dropbox",
                     style: TextStyle(
-                        fontFamily: 'Montserrat', fontSize: 13))
+                        fontFamily: 'Montserrat', fontSize: 13,color: colorTheme.headerText))
               ],
             ),
           ],

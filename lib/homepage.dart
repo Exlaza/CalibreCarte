@@ -224,7 +224,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return IconButton(
       icon: Icon(Icons.close),
       onPressed: () {
-        _appBarTitle = Text("Calibre Carte");
+        _appBarTitle = Text("Calibre Carte",style: TextStyle(fontFamily: 'Montserrat',
+            color: Color(0xffFED962)),);
         controller.clear();
       },
     );
@@ -259,13 +260,13 @@ class _MyHomePageState extends State<MyHomePage> {
               actions: <Widget>[
                 // action button
                 IconButton(
-                  icon: Icon(Icons.search),
+                  icon: Icon(Icons.search,color: Color(0xffFED962)),
                   onPressed: () {
                     _searchPressed(searchFilter);
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.more_vert),
+                  icon: Icon(Icons.more_vert,color: Color(0xffFED962)),
                   onPressed: () {
                     _settingModalBottomSheet(context);
                   },
