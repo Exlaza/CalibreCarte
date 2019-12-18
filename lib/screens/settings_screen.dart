@@ -45,10 +45,6 @@ class _SettingsNewState extends State<SettingsNew> {
     _prefs.setString(settingName, val);
   }
 
-  String getStringFromSP(String settingName) async {
-    return await _prefs.getString(settingName);
-  }
-
   Widget _settingsCard(settingName, settingIcon, Function onClicked) {
     return Card(
       elevation: 0.0,
@@ -119,6 +115,7 @@ class _SettingsNewState extends State<SettingsNew> {
         String fNameWithExt = element.name + '.' + element.format.toLowerCase();
         String pathToSearch = join(oldDirectoryPath, '/$fNameWithExt');
         String pathToMove = join(newDirectory.path, '/$fNameWithExt');
+//        The IF condition over her can probably be done in a better way
         if (File(pathToSearch).existsSync()) {
           File(pathToSearch).renameSync(pathToMove);
         }
@@ -132,7 +129,6 @@ class _SettingsNewState extends State<SettingsNew> {
 
   @override
   Widget build(BuildContext context) {
-//    print('Building asettings for no reason');
     Update update = Provider.of(context);
     Widget loadingWidget = Center(
       child: CircularProgressIndicator(),
