@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/connect_dropbox_screen.dart';
 import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/cloud_settings.dart';
 import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/dark_mode_toggle.dart';
 import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/search_dropdown.dart';
+import 'package:directory_picker/directory_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path/path.dart';
 
 class SettingsNew extends StatefulWidget {
   static const routeName = '/settings';
@@ -86,6 +91,21 @@ class _SettingsNewState extends State<SettingsNew> {
         ));
   }
 
+
+  selectDirectory(context) async{
+    Directory exd = await getExternalStorageDirectory();
+
+    Directory newDirectory = await DirectoryPicker.pick(
+        context: context,
+        rootDirectory: exd
+    );
+
+    if (newDirectory != null) {
+      // Do something with the picked directory
+    } else {
+      // User cancelled without picking any directory
+    }
+  }
   @override
   Widget build(BuildContext context) {
 //    print('Building asettings for no reason');
@@ -119,7 +139,10 @@ class _SettingsNewState extends State<SettingsNew> {
                 margin: EdgeInsets.fromLTRB(8, 8, 8, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[SizedBox(height: 20,),
+                  children: <Widget>[
+                    SizedBox(
+                      height: 20,
+                    ),
                     _settingGroup("Cloud"),
                     CloudSettings(),
                     _settingGroup("Search"),
@@ -137,7 +160,9 @@ class _SettingsNewState extends State<SettingsNew> {
                               Icons.info_outline,
                               color: Color(0xffFED962),
                             ),
-                            SizedBox(width: 10,),
+                            SizedBox(
+                              width: 10,
+                            ),
                             Text(" About",
                                 style: TextStyle(
                                     fontFamily: 'Montserrat', fontSize: 15))
@@ -148,19 +173,28 @@ class _SettingsNewState extends State<SettingsNew> {
                     Container(
                       padding: EdgeInsets.only(left: 16, bottom: 0),
                       child: Container(
-                        padding: EdgeInsets.only(top:4),
+                        padding: EdgeInsets.only(top: 4),
                         child: Row(
                           children: <Widget>[
                             Icon(
                               Icons.help_outline,
                               color: Color(0xffFED962),
                             ),
-                            SizedBox(width: 10,),
+                            SizedBox(
+                              width: 10,
+                            ),
                             Text(" Usage Instructions",
                                 style: TextStyle(
                                     fontFamily: 'Montserrat', fontSize: 15))
                           ],
                         ),
+                      ),
+                    ),
+                    SizedBox(height: 20,),
+                    GestureDetector(
+                      onTap: () => selectDirectory(context),
+                      child: Container(
+                        child: Text("Pick directroy with this"),
                       ),
                     )
                   ],
