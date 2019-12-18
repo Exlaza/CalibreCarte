@@ -189,8 +189,27 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
 //                        print(pathNameMap);
                       }
                     });
-                    
-//                    TODO: Change this to > 1
+                    storeIntInSharedPrefs(
+                        'noOfCalibreLibs', pathNameMap.length);
+                    pathNameMap.keys.toList().asMap().forEach((index, path) {
+                      String keyName = 'calibre_lib_path_$index';
+                      String libName = 'calibre_lib_name_$index';
+                      storeStringInSharedPrefs(keyName, path);
+                      storeStringInSharedPrefs(libName, pathNameMap[path]);
+                    });
+
+                    // TODO: MAKE THIS FASTER
+                    storeStringInSharedPrefs(
+                      'selected_calibre_lib_path',
+                      pathNameMap.keys.first,
+                    );
+                    storeStringInSharedPrefs(
+                      'selected_calibre_lib_name',
+                      pathNameMap.values.first,
+                    ).then((_) {
+                      update.changeTokenState(true);
+//                        update.updateFlagState(true);
+                    });
                     if (pathNameMap.length > 1) {
                       // First set the no of libraries in shared prefs
                       // Show a pop up which displays the list of libraries
