@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
       }
 
       sp.setString(
-          "download_directory", defaultDownloadDirectory.path + "/books");
+          "downloaded_directory", defaultDownloadDirectory.path + "/books");
     }
   }
 

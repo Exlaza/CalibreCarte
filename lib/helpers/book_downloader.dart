@@ -40,9 +40,8 @@ class BookDownloader {
 
   Future<String> returnFileDirectoryExternal(fileName) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    String dd = sp.getString("download_directory");
+    String dd = sp.getString("downloaded_directory");
     String pathMetadata = join(dd + "/$fileName");
-//    print(pathMetadata);
     return pathMetadata;
   }
 }
