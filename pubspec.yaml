@@ -60,6 +60,7 @@ flutter:
   assets:
     - assets/images/calibre_logo.png
     - assets/images/subtle_wood.png
+    - dropbox.json
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

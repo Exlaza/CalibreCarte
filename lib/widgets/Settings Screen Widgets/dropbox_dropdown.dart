@@ -3,8 +3,8 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:calibre_carte/helpers/cache_invalidator.dart';
-import 'package:calibre_carte/helpers/client_id.dart';
-import 'package:calibre_carte/helpers/id_loader.dart';
+import 'package:calibre_carte/helpers/configuration.dart';
+import 'package:calibre_carte/helpers/config_loader.dart';
 import 'package:calibre_carte/helpers/metadata_cacher.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
@@ -37,7 +37,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   int noOfCalibreLibs;
   bool hasChanged;
   String clientId;
-  ClientId id;
+  Configuration config;
   Completer<List<Widget>> _responseCompleter = Completer();
 
   Future<bool> loadingToken() async {
@@ -53,10 +53,10 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
         temp = sp.getString('calibre_lib_name_$i');
         dirNames.add(temp);
       }
-      id = await IdLoader(secretPath: "secrets.json").load();
-      clientId = id.apiKey;
       return true;
     }
+    config = await ConfigLoader(secretPath: "dropbox.json").load();
+    clientId = config.clientID;
 
     return false;
   }
