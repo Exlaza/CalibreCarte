@@ -3,6 +3,8 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:calibre_carte/helpers/cache_invalidator.dart';
+import 'package:calibre_carte/helpers/client_id.dart';
+import 'package:calibre_carte/helpers/id_loader.dart';
 import 'package:calibre_carte/helpers/metadata_cacher.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
@@ -19,7 +21,7 @@ import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 
 class DropboxDropdown extends StatefulWidget {
-  static const clientID = 'h1csd4yy5cxl0rl';
+//  static const clientID = 'h1csd4yy5cxl0rl';
   static const redirectUri = 'calibrecarte://dropbox';
 
   @override
@@ -34,6 +36,8 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   List<String> dirNames = [];
   int noOfCalibreLibs;
   bool hasChanged;
+  String clientId;
+  ClientId id;
   Completer<List<Widget>> _responseCompleter = Completer();
 
   Future<bool> loadingToken() async {
@@ -43,12 +47,14 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       dirNames.clear();
       dropboxEmail = sp.getString('dropboxEmail');
       selected_calibre_lib_dir = sp.getString('selected_calibre_lib_path');
-      selected_lib_name=sp.getString('selected_calibre_lib_name');
+      selected_lib_name = sp.getString('selected_calibre_lib_name');
       noOfCalibreLibs = sp.getInt('noOfCalibreLibs');
       for (int i = 0; i < noOfCalibreLibs; i++) {
         temp = sp.getString('calibre_lib_name_$i');
         dirNames.add(temp);
       }
+      id = await IdLoader(secretPath: "secrets.json").load();
+      clientId = id.apiKey;
       return true;
     }
 
@@ -114,11 +120,6 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     myFuture = loadingToken();
   }
 
-  final url =
-      'https://www.dropbox.com/oauth2/authorize?client_id=${DropboxDropdown
-      .clientID}&response_type=token&redirect_uri=${DropboxDropdown
-      .redirectUri}';
-
   _makePostRequest(token) async {
 //    print(token);
     // set up POST request arguments
@@ -137,8 +138,8 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     }
   }
 
-  Future<List<Widget>> refreshLibrary(BuildContext context,
-      Update update, ColorTheme colorTheme) async {
+  Future<List<Widget>> refreshLibrary(
+      BuildContext context, Update update, ColorTheme colorTheme) async {
 //    print("Inside refresh Library for some reason");
     Map<String, String> pathNameMap = Map();
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -153,11 +154,16 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text("No internet"),
       ));
-      List<Widget> l = [Text("No Internet",style:  TextStyle(
-        fontFamily: 'Montserrat',
+      List<Widget> l = [
+        Text(
+          "No Internet",
+          style: TextStyle(
+            fontFamily: 'Montserrat',
 //                        fontStyle: FontStyle.italic,
-        fontSize: 14, color: Colors.grey,
-      ),)];
+            fontSize: 14, color: Colors.grey,
+          ),
+        )
+      ];
       return l;
     }
 //    print("Internet check done");
@@ -172,7 +178,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
           String libPath = element["metadata"]["metadata"]["path_display"];
           libPath = libPath.replaceAll('metadata.db', "");
           List<String> directories =
-          element["metadata"]["metadata"]["path_display"].split('/');
+              element["metadata"]["metadata"]["path_display"].split('/');
           String libName = directories.elementAt(directories.length - 2);
           pathNameMap.putIfAbsent(libPath, () => libName);
         }
@@ -186,27 +192,39 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       });
       List<Widget> columnChildren = pathNameMap.keys.toList().map((element) {
         return InkWell(
-            onTap: selected_lib_name == pathNameMap[element] ?(){}:() {
-              selectingCalibreLibrary(element, pathNameMap[element], update);
-              setState(() {
-                myFuture = loadingToken();
-              });
-            },
+            onTap: selected_lib_name == pathNameMap[element]
+                ? () {}
+                : () {
+                    selectingCalibreLibrary(
+                        element, pathNameMap[element], update);
+                    setState(() {
+                      myFuture = loadingToken();
+                    });
+                  },
             child: Container(
               alignment: Alignment.bottomLeft,
               padding: EdgeInsets.fromLTRB(70, 5, 20, 5),
-              child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Row(children: <Widget>[Icon(Icons.cloud_download, color: Color(0xffFED962)),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      " ${pathNameMap[element]}",
-                      style: TextStyle(fontFamily: 'Montserrat', fontSize: 15,color: colorTheme.headerText),
-                    )],),
-                  selected_lib_name == pathNameMap[element] ? Icon(
-                      Icons.done, color: Color(0xffFED962)):Container()
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.cloud_download, color: Color(0xffFED962)),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        " ${pathNameMap[element]}",
+                        style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 15,
+                            color: colorTheme.headerText),
+                      )
+                    ],
+                  ),
+                  selected_lib_name == pathNameMap[element]
+                      ? Icon(Icons.done, color: Color(0xffFED962))
+                      : Container()
                 ],
               ),
             ));
@@ -225,12 +243,14 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   @override
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
-    ColorTheme colorTheme=Provider.of(context);
+    ColorTheme colorTheme = Provider.of(context);
     return FutureBuilder(
       future: myFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == false) {
+            final url =
+                'https://www.dropbox.com/oauth2/authorize?client_id=${clientId}&response_type=token&redirect_uri=${DropboxDropdown.redirectUri}';
             return ConnectButton(() {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                 return DropboxAuthentication(
@@ -253,78 +273,81 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                   selected_calibre_lib_dir == null
                       ? Text("no directory selected")
                       : ExpansionTile(
-                    onExpansionChanged: (bool value) {
-                      if (value) {
-                        setState(() {
-                          if (_responseCompleter.isCompleted) {
-                            _responseCompleter = Completer();
-                          }
-                        });
-                        _responseCompleter
-                            .complete(refreshLibrary(context, update,colorTheme));
+                          onExpansionChanged: (bool value) {
+                            if (value) {
+                              setState(() {
+                                if (_responseCompleter.isCompleted) {
+                                  _responseCompleter = Completer();
+                                }
+                              });
+                              _responseCompleter.complete(
+                                  refreshLibrary(context, update, colorTheme));
 //                        print("Getting Expansion Item ");
-                      }
-                    },
-                    title: Card( color: Colors.transparent,
-                      elevation: 0.0,
-                      child: InkWell(
-                        onTap: () {},
-                        child: Container( color: Colors.transparent,
-                          padding: EdgeInsets.fromLTRB(30, 0, 20, 1),
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.folder,
-                                    color: Color(0xffFED962),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text("Change Library",
-                                      style: TextStyle(color: colorTheme.headerText,
-                                          fontFamily: 'Montserrat',
-                                          fontSize: 15))
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    children: <Widget>[
-                      FutureBuilder(
-                          future: _responseCompleter.future,
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<Widget>> snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              return Column(
-                                children: <Widget>[
-                                  Column(
-                                    children: snapshot.data,
-                                  ),
-                                  SizedBox(
-                                    height: 7,
-                                  ),
-                                ],
-                              );
-                            } else {
-                              return Column(
-                                children: <Widget>[
-                                  Center(
-                                    child: const Text('Loading...'),
-                                  ),
-                                  SizedBox(
-                                    height: 7,
-                                  ),
-                                ],
-                              );
                             }
-                          })
-                    ],
-                  ),
+                          },
+                          title: Card(
+                            color: Colors.transparent,
+                            elevation: 0.0,
+                            child: InkWell(
+                              onTap: () {},
+                              child: Container(
+                                color: Colors.transparent,
+                                padding: EdgeInsets.fromLTRB(30, 0, 20, 1),
+                                child: Column(
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.folder,
+                                          color: Color(0xffFED962),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text("Change Library",
+                                            style: TextStyle(
+                                                color: colorTheme.headerText,
+                                                fontFamily: 'Montserrat',
+                                                fontSize: 15))
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          children: <Widget>[
+                            FutureBuilder(
+                                future: _responseCompleter.future,
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<List<Widget>> snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    return Column(
+                                      children: <Widget>[
+                                        Column(
+                                          children: snapshot.data,
+                                        ),
+                                        SizedBox(
+                                          height: 7,
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    return Column(
+                                      children: <Widget>[
+                                        Center(
+                                          child: const Text('Loading...'),
+                                        ),
+                                        SizedBox(
+                                          height: 7,
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                })
+                          ],
+                        ),
                   LogoutButton(() {
                     deleteToken();
                     CacheInvalidator.invalidateImagesCache();

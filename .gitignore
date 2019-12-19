@@ -10,6 +10,7 @@
 .svn/
 assets/testing
 assets/books
+assets/dropbox.json
 # IntelliJ related
 *.iml
 *.ipr
