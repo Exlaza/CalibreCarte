@@ -65,12 +65,8 @@ class _SettingsNewState extends State<SettingsNew> {
     if (newDirectory != null) {
       // Do something with the picked directory
 //      Set the old directory so that I can search for all the downloaded files in the directory
-      print("Inside changing of direcotry");
       String oldDirectoryPath = await _prefs.getString("downloaded_directory");
-      print("Old directory : $oldDirectoryPath");
 //      Set the new directory in the shared preferences.
-      print("New Directory");
-      print(newDirectory.path);
       saveStringToSP("downloaded_directory", newDirectory.path);
 //      Get the books title and file extensions so that I can search for filenames
       List<Data> dataList = await DataProvider.getAllBooksData();
@@ -82,7 +78,6 @@ class _SettingsNewState extends State<SettingsNew> {
         String fNameWithExt = element.name + '.' + element.format.toLowerCase();
         String pathToSearch = oldDirectoryPath + '/$fNameWithExt';
         String pathToMove = newDirectory.path + '/$fNameWithExt';
-        print("Path to searhcf $pathToSearch and apth to Move: $pathToMove");
 //        The IF condition over her can probably be done in a better way
         if (File(pathToSearch).existsSync()) {
           File(pathToSearch).renameSync(pathToMove);
