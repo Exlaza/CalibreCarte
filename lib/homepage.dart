@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -240,10 +241,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
     String searchFilter = update.searchFilter;
+    ColorTheme colortheme= Provider.of(context);
 //    print("rebuilding homepage");
     return Container(
       child: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: colortheme.descriptionBackground,
           appBar: AppBar(
               backgroundColor: Color(0xff002242),
               title: _appBarTitle,
@@ -284,7 +286,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     );
                   } else {
                     return Center(
-                      child: Text('Please Connect to dropbox'),
+                      child: Text('Please Connect to dropbox', style: TextStyle(fontFamily: 'Montserrat',
+                          color: colortheme.headerText) ,),
                     );
                   }
                 } else {
