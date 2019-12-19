@@ -9,12 +9,9 @@ class ConfigLoader {
   ConfigLoader({this.secretPath});
 
   Future<Configuration> load() {
-    print("Load called");
     return rootBundle.loadStructuredData<Configuration>(this.secretPath,
         (jsonStr) async {
       final secret = Configuration.fromJson(json.decode(jsonStr));
-      print("CAllback called");
-      print(secret);
       return secret;
     });
   }
