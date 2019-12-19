@@ -96,7 +96,11 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
                 child: Container(
                     padding:
                         EdgeInsets.only(top: 25, left: 23, right: 23, bottom: 10),
-                    child: Text("Cancel")),
+                    child: Text("Cancel",style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      color: Color(0xff002242),
+                      fontSize: 15
+                    ),)),
               )
             ],
           ),

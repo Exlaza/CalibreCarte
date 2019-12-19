@@ -74,9 +74,8 @@ class _MyAppState extends State<MyApp> {
               title: "Calibre Carte",
               theme: ThemeData(
                   primaryColor: Color(0xffFED962),
-                  dividerColor: Colors.transparent),
+                  ),
               home: MyHomePage(),
-
             ),
           );
         } else {

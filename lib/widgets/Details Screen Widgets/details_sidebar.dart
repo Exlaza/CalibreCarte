@@ -1,6 +1,7 @@
 import 'package:calibre_carte/helpers/book_downloader.dart';
 import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/open_format_dialog.dart';
 import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/select_format_dialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
@@ -44,10 +45,14 @@ class DetailsSidebar extends StatelessWidget {
       return Scaffold(
         backgroundColor: Colors.black.withOpacity(0.2),
         floatingActionButton: FloatingActionButton(
+            backgroundColor: Color(0xff002242),
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Icon(Icons.arrow_back)),
+            child: Icon(
+              Icons.arrow_back,
+              color: Color(0xffFED962),
+            )),
         body: Container(
           child: SingleChildScrollView(
               padding: EdgeInsets.all(15),
@@ -60,10 +65,10 @@ class DetailsSidebar extends StatelessWidget {
                             fontFamily: 'Montserrat',
                             color: Colors.white))
                     : Container(
-                        alignment: Alignment.center,
+                        alignment: Alignment.bottomCenter,
+                        height: MediaQuery.of(context).size.height / 2,
                         child: Text(
                           'No description',
-                          textAlign: TextAlign.start,
                           style: TextStyle(
                               fontSize: 20,
                               fontFamily: 'Montserrat',
@@ -96,10 +101,11 @@ class DetailsSidebar extends StatelessWidget {
               });
             },
             child: Container(
-                decoration:
-                    BoxDecoration(border: Border.all(width: 1, color: Colors.white), color: color
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.white),
+                    color: color
 //                  boxShadow: [BoxShadow(blurRadius: 10)],
-                        ),
+                    ),
                 padding: EdgeInsets.all(10),
                 // TODO: change sizes
 
@@ -128,7 +134,7 @@ class DetailsSidebar extends StatelessWidget {
                 height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  border: Border.all(width: 1,color: Colors.white),
+                  border: Border.all(width: 1, color: Colors.white),
                   color: altColor,
 //                boxShadow: [BoxShadow(blurRadius: 10)],
                 ),
@@ -159,7 +165,7 @@ class DetailsSidebar extends StatelessWidget {
               height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                border: Border.all(width: 1,color: Colors.white),
+                border: Border.all(width: 1, color: Colors.white),
                 color: color,
 //                boxShadow: [BoxShadow(blurRadius: 10)],
               ),
@@ -184,7 +190,7 @@ class DetailsSidebar extends StatelessWidget {
               height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  border: Border.all(width: 1,color: Colors.white),
+                  border: Border.all(width: 1, color: Colors.white),
                   color: altColor,
                   boxShadow: [
 //                BoxShadow(blurRadius: 10),
