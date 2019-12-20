@@ -76,7 +76,7 @@ class BookDetailsText extends StatelessWidget {
                             ),
 //              maxLines: 2,
                           ),
-                        ),
+                        ),bookDetails.pubdate==null?Container():
                   Container(
                     padding: EdgeInsets.fromLTRB(5, 10, 2, 20),
                     alignment: Alignment.topLeft,
