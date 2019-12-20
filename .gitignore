@@ -8,6 +8,12 @@
 .buildlog/
 .history
 .svn/
+dropbox.json
+key.properties
+assets/testing
+assets/books
+assets/dropbox.json
+android/key.properties
 
 # IntelliJ related
 *.iml
