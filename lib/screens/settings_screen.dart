@@ -1,17 +1,32 @@
+import 'dart:io';
+
+import 'package:calibre_carte/providers/color_theme_provider.dart';
+import 'package:calibre_carte/helpers/data_provider.dart';
+import 'package:calibre_carte/models/data.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
-import 'package:calibre_carte/screens/connect_dropbox_screen.dart';
+import 'package:calibre_carte/screens/about_us.dart';
+import 'package:calibre_carte/screens/instructions_screen.dart';
+import 'package:calibre_carte/screens/license.dart';
+import 'package:calibre_carte/screens/privacy_policy.dart';
+import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/cloud_settings.dart';
+import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/dark_mode_toggle.dart';
+import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/search_dropdown.dart';
+import 'package:directory_picker/directory_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path/path.dart';
 
-class Settings extends StatefulWidget {
+class SettingsNew extends StatefulWidget {
   static const routeName = '/settings';
 
   @override
-  _SettingsState createState() => _SettingsState();
+  _SettingsNewState createState() => _SettingsNewState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsNewState extends State<SettingsNew> {
   SharedPreferences _prefs;
   bool darkMode;
   Future myFuture;
@@ -35,241 +50,248 @@ class _SettingsState extends State<Settings> {
     _prefs.setString(settingName, val);
   }
 
-//  I needed to save Future builder in an instance because that was the only way, to prevent Future builder from firing again and again
-//  Here's the thing. If you give it a function the future: property in future builder assumes that you are returning a new instance of future
-//  For future builder this is akin to saying build it again
-//  I don't want to build Future builder again, just the switch component part of the already shown widget.
-//  This is a very subtle distinction which took 2 hrs of google searching to finally figure out what was wrong
-//  One more error that you have to take care of is that a value in switch bool should not be None. There is a possibility that
-//  While returning from shared preferences, you get the yellow screen if that is None
+  Widget _settingGroup(groupName) {
+    return Container(
+        padding: EdgeInsets.only(left: 16),
+        child: Text(
+          groupName,
+          style: TextStyle(
+              fontFamily: 'Montserrat', color: Colors.grey, fontSize: 20),
+        ));
+  }
 
-//  I cannot delegate it to a variable above the return statement because this will lead to the yellow scren becuse flutter tries to build that before it goes to the return
-//  Part of the
-//  And while the build is definitely called. We don't update the whole page, becuase the future builder know the future returned
-//  Has not changed
-//  So we can also shave a few miliseconds from that if we
+  selectDirectory(context, ColorTheme colorTheme) async {
+    Directory exd = await getExternalStorageDirectory();
+
+    Directory newDirectory = await DirectoryPicker.pick(
+        context: context,
+        rootDirectory: exd,
+        backgroundColor: colorTheme.darkMode ? Colors.grey : Colors.white);
+
+    if (newDirectory != null) {
+      // Do something with the picked directory
+//      Set the old directory so that I can search for all the downloaded files in the directory
+      String oldDirectoryPath = await _prefs.getString("downloaded_directory");
+//      Set the new directory in the shared preferences.
+      saveStringToSP("downloaded_directory", newDirectory.path);
+//      Get the books title and file extensions so that I can search for filenames
+      List<Data> dataList = await DataProvider.getAllBooksData();
+      List<Map<String, String>> dataFormatsFileNameMapTemp = List();
+
+//      For all the filenames in here, I will searhc it one by one and then
+//      rename it to the new one, which is supposedly equivalent as to moving it
+      dataList.forEach((element) {
+        String fNameWithExt = element.name + '.' + element.format.toLowerCase();
+        String pathToSearch = oldDirectoryPath + '/$fNameWithExt';
+        String pathToMove = newDirectory.path + '/$fNameWithExt';
+//        The IF condition over her can probably be done in a better way
+        if (File(pathToSearch).existsSync()) {
+          File(pathToSearch).renameSync(pathToMove);
+        }
+      });
+    } else {
+      // User cancelled without picking any directory
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-//    print('Building asettings for no reason');
     Update update = Provider.of(context);
+    ColorTheme colorTheme = Provider.of(context);
     Widget loadingWidget = Center(
       child: CircularProgressIndicator(),
     );
-    return Stack(
-      children: <Widget>[
-        Image.asset(
-          'assets/images/subtle_wood.png',
-          fit: BoxFit.fill,
-          height: double.infinity,
-          width: double.infinity,
+    return Scaffold(
+      backgroundColor: colorTheme.settingsBackground,
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white, //change your color here
         ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor: Colors.black.withOpacity(0.5),
-            title: Text('Settings'),
+        elevation: 0.0,
+        backgroundColor: Color(0xff002242),
+        title: Text(
+          'Settings',
+          style: TextStyle(
+            fontFamily: 'Montserrat',
+            color: Colors.white,
           ),
-          body: FutureBuilder(
-            future: myFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
+        ),
+      ),
+      body: FutureBuilder(
+        future: myFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
 //                print('THe connection finished now');
-                return Container(
-                  margin: EdgeInsets.fromLTRB(8, 8, 8, 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                          padding: EdgeInsets.only(left: 4),
-                          child: Text(
-                            'Cloud',
-                            style: TextStyle(fontSize: 30),
-                          )),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                        child: InkWell(
-                          onTap: () {
-//                            print('Tap is not working');
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) {
-                              return DropboxSignIn();
-                            }));
-                          },
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                            child: Column(
+            return SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsets.fromLTRB(8, 8, 8, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 20,
+                    ),
+                    _settingGroup("Cloud"),
+                    CloudSettings(),
+                    _settingGroup("Search"),
+                    SearchDropdown(),
+                    _settingGroup("Appearance"),
+                    DarkMode(),
+                    _settingGroup("Download Directory"),
+                    GestureDetector(
+                      onTap: () => selectDirectory(context, colorTheme),
+                      child: Container(
+                        child: Container(
+                          padding: EdgeInsets.only(left: 16),
+                          child: ListTile(
+                            contentPadding: EdgeInsets.all(0),
+                            title: Row(
                               children: <Widget>[
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.cloud,
-                                      color: update.tokenExists
-                                          ? Colors.blue
-                                          : Colors.transparent,
-                                    ),
-                                    Text('Dropbox'),
-                                  ],
+                                Icon(
+                                  Icons.folder_open,
+                                  color: Color(0xffFED962),
                                 ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(" Select Download Directory",
+                                    style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 15,
+                                        color: colorTheme.headerText))
                               ],
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 4),
-                        child: Text(
-                          'Search',
-                          style: TextStyle(fontSize: 30),
-                        ),
-                      ),
-                      Consumer<Update>(
-                        builder: (ctx, update, child) => Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30)),
-                          child: Column(
-                            children: <Widget>[
-                              ListTile(
-                                trailing:
-                                    Text(update.searchFilter ?? 'not selected'),
-                                leading: Icon(Icons.search),
-                                title: Text(
-                                  "Search By",
-                                ),
-                                onTap: () {
-                                  showModalBottomSheet(
-                                      elevation: 10,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5.0)),
-                                      backgroundColor:
-                                          Colors.grey.withOpacity(0.8),
-                                      context: context,
-                                      builder: (_) {
-                                        return Container(
-                                          child: Wrap(
-                                            children: <Widget>[
-                                              ListTile(
-                                                title: Text("Author"),
-                                                onTap: () {
-                                                  saveStringToSP(
-                                                      'searchFilter', 'author');
-                                                  update.changeSearchFilter(
-                                                      'author');
-                                                },
-                                              ),
-                                              ListTile(
-                                                title: Text("Book Title"),
-                                                onTap: () {
-                                                  saveStringToSP(
-                                                      'searchFilter', 'title');
-                                                  update.changeSearchFilter(
-                                                      'title');
-                                                },
-                                              )
-                                            ],
-                                          ),
-                                        );
-                                      });
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 4),
-                        child: Text(
-                          'Other',
-                          style: TextStyle(fontSize: 30),
-                        ),
-                      ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
+                    ),
+                    _settingGroup("Help"),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return AboutUs();
+                        }));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(left: 16, bottom: 0, top:10),
                         child: Container(
-                          padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                          decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.5),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(30))),
-                          child: Column(
+                          padding: EdgeInsets.only(top: 4),
+                          child: Row(
                             children: <Widget>[
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.wb_sunny,
-                                        size: 20,
-                                      ),
-                                      SizedBox(
-                                        width: 30,
-                                      ),
-                                      Text(
-                                        'Dark Mode',
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                    ],
-                                  ),
-                                  Switch(
-                                    value: darkMode,
-                                    onChanged: (val) {
-                                      saveBoolToSharedPrefs('darkMode', val);
-                                      setState(() {
-                                        darkMode = val;
-                                      });
-                                    },
-                                  )
-                                ],
+                              Icon(
+                                Icons.help_outline,
+                                color: Color(0xffFED962),
                               ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(" About Calibre Carte",
+                                  style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 15,
+                                      color: colorTheme.headerText))
                             ],
                           ),
                         ),
-                      )
-                    ],
-                  ),
-                );
-              } else {
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return PrivacyPolicy();
+                        }));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(left: 16, bottom: 0,top: 10),
+                        child: Container(
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.help_outline,
+                                color: Color(0xffFED962),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(" Privacy Policy",
+                                  style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 15,
+                                      color: colorTheme.headerText))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return Instructions();
+                        }));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(left: 16, bottom: 0, top:10),
+                        child: Container(
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.help_outline,
+                                color: Color(0xffFED962),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(" Usage Instructions",
+                                  style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 15,
+                                      color: colorTheme.headerText))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),InkWell(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return License();
+                        }));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(left: 16, top: 10),
+                        child: Container(
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.info_outline,
+                                color: Color(0xffFED962),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(" License",
+                                  style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 15,
+                                      color: colorTheme.headerText))
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          } else {
 //                print('The connection hasn\'t finsihed yet');
-                return CircularProgressIndicator();
-              }
-            },
-          ),
-        )
-      ],
-    );
-  }
-}
-
-class SearchSettingRowTrigger extends StatelessWidget {
-  final bool boolTriggerValue;
-
-  SearchSettingRowTrigger(this.boolTriggerValue);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        Icon(
-          Icons.settings_ethernet,
-        ),
-        Text('Search Title'),
-        Switch(
-          value: boolTriggerValue,
-          onChanged: (val) {},
-        )
-      ],
+            return CircularProgressIndicator();
+          }
+        },
+      ),
     );
   }
 }

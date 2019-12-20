@@ -1,12 +1,14 @@
 import 'dart:async';
 
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
+import 'package:calibre_carte/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'widgets/books_view.dart';
+import 'widgets/Books View Widgets/books_view.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -34,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Observable(_textUpdates.stream)
         .debounce((_) => TimerStream(true, const Duration(milliseconds: 500)))
         .forEach((s) {
-      if (filter != s) {
+      if ((filter != s) || (filter == "")){
         setState(() {
           filter = s;
         });
@@ -59,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
     showModalBottomSheet(
         elevation: 5,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        backgroundColor: Colors.grey.withOpacity(0.8),
+        backgroundColor: Colors.grey,
         context: context,
         builder: (BuildContext bc) {
           return Container(
@@ -93,18 +95,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   showSettings(BuildContext context) {
     Navigator.of(context).pop();
-    Navigator.pushNamed(context, "/settings").then((_) {
-//      setState(() {
-//        myFuture = getTokenFromPreferences();
-//      });
-    });
+//    Navigator.pushNamed(context, "/settings").then((_) {
+////      setState(() {
+////        myFuture = getTokenFromPreferences();
+////      });
+//    });
+
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) {
+      return SettingsNew();
+    }));
   }
 
   void showLayouts(BuildContext context) {
     Navigator.of(context).pop();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        backgroundColor: Colors.grey.withOpacity(0.8),
+        backgroundColor: Colors.grey,
         context: context,
         builder: (BuildContext bc) {
           return Container(
@@ -117,6 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       layout = "list";
                     });
+                    Navigator.of(context).pop();
                     storeLayout('list');
                   },
                 ),
@@ -127,17 +135,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       layout = "grid";
                     });
+                    Navigator.of(context).pop();
                     storeLayout('grid');
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.view_carousel),
-                  title: Text("Carousel"),
-                  onTap: () {
-                    setState(() {
-                      layout = "carousel";
-                    });
-                    storeLayout('carousel');
                   },
                 )
               ],
@@ -150,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        backgroundColor: Colors.grey.withOpacity(0.8),
+        backgroundColor: Colors.grey,
         context: context,
         builder: (BuildContext bc) {
           return Container(
@@ -180,7 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        backgroundColor: Colors.grey.withOpacity(0.8),
+        backgroundColor: Colors.grey,
         context: context,
         builder: (BuildContext bc) {
           return Container(
@@ -218,7 +217,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return IconButton(
       icon: Icon(Icons.close),
       onPressed: () {
-        _appBarTitle = Text("Calibre Carte");
+        _appBarTitle = Text("Calibre Carte",style: TextStyle(fontFamily: 'Montserrat',
+            color: Colors.white),);
         controller.clear();
       },
     );
@@ -226,7 +226,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _searchPressed(String searchFil) {
     setState(() {
-      _appBarTitle = new TextField(
+      _appBarTitle = new TextField(style: TextStyle(color: Colors.white), autofocus: true,
         controller: controller,
         decoration: new InputDecoration(
             prefixIcon: closeButton(), hintText: 'Search for ${searchFil}s'),
@@ -234,73 +234,66 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Widget _appBarTitle = const Text("Calibre Carte");
+  Widget _appBarTitle = const Text("Calibre Carte",style: TextStyle(fontFamily: 'Montserrat',
+      color: Colors.white),);
 
   @override
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
     String searchFilter = update.searchFilter;
+    ColorTheme colortheme= Provider.of(context);
 //    print("rebuilding homepage");
     return Container(
-      child: Stack(
-        children: <Widget>[
-          Image.asset(
-            'assets/images/subtle_wood.png',
-            fit: BoxFit.fill,
-            height: double.infinity,
-            width: double.infinity,
-          ),
-          Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: AppBar(
-                  backgroundColor: Colors.black.withOpacity(0.6),
-                  title: _appBarTitle,
-                  leading:
-                      Image.asset('assets/images/calibre_logo.png', scale: 0.4),
-                  actions: <Widget>[
-                    // action button
-                    IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () {
-                        _searchPressed(searchFilter);
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.more_vert),
-                      onPressed: () {
-                        _settingModalBottomSheet(context);
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.refresh),
-                      onPressed: () {
-                        update.updateFlagState(true);
-                      },
-                    )
-                  ]),
-              body: FutureBuilder(
-                  future: myFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (update.tokenExists == true) {
-                        return BooksView(
-                          layout,
-                          filter,
-                          sortDirection: sortDirection,
-                          sortOption: sortOption,
-                          update: update,
-                        );
-                      } else {
-                        return Center(
-                          child: Text('Please Connect to dropbox'),
-                        );
-                      }
-                    } else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  })),
-        ],
-      ),
+      child: Scaffold(
+          backgroundColor: colortheme.descriptionBackground,
+          appBar: AppBar(
+              backgroundColor: Color(0xff002242),
+              title: _appBarTitle,
+//              leading:
+//                  Image.asset('assets/images/calibre_logo.png', scale: 0.4),
+              actions: <Widget>[
+                // action button
+                IconButton(
+                  icon: Icon(Icons.search,color: Color(0xffFED962)),
+                  onPressed: () {
+                    _searchPressed(searchFilter);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.more_vert,color: Color(0xffFED962)),
+                  onPressed: () {
+                    _settingModalBottomSheet(context);
+                  },
+                ),
+//                IconButton(
+//                  icon: Icon(Icons.refresh),
+//                  onPressed: () {
+//                    update.updateFlagState(true);
+//                  },
+//                )
+              ]),
+          body: FutureBuilder(
+              future: myFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (update.tokenExists == true) {
+                    return BooksView(
+                      layout,
+                      filter,
+                      sortDirection: sortDirection,
+                      sortOption: sortOption,
+                      update: update,
+                    );
+                  } else {
+                    return Center(
+                      child: Text('Please Connect to dropbox', style: TextStyle(fontFamily: 'Montserrat',
+                          color: colortheme.headerText) ,),
+                    );
+                  }
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              })),
     );
   }
 }

@@ -7,8 +7,10 @@ import 'package:calibre_carte/helpers/image_cacher.dart';
 class BookDetailsCoverImage extends StatefulWidget {
   final int bookId;
   final String relativePath;
+  final height;
+  final width;
 
-  BookDetailsCoverImage(this.bookId, this.relativePath);
+  BookDetailsCoverImage(this.bookId, this.relativePath,this.height,this.width);
 
   @override
   _BookDetailsCoverImageState createState() => _BookDetailsCoverImageState();
@@ -26,7 +28,7 @@ class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
     bool exists = await ic.checkIfCachedFileExists(widget.bookId);
     if (!exists) {
       imageExists =
-          await ic.downloadAndCacheImage(widget.relativePath, widget.bookId);
+      await ic.downloadAndCacheImage(widget.relativePath, widget.bookId);
     }
     if (imageExists == true) {
       localImagePath = await ic.returnCachedImagePath(widget.bookId);
@@ -51,12 +53,15 @@ class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == true) {
-            return Image.file(
-              File(localImagePath),
-              fit: BoxFit.fill,
+            return widget.height==null?Image.file(
+                File(localImagePath)):Image.file(
+              File(localImagePath),height: widget.height,
+              width:widget.width,fit: BoxFit.fill,
             );
           } else
-            return Image.asset('assets/images/calibre_logo.png', scale: 0.4);
+            return widget.height==null?Image.asset('assets/images/calibre_logo.png', height: widget.height,
+                width:widget.width,fit: BoxFit.fill):Image.asset('assets/images/calibre_logo.png',height: widget.height,
+                width:widget.width,fit: BoxFit.fill);
         } else {
           return Center(
             child: CircularProgressIndicator(),

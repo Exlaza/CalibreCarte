@@ -1,28 +1,26 @@
-import 'dart:io';
-
 import 'package:calibre_carte/helpers/book_downloader.dart';
 import 'package:calibre_carte/helpers/data_provider.dart';
 import 'package:calibre_carte/models/data.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 
 import 'downloading_progress.dart';
 
-class SelectFormatDialog extends StatefulWidget {
-  int bookId;
-  String relativePath;
-  BuildContext oldContext;
+class OpenFormatDialog extends StatefulWidget {
+  final int bookId;
+  final String relativePath;
 
-  SelectFormatDialog(this.bookId, this.relativePath, this.oldContext);
+  OpenFormatDialog(this.bookId, this.relativePath);
 
   @override
-  _SelectFormatDialogState createState() => _SelectFormatDialogState();
+  _OpenFormatDialogState createState() => _OpenFormatDialogState();
 }
 
-class _SelectFormatDialogState extends State<SelectFormatDialog> {
+class _OpenFormatDialogState extends State<OpenFormatDialog> {
   Future myFuture;
   List<Map<String, String>> dataFormatsFileNameMap = List();
 
-  Future<void> getBookDataFormats() async {
+  Future<void> getLocalBookFormats() async {
     List<Data> dataList = await DataProvider.getDataByBookID(widget.bookId);
 
     dataList.forEach((element) {
@@ -34,32 +32,33 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
       };
       dataFormatsFileNameMap.add(tempMap);
     });
+    List<Map<String, String>> filteredDataFormatsFileNameMap = List();
+    BookDownloader bd = BookDownloader();
+    for (int i = 0; i < dataFormatsFileNameMap.length; i++) {
+      bool exists = await bd
+          .checkIfDownloadedFileExists(dataFormatsFileNameMap[i]["name"]);
+      if (exists) {
+        filteredDataFormatsFileNameMap.add(dataFormatsFileNameMap[i]);
+      }
+    }
+
+    setState(() {
+      dataFormatsFileNameMap = filteredDataFormatsFileNameMap;
+    });
   }
 
-  Future<void> bookDownloader(fileName, BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (_) {
-          return DownloadingProgress(widget.relativePath, fileName, context);
-        }).then((_) {
-      Navigator.of(context).pop();
-    });
+  Future<void> bookOpen(fileName) async {
+    BookDownloader bd = BookDownloader();
+    String fileDirectory = await bd.returnFileDirectoryExternal(fileName);
+
+    OpenFile.open(fileDirectory);
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    myFuture = getBookDataFormats();
-  }
-
-  Future<bool> checkNet() async {
-    try {
-      var result = await InternetAddress.lookup('https://api.dropboxapi.com');
-      return true;
-    } on SocketException catch (_) {
-      return false;
-    }
+    myFuture = getLocalBookFormats();
   }
 
   @override
@@ -75,15 +74,7 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
                 return FlatButton(
                   child: Text(element["format"]),
                   onPressed: () {
-                    checkNet().then((val) {
-                      if (val == true) {
-                        bookDownloader(element["name"], context);
-                      } else
-                        {Navigator.of(context).pop();
-                          Scaffold.of(widget.oldContext).showSnackBar(SnackBar(
-                          content: Text("No internet"),
-                        ));}
-                    });
+                    bookOpen(element["name"]);
                   },
                 );
               }).toList(),
