@@ -9,6 +9,7 @@
 .history
 .svn/
 dropbox.json
+key.properties
 assets/testing
 assets/books
 assets/dropbox.json
