@@ -4,13 +4,16 @@ import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/helpers/data_provider.dart';
 import 'package:calibre_carte/models/data.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
+import 'package:calibre_carte/screens/about_us.dart';
 import 'package:calibre_carte/screens/instructions_screen.dart';
+import 'package:calibre_carte/screens/license.dart';
 import 'package:calibre_carte/screens/privacy_policy.dart';
 import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/cloud_settings.dart';
 import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/dark_mode_toggle.dart';
 import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/search_dropdown.dart';
 import 'package:directory_picker/directory_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,7 +65,8 @@ class _SettingsNewState extends State<SettingsNew> {
 
     Directory newDirectory = await DirectoryPicker.pick(
         context: context,
-        rootDirectory: exd,backgroundColor: colorTheme.darkMode?Colors.grey:Colors.white);
+        rootDirectory: exd,
+        backgroundColor: colorTheme.darkMode ? Colors.grey : Colors.white);
 
     if (newDirectory != null) {
       // Do something with the picked directory
@@ -162,20 +166,50 @@ class _SettingsNewState extends State<SettingsNew> {
                       ),
                     ),
                     _settingGroup("Help"),
-                    InkWell( onTap: (){
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return PrivacyPolicy();
-                      }));
-                    },
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return AboutUs();
+                        }));
+                      },
                       child: Container(
-                        padding: EdgeInsets.only(left: 16),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.all(0),
-                          title: Row(
+                        padding: EdgeInsets.only(left: 16, bottom: 0, top:10),
+                        child: Container(
+                          padding: EdgeInsets.only(top: 4),
+                          child: Row(
                             children: <Widget>[
                               Icon(
-                                Icons.info_outline,
+                                Icons.help_outline,
+                                color: Color(0xffFED962),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(" About Calibre Carte",
+                                  style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 15,
+                                      color: colorTheme.headerText))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return PrivacyPolicy();
+                        }));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(left: 16, bottom: 0,top: 10),
+                        child: Container(
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.help_outline,
                                 color: Color(0xffFED962),
                               ),
                               SizedBox(
@@ -191,16 +225,16 @@ class _SettingsNewState extends State<SettingsNew> {
                         ),
                       ),
                     ),
-                    InkWell(onTap: (){
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return Instructions();
-                      }));
-                    },
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return Instructions();
+                        }));
+                      },
                       child: Container(
-                        padding: EdgeInsets.only(left: 16, bottom: 0),
+                        padding: EdgeInsets.only(left: 16, bottom: 0, top:10),
                         child: Container(
-                          padding: EdgeInsets.only(top: 4),
                           child: Row(
                             children: <Widget>[
                               Icon(
@@ -219,7 +253,35 @@ class _SettingsNewState extends State<SettingsNew> {
                           ),
                         ),
                       ),
-                    ),
+                    ),InkWell(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return License();
+                        }));
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(left: 16, top: 10),
+                        child: Container(
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.info_outline,
+                                color: Color(0xffFED962),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(" License",
+                                  style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 15,
+                                      color: colorTheme.headerText))
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),

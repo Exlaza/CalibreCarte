@@ -33,7 +33,7 @@ class Instructions extends StatelessWidget {
                     text: TextSpan(children: [
                       TextSpan(
                           text:
-                              "Before logging in, you should upload your entire Calibre Library folder to dropbox. You can find the location of the folder by clicking on the \"Calibre Library\" button in the Calibre Application.",
+                              " Before logging in, you should upload your entire Calibre Library folder to dropbox. You can find the location of the folder by clicking on the \"Calibre Library\" button in the Calibre Application.",
                           style: TextStyle(
                               fontFamily: 'Montserrat',
                               color: Colors.black,
@@ -41,7 +41,8 @@ class Instructions extends StatelessWidget {
                     ]),
                   ))
                 ],
-              ),SizedBox(
+              ),
+              SizedBox(
                 height: 20,
               ),
               Row(
@@ -56,7 +57,7 @@ class Instructions extends StatelessWidget {
                     text: TextSpan(children: [
                       TextSpan(
                           text:
-                              "For the best experience with Calibre Carte, download metadata using Calibre. You can find the instructions to download and edit metadata",
+                              " You can read more about how to export and move Calibre's libraries ",
                           style: TextStyle(
                               fontFamily: 'Montserrat',
                               color: Colors.black,
@@ -66,7 +67,7 @@ class Instructions extends StatelessWidget {
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               launch(
-                                  'https://manual.calibre-ebook.com/metadata.html#id2');
+                                  'http://blog.calibre-ebook.com/2017/01/how-to-backup-move-and-export-your.html');
                             },
                           style: TextStyle(
                               fontFamily: 'Montserrat',
@@ -75,7 +76,8 @@ class Instructions extends StatelessWidget {
                     ]),
                   ))
                 ],
-              ),SizedBox(
+              ),
+              SizedBox(
                 height: 20,
               ),
               Row(
@@ -87,27 +89,27 @@ class Instructions extends StatelessWidget {
                   ),
                   Expanded(
                       child: RichText(
-                        text: TextSpan(children: [
-                          TextSpan(
-                              text:
-                              "You can read more about how to export and move Calibre's libraries ",
-                              style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: Colors.black,
-                                  fontSize: 15)),
-                          TextSpan(
-                              text: "here.",
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  launch(
-                                      'http://blog.calibre-ebook.com/2017/01/how-to-backup-move-and-export-your.html');
-                                },
-                              style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: Colors.blue,
-                                  fontSize: 15)),
-                        ]),
-                      ))
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text:
+                              " For the best experience with Calibre Carte, download e-book metadata and covers using Calibre. You can find the instructions to download and edit metadata",
+                          style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              color: Colors.black,
+                              fontSize: 15)),
+                      TextSpan(
+                          text: " here.",
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              launch(
+                                  'https://manual.calibre-ebook.com/metadata.html#id2');
+                            },
+                          style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              color: Colors.blue,
+                              fontSize: 15)),
+                    ]),
+                  ))
                 ],
               )
             ],
