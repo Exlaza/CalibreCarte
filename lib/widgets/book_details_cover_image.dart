@@ -60,8 +60,8 @@ class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
             );
           } else
             return widget.height==null?Image.asset('assets/images/logo.png', height: widget.height,
-                width:widget.width,fit: BoxFit.cover):Image.asset('assets/images/logo.png',height: widget.height,
-                width:widget.width,fit: BoxFit.cover);
+                width:widget.width,fit: BoxFit.fitWidth):Image.asset('assets/images/logo.png',height: widget.height,
+                width:widget.width,fit: BoxFit.fitWidth);
         } else {
           return Center(
             child: CircularProgressIndicator(),
