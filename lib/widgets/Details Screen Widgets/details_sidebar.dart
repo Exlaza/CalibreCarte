@@ -154,7 +154,7 @@ class DetailsSidebar extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (_) =>
-                            OpenFormatDialog(bookId, bookDetails.path));
+                            OpenFormatDialog(bookId, bookDetails.path,context));
                   })
                 : (() => {}),
             child: Container(

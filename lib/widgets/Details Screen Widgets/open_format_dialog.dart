@@ -9,8 +9,9 @@ import 'downloading_progress.dart';
 class OpenFormatDialog extends StatefulWidget {
   final int bookId;
   final String relativePath;
+  final BuildContext oldContext;
 
-  OpenFormatDialog(this.bookId, this.relativePath);
+  OpenFormatDialog(this.bookId, this.relativePath, this.oldContext);
 
   @override
   _OpenFormatDialogState createState() => _OpenFormatDialogState();
@@ -53,8 +54,9 @@ class _OpenFormatDialogState extends State<OpenFormatDialog> {
 
     String result = await OpenFile.open(fileDirectory);
     if (result == "No APP found to open this file。"){
-      print("No application found to open the file");
+//      print("No application found to open the file");
       Navigator.pop(context);
+      Scaffold.of(widget.oldContext).showSnackBar(SnackBar(content: Text("No compatible app found."),));
     }
   }
 
