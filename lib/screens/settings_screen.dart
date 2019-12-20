@@ -4,6 +4,7 @@ import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/helpers/data_provider.dart';
 import 'package:calibre_carte/models/data.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
+import 'package:calibre_carte/screens/instructions_screen.dart';
 import 'package:calibre_carte/screens/privacy_policy.dart';
 import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/cloud_settings.dart';
 import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/dark_mode_toggle.dart';
@@ -190,25 +191,32 @@ class _SettingsNewState extends State<SettingsNew> {
                         ),
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.only(left: 16, bottom: 0),
+                    InkWell(onTap: (){
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return Instructions();
+                      }));
+                    },
                       child: Container(
-                        padding: EdgeInsets.only(top: 4),
-                        child: Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.help_outline,
-                              color: Color(0xffFED962),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(" Usage Instructions",
-                                style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    fontSize: 15,
-                                    color: colorTheme.headerText))
-                          ],
+                        padding: EdgeInsets.only(left: 16, bottom: 0),
+                        child: Container(
+                          padding: EdgeInsets.only(top: 4),
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.help_outline,
+                                color: Color(0xffFED962),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(" Usage Instructions",
+                                  style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 15,
+                                      color: colorTheme.headerText))
+                            ],
+                          ),
                         ),
                       ),
                     ),

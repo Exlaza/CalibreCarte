@@ -4,10 +4,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 class PrivacyPolicy extends StatelessWidget {
   final points = [
-    "Calibre Carte does not collect any of your personal information or track a user in any way. ",
+    " Calibre Carte does not collect any of your personal information or track a user in any way. ",
     "When you connect to Dropbox, and use the app, data is sent to and requested from Dropbox, which is governed by its own privacy policy. Dropbox is not affiliated with Calibre Carte, and as such, anything that it does or does not do with your data is completely out of this app’s control.",
     "Calibre Carte runs on top of Calibre, which is governed by its own privacy policy. Calibre is not affiliated with Calibre Carte, and as such, anything that it does or does not do with your data is completely out of Calibre Carte's control.",
-    "If you use the ebook download / export feature, the e-book file will leave the app and be opened in the app of your choice. The apps that can open these files are not affiliated with Calibre Carte, and each have their own privacy policies."
+    " If you use the ebook download / export feature, the e-book file will leave the app and be opened in the app of your choice. The apps that can open these files are not affiliated with Calibre Carte, and each have their own privacy policies."
   ];
 
   @override
@@ -63,7 +63,7 @@ class PrivacyPolicy extends StatelessWidget {
                     text: TextSpan(children: [
                       TextSpan(
                           text:
-                              "When you connect to Dropbox, and use the app, data is sent to and requested from",
+                              " When you connect to Dropbox, and use the app, data is sent to and requested from",
                           style: TextStyle(
                               fontFamily: 'Montserrat',
                               color: Colors.black,
@@ -104,7 +104,7 @@ class PrivacyPolicy extends StatelessWidget {
                     text: TextSpan(children: [
                       TextSpan(
                           text:
-                          "Calibre Carte runs on top of",
+                          " Calibre Carte runs on top of",
                           style: TextStyle(
                               fontFamily: 'Montserrat',
                               color: Colors.black,
