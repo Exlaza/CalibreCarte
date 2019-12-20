@@ -51,7 +51,11 @@ class _OpenFormatDialogState extends State<OpenFormatDialog> {
     BookDownloader bd = BookDownloader();
     String fileDirectory = await bd.returnFileDirectoryExternal(fileName);
 
-    OpenFile.open(fileDirectory);
+    String result = await OpenFile.open(fileDirectory);
+    if (result == "No APP found to open this file。"){
+      print("No application found to open the file");
+      Navigator.pop(context);
+    }
   }
 
   @override
