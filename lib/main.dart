@@ -72,9 +72,6 @@ class _MyAppState extends State<MyApp> {
             ],
             child: MaterialApp(
               title: "Calibre Carte",
-              theme: ThemeData(
-                  primaryColor: Color(0xffFED962),
-                  ),
               home: MyHomePage(),
             ),
           );

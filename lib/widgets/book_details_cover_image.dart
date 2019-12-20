@@ -59,8 +59,8 @@ class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
               width:widget.width,fit: BoxFit.fill,
             );
           } else
-            return widget.height==null?Image.asset('assets/images/calibre_logo.png', height: widget.height,
-                width:widget.width,fit: BoxFit.fill):Image.asset('assets/images/calibre_logo.png',height: widget.height,
+            return widget.height==null?Image.asset('assets/images/logo.png', height: widget.height,
+                width:widget.width,fit: BoxFit.fill):Image.asset('assets/images/logo.png',height: widget.height,
                 width:widget.width,fit: BoxFit.fill);
         } else {
           return Center(
