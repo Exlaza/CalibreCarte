@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/settings_screen.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
@@ -289,11 +290,33 @@ class _MyHomePageState extends State<MyHomePage> {
                     );
                   } else {
                     return Center(
-                      child: Text(
-                        'Please go to Settings and connect to Dropbox',
-                        style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            color: colortheme.headerText),
+                      child: RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text:
+                                  'Please go to ',
+                              style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  color: Colors.black,
+                                  fontSize: 15)),TextSpan( recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                            return SettingsNew();
+                          }));
+                        },
+                              text:
+                              'Settings',
+                              style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  color: Colors.blue,
+                                  fontSize: 15)),TextSpan(
+                              text:
+                              ' and connect to Dropbox',
+                              style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  color: Colors.black,
+                                  fontSize: 15))
+                        ]),
                       ),
                     );
                   }
