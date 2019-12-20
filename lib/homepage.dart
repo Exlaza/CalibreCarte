@@ -290,7 +290,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   } else {
                     return Center(
                       child: Text(
-                        'Please Connect to dropbox',
+                        'Please go to Settings and connect to Dropbox',
                         style: TextStyle(
                             fontFamily: 'Montserrat',
                             color: colortheme.headerText),

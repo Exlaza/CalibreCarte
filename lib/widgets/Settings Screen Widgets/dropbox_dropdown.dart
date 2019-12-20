@@ -355,6 +355,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                     setState(() {
                       myFuture = loadingToken();
                       update.changeTokenState(false);
+                      update.updateFlagState(true);
                     });
                   }),
                   SizedBox(
