@@ -37,10 +37,15 @@ class MetadataCacher {
     }
   }
 
-  Future<bool> downloadAndCacheMetadata([String token]) async {
-    String _token = await getTokenFromPreferences()??token;
-    String path = await getSelectedLibPathFromSharedPrefs();
-    String absPath = path + 'metadata.db';
+  Future<bool> downloadAndCacheMetadata({String token, String path}) async {
+    String _path;
+    String _token = await getTokenFromPreferences() ?? token;
+    if (path == null) {
+      _path = await getSelectedLibPathFromSharedPrefs();
+    } else {
+       _path = path;
+    }
+    String absPath = _path + 'metadata.db';
     Response response = await downloadMetadata(_token, absPath);
     //Get the bytes, get the temp directory and write a file in temp
     if (response == null) {

@@ -105,8 +105,8 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
           });
 
 
-    MetadataCacher().downloadAndCacheMetadata().then((val) {
-      if(val==true){
+    MetadataCacher().downloadAndCacheMetadata(path:key).then((value) {
+      if(value==true){
         storeStringInSharedPrefs('selected_calibre_lib_path', key);
         storeStringInSharedPrefs('selected_calibre_lib_name', val);
         update.updateFlagState(true);
