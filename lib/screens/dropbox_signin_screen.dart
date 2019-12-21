@@ -120,7 +120,8 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
       Navigator.of(context).pop();
     });
     MetadataCacher().downloadAndCacheMetadata().then((_) {
-      update.changeTokenState(true);
+//      update.changeTokenState(true);
+      update.updateFlagState(true);
       Navigator.of(context).pop();
     });
   }
