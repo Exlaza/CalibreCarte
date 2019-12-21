@@ -38,7 +38,11 @@ class DatabaseHelper {
   initDb() async {
 //    print("I am inside initDb");
     String path = await getDatabasePath();
-    var exists = await databaseExists(path);
+    bool exists;
+    try{await databaseExists(path);
+    exists=true;}catch(e){
+      print("database exception partial download $e");
+    }
 
     if (!exists) {
 //      print("Database at path doesn't exist");

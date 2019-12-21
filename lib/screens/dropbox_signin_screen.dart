@@ -116,13 +116,14 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
 
   selectingCalibreLibrary(key, val, update) {
     storeStringInSharedPrefs('selected_calibre_lib_path', key);
-    storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_) {
-      Navigator.of(context).pop();
-    });
+    storeStringInSharedPrefs('selected_calibre_lib_name', val);
     MetadataCacher().downloadAndCacheMetadata().then((_) {
       update.changeTokenState(true);
       update.updateFlagState(true);
       Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+
     });
   }
 
@@ -226,6 +227,31 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                             onTap: () {
 //                              print("first selected lib path ${element}");
 //                            print("first selected lib name ${pathNameMap[element]}");
+                              showDialog<void>(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (BuildContext context) {
+                                    return WillPopScope(
+                                        onWillPop: () async => false,
+                                        child: SimpleDialog(
+                                            key: UniqueKey(),
+                                            backgroundColor: Colors.black54,
+                                            children: <Widget>[
+                                              Center(
+                                                child: Column(children: [
+                                                  CircularProgressIndicator(),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Text(
+                                                    "Loading Calibre library",
+                                                    style: TextStyle(
+                                                        color: Colors.blueAccent),
+                                                  )
+                                                ]),
+                                              )
+                                            ]));
+                                  });
                               selectingCalibreLibrary(
                                   element, pathNameMap[element], update);
                             },
@@ -257,9 +283,35 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                           builder: (BuildContext context) {
                             return WillPopScope(
                               onWillPop: () async {
+                                showDialog<void>(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      return WillPopScope(
+                                          onWillPop: () async => false,
+                                          child: SimpleDialog(
+                                              key: UniqueKey(),
+                                              backgroundColor: Colors.black54,
+                                              children: <Widget>[
+                                                Center(
+                                                  child: Column(children: [
+                                                    CircularProgressIndicator(),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Text(
+                                                      "Loading Calibre library",
+                                                      style: TextStyle(
+                                                          color: Colors.blueAccent),
+                                                    )
+                                                  ]),
+                                                )
+                                              ]));
+                                    });
                                 await MetadataCacher().downloadAndCacheMetadata().then((_) {
                                   update.changeTokenState(true);
                                   update.updateFlagState(true);
+                                  Navigator.of(context).pop();
                                   Navigator.of(context).pop();
                                 });
                                 return true;
