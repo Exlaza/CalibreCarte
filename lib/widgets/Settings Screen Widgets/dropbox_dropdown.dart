@@ -242,7 +242,15 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       return [Text("No libraries found")];
     }
   }
-
+  Future<bool> checkNet() async {
+    try {
+      var result = await InternetAddress.lookup('www.google.com');
+//      print("internet is $result");
+      return true;
+    } on SocketException catch (_) {
+      return false;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
@@ -256,15 +264,22 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
             final url =
                 'https://www.dropbox.com/oauth2/authorize?client_id=${clientId}&response_type=token&redirect_uri=${DropboxDropdown.redirectUri}';
             return ConnectButton(() {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return DropboxAuthentication(
-                  selectedUrl: url, oldContext: oldContext,
-                );
-              })).then((_) {
-                setState(() {
-                  myFuture = loadingToken();
-                });
+              checkNet().then((val){
+                if(val==false){
+                  Scaffold.of(context).showSnackBar(SnackBar(content: Text("No internet"),));
+                }
+                else{
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                    return DropboxAuthentication(
+                      selectedUrl: url, oldContext: oldContext,
+                    );
+                  })).then((_) {
+                    setState(() {
+                      myFuture = loadingToken();
+                    });
 //                              update.updateFlagState(true);
+                  });
+                }
               });
             });
           } else {
