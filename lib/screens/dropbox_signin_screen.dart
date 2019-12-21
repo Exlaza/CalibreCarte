@@ -136,10 +136,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
           color: Colors.white, //change your color here
         ),
         title: Text('Dropbox Login',
-            style: TextStyle(
-              fontFamily: 'Montserrat',
-color: Colors.white
-            )),
+            style: TextStyle(fontFamily: 'Montserrat', color: Colors.white)),
       ),
       body: IndexedStack(
         index: _stackToView,
@@ -207,7 +204,7 @@ color: Colors.white
                       storeStringInSharedPrefs(libName, pathNameMap[path]);
                     });
 
-                    // TODO: MAKE THIS FASTER
+                    // TODO: Default selection
                     storeStringInSharedPrefs(
                       'selected_calibre_lib_path',
                       pathNameMap.keys.first,
@@ -258,11 +255,12 @@ color: Colors.white
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return WillPopScope( onWillPop: ()async{
-                              update.updateFlagState(true);
-                              update.changeTokenState(true);
-                              return true;
-                            },
+                            return WillPopScope(
+                              onWillPop: () async {
+                                update.updateFlagState(true);
+                                update.changeTokenState(true);
+                                return true;
+                              },
                               child: AlertDialog(
                                 contentPadding: EdgeInsets.all(10),
                                 content: Container(
