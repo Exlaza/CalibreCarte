@@ -257,8 +257,11 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                           builder: (BuildContext context) {
                             return WillPopScope(
                               onWillPop: () async {
-                                update.updateFlagState(true);
-                                update.changeTokenState(true);
+                                await MetadataCacher().downloadAndCacheMetadata().then((_) {
+                                  update.changeTokenState(true);
+                                  update.updateFlagState(true);
+                                  Navigator.of(context).pop();
+                                });
                                 return true;
                               },
                               child: AlertDialog(
@@ -287,19 +290,9 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                             );
                           });
                     } else {
+                      selectingCalibreLibrary(pathNameMap.keys.first,
+                          pathNameMap.values.first, update);
                       // Her we have only one library so we make that the default
-                      storeStringInSharedPrefs(
-                        'selected_calibre_lib_path',
-                        pathNameMap.keys.first,
-                      );
-                      storeStringInSharedPrefs(
-                        'selected_calibre_lib_name',
-                        pathNameMap.values.first,
-                      ).then((_) {
-                        update.changeTokenState(true);
-                        update.updateFlagState(true);
-                        Navigator.of(context).pop();
-                      });
                     }
                   } else {
                     Scaffold.of(context).showSnackBar(SnackBar(

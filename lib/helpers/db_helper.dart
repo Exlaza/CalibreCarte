@@ -54,7 +54,13 @@ class DatabaseHelper {
 //      print("Database at path exists");
     }
 //    print("Open gets called asfter this stateemnt");
-    return await openDatabase("metadata.db");
+    try{return await openDatabase("metadata.db");}catch(e){
+      print("fucking exception $e");
+      MetadataCacher mc = MetadataCacher();
+//      print('Metdata cacher should now run"');
+      await mc.downloadAndCacheMetadata();
+      return await openDatabase("metadata.db");
+    }
   }
 
   static deleteDb() async {
