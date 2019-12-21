@@ -77,8 +77,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   }
 
   selectingCalibreLibrary(key, val, update) {
-    storeStringInSharedPrefs('selected_calibre_lib_path', key);
-    storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_) {
+
 //      Navigator.of(context).pop();
       showDialog<void>(
           context: context,
@@ -104,10 +103,14 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                       )
                     ]));
           });
-    });
 
-    MetadataCacher().downloadAndCacheMetadata().then((_) {
-      update.updateFlagState(true);
+
+    MetadataCacher().downloadAndCacheMetadata().then((val) {
+      if(val==true){
+        storeStringInSharedPrefs('selected_calibre_lib_path', key);
+        storeStringInSharedPrefs('selected_calibre_lib_name', val);
+        update.updateFlagState(true);
+      }
       Navigator.of(context).pop();
     });
   }
@@ -243,6 +246,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   @override
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
+    BuildContext oldContext=context;
     ColorTheme colorTheme = Provider.of(context);
     return FutureBuilder(
       future: myFuture,
@@ -254,7 +258,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
             return ConnectButton(() {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                 return DropboxAuthentication(
-                  selectedUrl: url,
+                  selectedUrl: url, oldContext: oldContext,
                 );
               })).then((_) {
                 setState(() {

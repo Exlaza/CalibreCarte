@@ -297,7 +297,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   'Please go to ',
                               style: TextStyle(
                                   fontFamily: 'Montserrat',
-                                  color: Colors.black,
+                                  color: colortheme.headerText,
                                   fontSize: 15)),TextSpan( recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
@@ -314,7 +314,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               ' and connect to Dropbox',
                               style: TextStyle(
                                   fontFamily: 'Montserrat',
-                                  color: Colors.black,
+                                  color: colortheme.headerText,
                                   fontSize: 15))
                         ]),
                       ),

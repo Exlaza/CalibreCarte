@@ -37,11 +37,11 @@ class MetadataCacher {
     }
   }
 
-  Future<bool> downloadAndCacheMetadata() async {
-    String token = await getTokenFromPreferences();
+  Future<bool> downloadAndCacheMetadata([String token]) async {
+    String _token = await getTokenFromPreferences()??token;
     String path = await getSelectedLibPathFromSharedPrefs();
     String absPath = path + 'metadata.db';
-    Response response = await downloadMetadata(token, absPath);
+    Response response = await downloadMetadata(_token, absPath);
     //Get the bytes, get the temp directory and write a file in temp
     if (response == null) {
       return false;
@@ -49,12 +49,14 @@ class MetadataCacher {
       if (response.statusCode == 200) {
         await DatabaseHelper.deleteDb();
         await CacheInvalidator.invalidateImagesCache();
+        List<int> bytes = response.bodyBytes;
+        String tempDir = await getDatabasesPath();
+        String pathMetadata = join(tempDir + "/metadata.db");
+        await File(pathMetadata).writeAsBytes(bytes, flush: true);
+        return true;
+      } else {
+        return false;
       }
-      List<int> bytes = response.bodyBytes;
-      String tempDir = await getDatabasesPath();
-      String pathMetadata = join(tempDir + "/metadata.db");
-      await File(pathMetadata).writeAsBytes(bytes, flush: true);
-      return true;
     }
   }
 
