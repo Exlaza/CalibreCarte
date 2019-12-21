@@ -121,6 +121,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     });
     MetadataCacher().downloadAndCacheMetadata().then((_) {
       update.changeTokenState(true);
+      update.updateFlagState(true);
       Navigator.of(context).pop();
     });
   }
@@ -215,7 +216,7 @@ color: Colors.white
                       'selected_calibre_lib_name',
                       pathNameMap.values.first,
                     ).then((_) {
-                      update.changeTokenState(true);
+//                      update.changeTokenState(true);
 //                        update.updateFlagState(true);
                     });
                     if (pathNameMap.length > 1) {
@@ -254,30 +255,35 @@ color: Colors.white
                               ),
                             ));
                       }).toList();
-
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return AlertDialog(
-                              contentPadding: EdgeInsets.all(10),
-                              content: Container(
-                                width: 300,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Container(
-                                        child: Text(
-                                      'Select Library',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'Montserrat',
-                                          color: Color(0xff002242)),
-                                    )),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    Column(children: columnChildren)
-                                  ],
+                            return WillPopScope( onWillPop: ()async{
+                              update.updateFlagState(true);
+                              update.changeTokenState(true);
+                              return true;
+                            },
+                              child: AlertDialog(
+                                contentPadding: EdgeInsets.all(10),
+                                content: Container(
+                                  width: 300,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Container(
+                                          child: Text(
+                                        'Select Library',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: 'Montserrat',
+                                            color: Color(0xff002242)),
+                                      )),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Column(children: columnChildren)
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
