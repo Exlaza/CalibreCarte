@@ -38,7 +38,9 @@ class CalibreGridTile extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Container(key: Key(book.id.toString()+book.title),child: BookDetailsCoverImage(book.id, book.path, null, null)),
+          Container(
+              key: Key(book.path),
+              child: BookDetailsCoverImage(book.id, book.path, null, null)),
           Material(
             color: Colors.transparent,
             child: InkWell(
@@ -61,7 +63,8 @@ class CalibreGridTile extends StatelessWidget {
 //              width: MediaQuery.of(context).size.width / 2.4,
                 child: Row(
                   children: <Widget>[
-                    Container(width: MediaQuery.of(context).size.width/2.5,
+                    Container(
+                      width: MediaQuery.of(context).size.width / 2.5,
                       padding: EdgeInsets.only(left: 3),
                       child: Text(
                         book.title,
