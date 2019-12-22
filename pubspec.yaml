@@ -58,8 +58,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/calibre_logo.png
-    - assets/images/subtle_wood.png
+    - assets/images/logo.png
     - dropbox.json
   #  - images/a_dot_ham.jpeg
 
@@ -83,9 +82,7 @@ flutter:
           weight: 600
         - asset: assets/fonts/Montserrat-Bold.ttf
           weight: 700
-    - family: Roboto
-      fonts:
-        - asset: assets/fonts/Roboto-Regular.ttf
+
 
   # fonts:
   #   - family: Schyler

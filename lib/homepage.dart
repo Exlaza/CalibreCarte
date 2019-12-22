@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/settings_screen.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Observable(_textUpdates.stream)
         .debounce((_) => TimerStream(true, const Duration(milliseconds: 500)))
         .forEach((s) {
-      if ((filter != s) || (filter == "")){
+      if ((filter != s) || (filter == "")) {
         setState(() {
           filter = s;
         });
@@ -101,8 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
 ////      });
 //    });
 
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       return SettingsNew();
     }));
   }
@@ -217,8 +217,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return IconButton(
       icon: Icon(Icons.close),
       onPressed: () {
-        _appBarTitle = Text("Calibre Carte",style: TextStyle(fontFamily: 'Montserrat',
-            color: Colors.white),);
+        _appBarTitle = Text(
+          "Calibre Carte",
+          style: TextStyle(fontFamily: 'Montserrat', color: Colors.white),
+        );
         controller.clear();
       },
     );
@@ -226,7 +228,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _searchPressed(String searchFil) {
     setState(() {
-      _appBarTitle = new TextField(style: TextStyle(color: Colors.white), autofocus: true,
+      _appBarTitle = new TextField(
+        style: TextStyle(color: Colors.white),
+        autofocus: true,
         controller: controller,
         decoration: new InputDecoration(
             prefixIcon: closeButton(), hintText: 'Search for ${searchFil}s'),
@@ -234,33 +238,33 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Widget _appBarTitle = const Text("Calibre Carte",style: TextStyle(fontFamily: 'Montserrat',
-      color: Colors.white),);
+  Widget _appBarTitle = const Text(
+    "Calibre Carte",
+    style: TextStyle(fontFamily: 'Montserrat', color: Colors.white),
+  );
 
   @override
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
     String searchFilter = update.searchFilter;
-    ColorTheme colortheme= Provider.of(context);
+    ColorTheme colortheme = Provider.of(context);
 //    print("rebuilding homepage");
     return Container(
       child: Scaffold(
           backgroundColor: colortheme.descriptionBackground,
-          appBar: AppBar(
-              backgroundColor: Color(0xff002242),
-              title: _appBarTitle,
+          appBar:
+              AppBar(backgroundColor: Color(0xff002242), title: _appBarTitle,
 //              leading:
-//                  Image.asset('assets/images/calibre_logo.png', scale: 0.4),
-              actions: <Widget>[
+                  actions: <Widget>[
                 // action button
                 IconButton(
-                  icon: Icon(Icons.search,color: Color(0xffFED962)),
+                  icon: Icon(Icons.search, color: Colors.white),
                   onPressed: () {
                     _searchPressed(searchFilter);
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.more_vert,color: Color(0xffFED962)),
+                  icon: Icon(Icons.more_vert, color: Colors.white),
                   onPressed: () {
                     _settingModalBottomSheet(context);
                   },
@@ -286,8 +290,34 @@ class _MyHomePageState extends State<MyHomePage> {
                     );
                   } else {
                     return Center(
-                      child: Text('Please Connect to dropbox', style: TextStyle(fontFamily: 'Montserrat',
-                          color: colortheme.headerText) ,),
+                      child: RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text:
+                                  'Please go to ',
+                              style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  color: colortheme.headerText,
+                                  fontSize: 15)),TextSpan( recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                            return SettingsNew();
+                          }));
+                        },
+                              text:
+                              'Settings',
+                              style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  color: Colors.blue,
+                                  fontSize: 15)),TextSpan(
+                              text:
+                              ' and connect to Dropbox',
+                              style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  color: colortheme.headerText,
+                                  fontSize: 15))
+                        ]),
+                      ),
                     );
                   }
                 } else {

@@ -114,7 +114,7 @@ class _BooksViewState extends State<BooksView> {
                     ? BooksGridView(widget.filter, books)
                     : BooksListView(widget.filter, books));
           } else {
-            return CircularProgressIndicator();
+            return Center(child:  CircularProgressIndicator(),);
           }
         });
   }

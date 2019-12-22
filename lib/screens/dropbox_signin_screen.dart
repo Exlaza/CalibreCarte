@@ -15,9 +15,10 @@ import 'package:http/http.dart';
 
 class DropboxAuthentication extends StatefulWidget {
   final String selectedUrl;
+  final BuildContext oldContext;
 
   DropboxAuthentication({
-    @required this.selectedUrl,
+    @required this.selectedUrl, this.oldContext
   });
 
   @override
@@ -28,7 +29,7 @@ class DropboxAuthentication extends StatefulWidget {
 class _DropboxAuthenticationState extends State<DropboxAuthentication> {
   final url;
   final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+  Completer<WebViewController>();
   bool _isLoadingPage;
   final key = UniqueKey();
   num _stackToView = 1;
@@ -114,15 +115,48 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     sp.setInt(key, val);
   }
 
-  selectingCalibreLibrary(key, val, update) {
+  selectingCalibreLibrary(key, val, update, token) {
     storeStringInSharedPrefs('selected_calibre_lib_path', key);
-    storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_) {
+    storeStringInSharedPrefs('selected_calibre_lib_name', val);
+    MetadataCacher().downloadAndCacheMetadata(token:token).then((val) {
+      if (val == true) {
+//        print("storing token");
+        storeStringInSharedPrefs('token', token);
+//        print("stored token");
+        update.changeTokenState(true);
+        update.updateFlagState(true);
+      }
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
       Navigator.of(context).pop();
     });
-    MetadataCacher().downloadAndCacheMetadata().then((_) {
-      update.changeTokenState(true);
-      Navigator.of(context).pop();
-    });
+  }
+
+  _showLoading(BuildContext context) {
+    showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return WillPopScope(
+              onWillPop: () async => false,
+              child: SimpleDialog(
+                  key: UniqueKey(),
+                  backgroundColor: Colors.black54,
+                  children: <Widget>[
+                    Center(
+                      child: Column(children: [
+                        CircularProgressIndicator(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Loading Calibre library",
+                          style: TextStyle(color: Colors.blueAccent),
+                        )
+                      ]),
+                    )
+                  ]));
+        });
   }
 
   @override
@@ -135,10 +169,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
           color: Colors.white, //change your color here
         ),
         title: Text('Dropbox Login',
-            style: TextStyle(
-              fontFamily: 'Montserrat',
-color: Colors.white
-            )),
+            style: TextStyle(fontFamily: 'Montserrat', color: Colors.white)),
       ),
       body: IndexedStack(
         index: _stackToView,
@@ -173,7 +204,6 @@ color: Colors.white
                   }
                 });
                 // Step 2: Storing token in shared prefs. Remember this is async so, the next statement would be executed immediately
-                storeStringInSharedPrefs('token', token);
                 // Step 3 Make a call to search for calibre libs
                 Map<String, String> pathNameMap = Map();
                 _makePostRequest(token).then((response) {
@@ -186,13 +216,13 @@ color: Colors.white
                       if (element["metadata"]["metadata"]["name"] ==
                           "metadata.db") {
                         String libPath =
-                            element["metadata"]["metadata"]["path_display"];
+                        element["metadata"]["metadata"]["path_display"];
                         libPath = libPath.replaceAll('metadata.db', "");
                         List<String> directories = element["metadata"]
-                                ["metadata"]["path_display"]
+                        ["metadata"]["path_display"]
                             .split('/');
                         String libName =
-                            directories.elementAt(directories.length - 2);
+                        directories.elementAt(directories.length - 2);
                         pathNameMap.putIfAbsent(libPath, () => libName);
 //                        print(pathNameMap);
                       }
@@ -206,7 +236,7 @@ color: Colors.white
                       storeStringInSharedPrefs(libName, pathNameMap[path]);
                     });
 
-                    // TODO: MAKE THIS FASTER
+                    // TODO: Default selection
                     storeStringInSharedPrefs(
                       'selected_calibre_lib_path',
                       pathNameMap.keys.first,
@@ -214,22 +244,18 @@ color: Colors.white
                     storeStringInSharedPrefs(
                       'selected_calibre_lib_name',
                       pathNameMap.values.first,
-                    ).then((_) {
-                      update.changeTokenState(true);
-//                        update.updateFlagState(true);
-                    });
+                    );
                     if (pathNameMap.length > 1) {
                       // First set the no of libraries in shared prefs
                       // Show a pop up which displays the list of libraries
 //                      print('I have come inside the popup dispaly htingy');
                       List<Widget> columnChildren =
-                          pathNameMap.keys.toList().map((element) {
+                      pathNameMap.keys.toList().map((element) {
                         return InkWell(
                             onTap: () {
-//                              print("first selected lib path ${element}");
-//                            print("first selected lib name ${pathNameMap[element]}");
+                              _showLoading(context);
                               selectingCalibreLibrary(
-                                  element, pathNameMap[element], update);
+                                  element, pathNameMap[element], update, token);
                             },
                             child: Container(
                               padding: EdgeInsets.all(8),
@@ -254,53 +280,72 @@ color: Colors.white
                               ),
                             ));
                       }).toList();
-
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return AlertDialog(
-                              contentPadding: EdgeInsets.all(10),
-                              content: Container(
-                                width: 300,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Container(
-                                        child: Text(
-                                      'Select Library',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'Montserrat',
-                                          color: Color(0xff002242)),
-                                    )),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    Column(children: columnChildren)
-                                  ],
+                            return WillPopScope(
+                              onWillPop: () async {
+                                _showLoading(context);
+                                await MetadataCacher()
+                                    .downloadAndCacheMetadata(token:token)
+                                    .then((val) {
+                                  if (val == true) {
+                                    storeStringInSharedPrefs('token', token);
+                                    update.changeTokenState(true);
+                                    update.updateFlagState(true);
+                                  }
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
+                                });
+                                return true;
+                              },
+                              child: AlertDialog(
+                                contentPadding: EdgeInsets.all(10),
+                                content: Container(
+                                  width: 300,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Container(
+                                          child: Text(
+                                            'Select Library',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontFamily: 'Montserrat',
+                                                color: Color(0xff002242)),
+                                          )),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Column(children: columnChildren)
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
                           });
                     } else {
-                      // Her we have only one library so we make that the default
-                      storeStringInSharedPrefs(
-                        'selected_calibre_lib_path',
-                        pathNameMap.keys.first,
-                      );
-                      storeStringInSharedPrefs(
-                        'selected_calibre_lib_name',
-                        pathNameMap.values.first,
-                      ).then((_) {
-                        update.changeTokenState(true);
-                        update.updateFlagState(true);
+                      _showLoading(context);
+                      storeStringInSharedPrefs('selected_calibre_lib_path', pathNameMap.keys.first);
+                      storeStringInSharedPrefs('selected_calibre_lib_name', pathNameMap.values.first);
+                      MetadataCacher().downloadAndCacheMetadata(token:token).then((val) {
+                        if (val == true) {
+//                          print("storing token");
+                          storeStringInSharedPrefs('token', token);
+//                          print("stored token");
+                          update.changeTokenState(true);
+                          update.updateFlagState(true);
+                        }
+                        Navigator.of(context).pop();
                         Navigator.of(context).pop();
                       });
+                      // Her we have only one library so we make that the default
                     }
                   } else {
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text("No Calibre libraries found"),
-                    ));
+                    Scaffold.of(widget.oldContext).showSnackBar(
+                        SnackBar(content: Text("No Calibre libraries found"),));
+                    Navigator.of(context)
+                        .pop();
                     // Show the bottom snack bar that no libraries found and Pop out of this context
                   }
                 });

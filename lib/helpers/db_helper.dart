@@ -38,7 +38,11 @@ class DatabaseHelper {
   initDb() async {
 //    print("I am inside initDb");
     String path = await getDatabasePath();
-    var exists = await databaseExists(path);
+    bool exists;
+    try{await databaseExists(path);
+    exists=true;}catch(e){
+      print("database exception partial download $e");
+    }
 
     if (!exists) {
 //      print("Database at path doesn't exist");
@@ -54,7 +58,13 @@ class DatabaseHelper {
 //      print("Database at path exists");
     }
 //    print("Open gets called asfter this stateemnt");
-    return await openDatabase("metadata.db");
+    try{return await openDatabase("metadata.db");}catch(e){
+      print("fucking exception $e");
+      MetadataCacher mc = MetadataCacher();
+//      print('Metdata cacher should now run"');
+      await mc.downloadAndCacheMetadata();
+      return await openDatabase("metadata.db");
+    }
   }
 
   static deleteDb() async {
