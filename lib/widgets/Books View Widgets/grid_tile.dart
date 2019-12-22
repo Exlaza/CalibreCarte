@@ -38,7 +38,7 @@ class CalibreGridTile extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          BookDetailsCoverImage(book.id, book.path, null, null),
+          Container(key: Key(book.id.toString()+book.title),child: BookDetailsCoverImage(book.id, book.path, null, null)),
           Material(
             color: Colors.transparent,
             child: InkWell(
