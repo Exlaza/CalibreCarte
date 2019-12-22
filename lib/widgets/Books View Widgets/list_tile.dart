@@ -52,7 +52,7 @@ class CoolTile extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Container(
-              child: Container(
+              child: Container( color: Colors.white,
                 child: BookDetailsCoverImage(
                     books[index].id,
                     books[index].path,

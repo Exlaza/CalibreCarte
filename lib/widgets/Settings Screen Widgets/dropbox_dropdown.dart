@@ -77,8 +77,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   }
 
   selectingCalibreLibrary(key, val, update) {
-    storeStringInSharedPrefs('selected_calibre_lib_path', key);
-    storeStringInSharedPrefs('selected_calibre_lib_name', val).then((_) {
+
 //      Navigator.of(context).pop();
       showDialog<void>(
           context: context,
@@ -104,10 +103,14 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                       )
                     ]));
           });
-    });
 
-    MetadataCacher().downloadAndCacheMetadata().then((_) {
-      update.updateFlagState(true);
+
+    MetadataCacher().downloadAndCacheMetadata(path:key).then((value) {
+      if(value==true){
+        storeStringInSharedPrefs('selected_calibre_lib_path', key);
+        storeStringInSharedPrefs('selected_calibre_lib_name', val);
+        update.updateFlagState(true);
+      }
       Navigator.of(context).pop();
     });
   }
@@ -239,10 +242,19 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       return [Text("No libraries found")];
     }
   }
-
+  Future<bool> checkNet() async {
+    try {
+      var result = await InternetAddress.lookup('www.google.com');
+//      print("internet is $result");
+      return true;
+    } on SocketException catch (_) {
+      return false;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
+    BuildContext oldContext=context;
     ColorTheme colorTheme = Provider.of(context);
     return FutureBuilder(
       future: myFuture,
@@ -252,15 +264,22 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
             final url =
                 'https://www.dropbox.com/oauth2/authorize?client_id=${clientId}&response_type=token&redirect_uri=${DropboxDropdown.redirectUri}';
             return ConnectButton(() {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return DropboxAuthentication(
-                  selectedUrl: url,
-                );
-              })).then((_) {
-                setState(() {
-                  myFuture = loadingToken();
-                });
+              checkNet().then((val){
+                if(val==false){
+                  Scaffold.of(context).showSnackBar(SnackBar(content: Text("No internet"),));
+                }
+                else{
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                    return DropboxAuthentication(
+                      selectedUrl: url, oldContext: oldContext,
+                    );
+                  })).then((_) {
+                    setState(() {
+                      myFuture = loadingToken();
+                    });
 //                              update.updateFlagState(true);
+                  });
+                }
               });
             });
           } else {
@@ -355,6 +374,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                     setState(() {
                       myFuture = loadingToken();
                       update.changeTokenState(false);
+                      update.updateFlagState(true);
                     });
                   }),
                   SizedBox(

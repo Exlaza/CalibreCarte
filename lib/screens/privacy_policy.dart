@@ -152,6 +152,52 @@ class PrivacyPolicy extends StatelessWidget {
                     ]),
                   ))
                 ],
+              ),
+          SizedBox(
+          height: 10,
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              "\u2022",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Expanded(
+                child: RichText(
+                  text: TextSpan(children: [
+                    TextSpan(
+                        text: "Calibre Carte requires permissions to access device storage only for storing and accessing downloaded books.",
+                        style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            color: Colors.black,
+                            fontSize: 15))
+                  ]),
+                ))
+          ],
+        ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "\u2022",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Expanded(
+                      child: RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                              text: "Calibre Carte requires permissions to access files and folders on your Dropbox© account only to scan for available Calibre Libraries and download Calibre Libraries. Calibre Carte does not do anything else with your data on Dropbox.",
+                              style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  color: Colors.black,
+                                  fontSize: 15))
+                        ]),
+                      ))
+                ],
               )
             ],
           ),
