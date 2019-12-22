@@ -54,12 +54,12 @@ class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == true) {
             return widget.height==null?Image.file(
-                File(localImagePath)):Image.file(
-              File(localImagePath),height: widget.height,
+                File(localImagePath), key: UniqueKey(),):Image.file(
+              File(localImagePath),key: UniqueKey(),height: widget.height,
               width:widget.width,fit: BoxFit.fill,
             );
           } else
-            return widget.height==null?Image.asset('assets/images/logo.png', height: widget.height,
+            return widget.height==null?Image.asset('assets/images/logo.png', key: UniqueKey(), height: widget.height,
                 width:widget.width,fit: BoxFit.fitWidth):Image.asset('assets/images/logo.png',height: widget.height,
                 width:widget.width,fit: BoxFit.fitWidth);
         } else {
