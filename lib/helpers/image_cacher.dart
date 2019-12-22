@@ -59,9 +59,10 @@ class ImageCacher {
 //      print(response.statusCode);
       return false;
     }
+    String bookTitle = relativePath.split("/")[1];
     List<int> bytes = response.bodyBytes;
     Directory tempDir = await getTemporaryDirectory();
-    String pathMetadata = join(tempDir.path + "/cover_$bookID.jpg");
+    String pathMetadata = join(tempDir.path + "/cover_${bookID}_$bookTitle.jpg");
     await File(pathMetadata).writeAsBytes(bytes, flush: true);
     return true;
   }
@@ -78,9 +79,10 @@ class ImageCacher {
     await File(pathMetadata).writeAsBytes(bytes, flush: true);
   }
 
-  Future<bool> checkIfCachedFileExists(bookID) async {
+  Future<bool> checkIfCachedFileExists(relativePath, bookID) async {
+    String bookTitle = relativePath.split("/")[1];
     Directory tempDir = await getTemporaryDirectory();
-    String pathMetadata = join(tempDir.path + "/cover_$bookID.jpg");
+    String pathMetadata = join(tempDir.path + "/cover_${bookID}_$bookTitle.jpg");
     return await File(pathMetadata).exists();
   }
 
@@ -90,9 +92,10 @@ class ImageCacher {
     return await File(pathMetadata).exists();
   }
 
-  Future<String> returnCachedImagePath(bookID) async {
+  Future<String> returnCachedImagePath(relativePath, bookID) async {
+    String bookTitle = relativePath.split("/")[1];
     Directory tempDir = await getTemporaryDirectory();
-    String pathMetadata = join(tempDir.path + "/cover_$bookID.jpg");
+    String pathMetadata = join(tempDir.path + "/cover_${bookID}_$bookTitle.jpg");
     return pathMetadata;
   }
 

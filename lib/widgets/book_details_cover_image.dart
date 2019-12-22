@@ -25,13 +25,13 @@ class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
     ImageCacher ic = ImageCacher();
     bool imageExists = true;
 
-    bool exists = await ic.checkIfCachedFileExists(widget.bookId);
+    bool exists = await ic.checkIfCachedFileExists(widget.relativePath, widget.bookId);
     if (!exists) {
       imageExists =
       await ic.downloadAndCacheImage(widget.relativePath, widget.bookId);
     }
     if (imageExists == true) {
-      localImagePath = await ic.returnCachedImagePath(widget.bookId);
+      localImagePath = await ic.returnCachedImagePath(widget.relativePath, widget.bookId);
       return true;
     }
     if (imageExists == false) {
