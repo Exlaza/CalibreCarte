@@ -1,6 +1,11 @@
 # Calibre Carte
 
-A modern calibre library viewer for android. Made with Flutter.
+A modern calibre library viewer for android. Made with Flutter. 
+
+Available on [Google Play](https://play.google.com/store/apps/details?id=com.calibre_carte.app)
+
+## Screenshots:
+<img src="https://github.com/Exlaza/CalibreCarte/blob/PrernaD-readmepatch-1/Calibre%20Carte%20Screenshots/tia235727476813115392.png" height="520px" > <img src="https://github.com/Exlaza/CalibreCarte/blob/PrernaD-readmepatch-1/Calibre%20Carte%20Screenshots/tia6743131661132596715.png" height="520px" >  <img src="https://github.com/Exlaza/CalibreCarte/blob/PrernaD-readmepatch-1/Calibre%20Carte%20Screenshots/tia4167180534174613768.png" height="520px" >    <img src="https://github.com/Exlaza/CalibreCarte/blob/PrernaD-readmepatch-1/Calibre%20Carte%20Screenshots/tia6785812278623844465.png" height="520px" >  <img src="https://github.com/Exlaza/CalibreCarte/blob/PrernaD-readmepatch-1/Calibre%20Carte%20Screenshots/tia7383909655501564497.png" height="520px" >  <img src="https://github.com/Exlaza/CalibreCarte/blob/PrernaD-readmepatch-1/Calibre%20Carte%20Screenshots/tia8923551482651499786.png" height="520px" >  
 
 ## Features:
   - [x] Dropbox support
