@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/html_parser.dart';
-import 'package:flutter_html/style.dart';
+//import 'package:flutter_html/style.dart';
 
 class DetailsSidebar extends StatelessWidget {
   final totalHeight;
@@ -62,12 +62,11 @@ class DetailsSidebar extends StatelessWidget {
               child: Container(
                 child: bookComments != null
                     ? Html(
-                        data: bookComments.text,
-                        style: {"html": Style(
-                            fontSize: FontSize(32),
-                            fontFamily: 'Montserrat',
-                            color: Colors.white
-                        )})
+                    data: bookComments.text,
+                    defaultTextStyle: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Montserrat',
+                        color: Colors.white))
                 : Container(
                         alignment: Alignment.bottomCenter,
                         height: MediaQuery.of(context).size.height / 2,
