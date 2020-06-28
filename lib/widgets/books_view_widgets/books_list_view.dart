@@ -1,7 +1,7 @@
 import 'package:calibre_carte/models/books.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
-import 'package:calibre_carte/widgets/Books%20View%20Widgets/list_tile.dart';
+import 'package:calibre_carte/widgets/books_view_widgets/list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,6 +1,6 @@
 import 'package:calibre_carte/helpers/book_downloader.dart';
-import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/open_format_dialog.dart';
-import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/select_format_dialog.dart';
+import 'package:calibre_carte/widgets/details_screen_widgets/open_format_dialog.dart';
+import 'package:calibre_carte/widgets/details_screen_widgets/select_format_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
