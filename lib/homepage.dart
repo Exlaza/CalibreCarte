@@ -250,6 +250,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ColorTheme colortheme = Provider.of(context);
 //    print("rebuilding homepage");
     return Container(
+      key: Key("homePageContainer"),
       child: Scaffold(
           backgroundColor: colortheme.descriptionBackground,
           appBar:
@@ -290,6 +291,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     );
                   } else {
                     return Center(
+                      key: Key("homePageWithoutSP"),
                       child: RichText(
                         text: TextSpan(children: [
                           TextSpan(
@@ -298,7 +300,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               style: TextStyle(
                                   fontFamily: 'Montserrat',
                                   color: colortheme.headerText,
-                                  fontSize: 15)),TextSpan( recognizer: TapGestureRecognizer()
+                                  fontSize: 15)),
+                          TextSpan( recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                             return SettingsNew();

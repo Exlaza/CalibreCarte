@@ -105,6 +105,7 @@ class _BooksViewState extends State<BooksView> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
+      key: Key("homePageWithSP"),
         future: afterSorting,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
