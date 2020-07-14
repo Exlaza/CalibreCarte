@@ -1,8 +1,8 @@
 import 'package:calibre_carte/helpers/book_author_link_provider.dart';
 import 'package:calibre_carte/models/books_authors_link.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
-import 'package:calibre_carte/widgets/Books%20View%20Widgets/books_grid_view.dart';
-import 'package:calibre_carte/widgets/Books%20View%20Widgets/books_list_view.dart';
+import 'package:calibre_carte/widgets/books_view_widgets/books_grid_view.dart';
+import 'package:calibre_carte/widgets/books_view_widgets/books_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:calibre_carte/helpers/authors_provider.dart';
 import 'package:calibre_carte/helpers/books_provider.dart';

@@ -2,7 +2,7 @@ import 'package:calibre_carte/models/publishers.dart';
 import 'package:calibre_carte/models/ratings.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
-import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/rating.dart';
+import 'package:calibre_carte/widgets/details_screen_widgets/rating.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -1,7 +1,7 @@
 import 'package:calibre_carte/models/publishers.dart';
 import 'package:calibre_carte/models/ratings.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
-import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/details_text.dart';
+import 'package:calibre_carte/widgets/details_screen_widgets/details_text.dart';
 import 'package:flutter/material.dart';
 
 class DetailsLeftTile extends StatelessWidget {

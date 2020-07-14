@@ -1,9 +1,11 @@
 import 'package:calibre_carte/helpers/book_downloader.dart';
-import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/open_format_dialog.dart';
-import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/select_format_dialog.dart';
+import 'package:calibre_carte/widgets/details_screen_widgets/open_format_dialog.dart';
+import 'package:calibre_carte/widgets/details_screen_widgets/select_format_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/html_parser.dart';
+//import 'package:flutter_html/style.dart';
 
 class DetailsSidebar extends StatelessWidget {
   final totalHeight;
@@ -41,6 +43,7 @@ class DetailsSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width -
         MediaQuery.of(context).size.width / 1.5;
+    print(bookComments.text);
     Widget descriptionPopup() {
       return Scaffold(
         backgroundColor: Colors.black.withOpacity(0.2),
@@ -59,12 +62,12 @@ class DetailsSidebar extends StatelessWidget {
               child: Container(
                 child: bookComments != null
                     ? Html(
-                        data: bookComments.text,
-                        defaultTextStyle: TextStyle(
-                            fontSize: 20,
-                            fontFamily: 'Montserrat',
-                            color: Colors.white))
-                    : Container(
+                    data: bookComments.text,
+                    defaultTextStyle: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Montserrat',
+                        color: Colors.white))
+                : Container(
                         alignment: Alignment.bottomCenter,
                         height: MediaQuery.of(context).size.height / 2,
                         child: Text(
