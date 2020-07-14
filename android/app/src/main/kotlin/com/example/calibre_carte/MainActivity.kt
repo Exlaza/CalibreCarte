@@ -1,4 +1,4 @@
-package com.example.calibre_carte
+package com.calibre_carte.app
 
 import android.os.Bundle
 
