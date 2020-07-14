@@ -59,7 +59,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     _sub = getLinksStream().listen((String link) {
       //Although this is not needed now, but Google actually recommends against using a webview for,
       //So assuming in future we need to do it the url_launcher way then we would have to use this method
-//      print(link);
+      print(link);
       //So, just keeping it here.
       // Parse the link and warn the user, if it is not correct
     }, onError: (err) {
@@ -94,15 +94,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     initUniLinks();
   }
 
-  _launchURL(String url) async {
-//    print(await canLaunch(url));
-    if (await canLaunch(url)) {
-//      print('url');
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+
 
   Future<void> storeStringInSharedPrefs(key, val) async {
 //    print("Storing token");
@@ -174,6 +166,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
       body: IndexedStack(
         index: _stackToView,
         children: <Widget>[
+          Text('Redirecting to dropbox'),
           WebView(
             key: key,
             javascriptMode: JavascriptMode.unrestricted,
@@ -183,7 +176,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
             },
             navigationDelegate: (NavigationRequest request) {
               if (request.url.startsWith('calibrecarte://dropbox')) {
-                _launchURL(request.url);
+//                _launchURL(request.url);
                 //Here you parse the url and get back the token value and send it wherever or store it in some state
                 //List opf things to do
                 // 1. Parse the token from the url. 2. Store the token in shared prefs
