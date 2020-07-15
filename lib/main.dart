@@ -4,6 +4,7 @@ import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,6 +74,15 @@ class _MyAppState extends State<MyApp> {
             child: MaterialApp(
               title: "Calibre Carte",
               home: MyHomePage(),
+              supportedLocales: [
+                Locale('en', 'US'),
+                Locale('hi', 'IN')
+              ],
+              localizationsDelegates: [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
             ),
           );
         } else {
