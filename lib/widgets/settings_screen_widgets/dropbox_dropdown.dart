@@ -6,6 +6,7 @@ import 'package:calibre_carte/helpers/cache_invalidator.dart';
 import 'package:calibre_carte/helpers/configuration.dart';
 import 'package:calibre_carte/helpers/config_loader.dart';
 import 'package:calibre_carte/helpers/metadata_cacher.dart';
+import 'package:calibre_carte/helpers/oauth_helper.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/dropbox_signin_screen.dart';
@@ -24,7 +25,8 @@ import 'package:http/http.dart' as http;
 
 class DropboxDropdown extends StatefulWidget {
 //  static const clientID = 'h1csd4yy5cxl0rl';
-  static const redirectUri = 'calibrecarte://dropbox';
+  static const redirectUriCode = 'calibrecarte://dropbox/code';
+  static const redirectUriToken = 'calibrecarte://dropbox/token';
 
   @override
   _DropboxDropdownState createState() => _DropboxDropdownState();
@@ -35,6 +37,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   String dropboxEmail;
   String selected_calibre_lib_dir;
   String selected_lib_name;
+  String token;
   List<String> dirNames = [];
   int noOfCalibreLibs;
   bool hasChanged;
@@ -90,6 +93,21 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     };
     String json =
         '{"query": "metadata.db", "options":{"filename_only":true, "file_extensions":["db"]}}'; // make POST request
+    Response response = await post(url, headers: headers, body: json);
+    int statusCode = response.statusCode;
+    String body = response.body;
+    return response;
+  }
+
+  _makePostRequestCode(code) async {
+//    print(token);
+    // set up POST request arguments
+    String url = 'https://api.dropboxapi.com/oauth2/token';
+    Map<String, String> headers = {
+      "Content-type": "application/json"
+    };
+    String json =
+        '{"code", $code, "grant_type"="authorization_code", "code_verifier"=${OAuthUtils.codeVerifier}, "client_id":$clientId }'; // make POST request
     Response response = await post(url, headers: headers, body: json);
     int statusCode = response.statusCode;
     String body = response.body;
@@ -197,167 +215,177 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       //Although this is not needed now, but Google actually recommends against using a webview for,
       //So assuming in future we need to do it the url_launcher way then we would have to use this method
       print(link);
-      if (link.startsWith(DropboxDropdown.redirectUri)){
+      if (link.startsWith(DropboxDropdown.redirectUriCode)){
 
         Update update = Provider.of<Update>(context, listen: false);
 
         var uri = Uri.parse(link);
         // Step 1. Parse the token
-        String token;
+        String code;
+
         var tempUri = Uri.parse('http://calibrecarte.com?${uri.fragment}');
         tempUri.queryParameters.forEach((k, v) {
-          if (k == "access_token") {
-            token = v;
+          if (k == "code") {
+            code = v;
           }
+//          if (k == "access_token") {
+//            token = v;
+//          }
+
         });
 
-        Map<String, String> pathNameMap = Map();
-        _makePostRequest(token).then((response) {
-          //Make a map Map<String, String> First value is the base path in lower case
-          // Second Value is the name of the Folder(Library)
-          // I have to convert string response.body to json
+        _makePostRequestCode(code).then((response){
           Map<String, dynamic> responseJson = jsonDecode(response.body);
-          if (responseJson['matches'].length != 0) {
-            responseJson['matches'].forEach((element) {
-              if (element["metadata"]["metadata"]["name"] ==
-                  "metadata.db") {
-                String libPath =
-                element["metadata"]["metadata"]["path_display"];
-                libPath = libPath.replaceAll('metadata.db', "");
-                List<String> directories = element["metadata"]
-                ["metadata"]["path_display"]
-                    .split('/');
-                String libName =
-                directories.elementAt(directories.length - 2);
-                pathNameMap.putIfAbsent(libPath, () => libName);
-//                        print(pathNameMap);
-              }
-            });
-            storeIntInSharedPrefs(
-                'noOfCalibreLibs', pathNameMap.length);
-            pathNameMap.keys.toList().asMap().forEach((index, path) {
-              String keyName = 'calibre_lib_path_$index';
-              String libName = 'calibre_lib_name_$index';
-              storeStringInSharedPrefs(keyName, path);
-              storeStringInSharedPrefs(libName, pathNameMap[path]);
-            });
+          token = responseJson['access_token'];
 
-            // TODO: Default selection
-            storeStringInSharedPrefs(
-              'selected_calibre_lib_path',
-              pathNameMap.keys.first,
-            );
-            storeStringInSharedPrefs(
-              'selected_calibre_lib_name',
-              pathNameMap.values.first,
-            );
-            if (pathNameMap.length > 1) {
-              // First set the no of libraries in shared prefs
-              // Show a pop up which displays the list of libraries
+
+          Map<String, String> pathNameMap = Map();
+          _makePostRequest(token).then((response) {
+            //Make a map Map<String, String> First value is the base path in lower case
+            // Second Value is the name of the Folder(Library)
+            // I have to convert string response.body to json
+            Map<String, dynamic> responseJson = jsonDecode(response.body);
+            if (responseJson['matches'].length != 0) {
+              responseJson['matches'].forEach((element) {
+                if (element["metadata"]["metadata"]["name"] ==
+                    "metadata.db") {
+                  String libPath =
+                  element["metadata"]["metadata"]["path_display"];
+                  libPath = libPath.replaceAll('metadata.db', "");
+                  List<String> directories = element["metadata"]
+                  ["metadata"]["path_display"]
+                      .split('/');
+                  String libName =
+                  directories.elementAt(directories.length - 2);
+                  pathNameMap.putIfAbsent(libPath, () => libName);
+//                        print(pathNameMap);
+                }
+              });
+              storeIntInSharedPrefs(
+                  'noOfCalibreLibs', pathNameMap.length);
+              pathNameMap.keys.toList().asMap().forEach((index, path) {
+                String keyName = 'calibre_lib_path_$index';
+                String libName = 'calibre_lib_name_$index';
+                storeStringInSharedPrefs(keyName, path);
+                storeStringInSharedPrefs(libName, pathNameMap[path]);
+              });
+
+              // TODO: Default selection
+              storeStringInSharedPrefs(
+                'selected_calibre_lib_path',
+                pathNameMap.keys.first,
+              );
+              storeStringInSharedPrefs(
+                'selected_calibre_lib_name',
+                pathNameMap.values.first,
+              );
+              if (pathNameMap.length > 1) {
+                // First set the no of libraries in shared prefs
+                // Show a pop up which displays the list of libraries
 //                      print('I have come inside the popup dispaly htingy');
-              List<Widget> columnChildren =
-              pathNameMap.keys.toList().map((element) {
-                return InkWell(
-                    onTap: () {
-                      _showLoading(context);
-                      selectingCalibreLibraryNew(
-                          element, pathNameMap[element], update, token);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Icon(
-                            Icons.folder,
-                            color: Color(0xffFED962),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            pathNameMap[element],
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontFamily: 'Montserrat',
-                                color: Color(0xff002242)),
-                          )
-                        ],
-                      ),
-                    ));
-              }).toList();
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return WillPopScope(
-                      onWillPop: () async {
+                List<Widget> columnChildren =
+                pathNameMap.keys.toList().map((element) {
+                  return InkWell(
+                      onTap: () {
                         _showLoading(context);
-                        await MetadataCacher()
-                            .downloadAndCacheMetadata(token:token)
-                            .then((val) {
-                          if (val == true) {
-                            storeStringInSharedPrefs('token', token);
-                            update.changeTokenState(true);
-                            update.updateFlagState(true);
-                          }
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                        });
-                        return true;
+                        selectingCalibreLibraryNew(
+                            element, pathNameMap[element], update, token);
                       },
-                      child: AlertDialog(
-                        contentPadding: EdgeInsets.all(10),
-                        content: Container(
-                          width: 300,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Container(
-                                  child: Text(
-                                    'Select Library',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontFamily: 'Montserrat',
-                                        color: Color(0xff002242)),
-                                  )),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Column(children: columnChildren)
-                            ],
+                      child: Container(
+                        padding: EdgeInsets.all(8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Icon(
+                              Icons.folder,
+                              color: Color(0xffFED962),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              pathNameMap[element],
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: 'Montserrat',
+                                  color: Color(0xff002242)),
+                            )
+                          ],
+                        ),
+                      ));
+                }).toList();
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return WillPopScope(
+                        onWillPop: () async {
+                          _showLoading(context);
+                          await MetadataCacher()
+                              .downloadAndCacheMetadata(token:token)
+                              .then((val) {
+                            if (val == true) {
+                              storeStringInSharedPrefs('token', token);
+                              update.changeTokenState(true);
+                              update.updateFlagState(true);
+                            }
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          });
+                          return true;
+                        },
+                        child: AlertDialog(
+                          contentPadding: EdgeInsets.all(10),
+                          content: Container(
+                            width: 300,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Container(
+                                    child: Text(
+                                      'Select Library',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: 'Montserrat',
+                                          color: Color(0xff002242)),
+                                    )),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Column(children: columnChildren)
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  });
-            } else {
-              _showLoading(context);
-              storeStringInSharedPrefs('selected_calibre_lib_path', pathNameMap.keys.first);
-              storeStringInSharedPrefs('selected_calibre_lib_name', pathNameMap.values.first);
-              MetadataCacher().downloadAndCacheMetadata(token:token).then((val) {
-                if (val == true) {
+                      );
+                    });
+              } else {
+                _showLoading(context);
+                storeStringInSharedPrefs('selected_calibre_lib_path', pathNameMap.keys.first);
+                storeStringInSharedPrefs('selected_calibre_lib_name', pathNameMap.values.first);
+                MetadataCacher().downloadAndCacheMetadata(token:token).then((val) {
+                  if (val == true) {
 //                          print("storing token");
-                  storeStringInSharedPrefs('token', token);
+                    storeStringInSharedPrefs('token', token);
 //                          print("stored token");
-                  update.changeTokenState(true);
-                  update.updateFlagState(true);
-                }
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              });
-              // Her we have only one library so we make that the default
+                    update.changeTokenState(true);
+                    update.updateFlagState(true);
+                  }
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                });
+                // Her we have only one library so we make that the default
+              }
+            } else {
+              Scaffold.of(context).showSnackBar(
+                  SnackBar(content: Text("No Calibre libraries found"),));
+              Navigator.of(context)
+                  .pop();
+              // Show the bottom snack bar that no libraries found and Pop out of this context
             }
-          } else {
-            Scaffold.of(context).showSnackBar(
-                SnackBar(content: Text("No Calibre libraries found"),));
-            Navigator.of(context)
-                .pop();
-            // Show the bottom snack bar that no libraries found and Pop out of this context
-          }
+          });
+
+
         });
-
-
-        ;
       }
       //So, just keeping it here.
       // Parse the link and warn the user, if it is not correct
@@ -522,13 +550,16 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     Update update = Provider.of(context);
 //    BuildContext oldContext = context;
     ColorTheme colorTheme = Provider.of(context);
+    print(OAuthUtils.codeVerifier);
     return FutureBuilder(
       future: myFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == false) {
+            final codeChallenge = OAuthUtils.generateAndEncodeCodeChallenge();
+
             final url =
-                'https://www.dropbox.com/oauth2/authorize?client_id=${clientId}&response_type=token&redirect_uri=${DropboxDropdown.redirectUri}';
+                'https://www.dropbox.com/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=${DropboxDropdown.redirectUriCode}&code_challenge=$codeChallenge&code_challenge_method=${OAuthUtils.codeChallengeMethod}';
             return ConnectButton(() {
               checkNet().then((val){
                 if(val==false){
