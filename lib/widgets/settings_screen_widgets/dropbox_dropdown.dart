@@ -25,7 +25,7 @@ import 'package:http/http.dart' as http;
 
 class DropboxDropdown extends StatefulWidget {
 //  static const clientID = 'h1csd4yy5cxl0rl';
-  static const redirectUriCode = 'calibrecarte://dropbox/code';
+  static const redirectUriCode = 'calibrecarte://dropbox';
   static const redirectUriToken = 'calibrecarte://dropbox/token';
 
   @override
@@ -102,13 +102,14 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   _makePostRequestCode(code) async {
 //    print(token);
     // set up POST request arguments
-    String url = 'https://api.dropboxapi.com/oauth2/token';
-    Map<String, String> headers = {
-      "Content-type": "application/json"
-    };
-    String json =
-        '{"code", $code, "grant_type"="authorization_code", "code_verifier"=${OAuthUtils.codeVerifier}, "client_id":$clientId }'; // make POST request
-    Response response = await post(url, headers: headers, body: json);
+    String url = 'https://api.dropbox.com/oauth2/token';
+//    Map<String, String> headers = {
+//      "Content-type": "application/json"
+//    };
+    print(code);
+    Map<String, dynamic> json = {"code":code, "redirect_uri": DropboxDropdown.redirectUriCode, "grant_type":"authorization_code", "code_verifier":OAuthUtils.codeVerifier, "client_id":clientId} ; // make POST request
+
+    Response response = await post(url, body: json);
     int statusCode = response.statusCode;
     String body = response.body;
     return response;
@@ -223,21 +224,20 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
         // Step 1. Parse the token
         String code;
 
-        var tempUri = Uri.parse('http://calibrecarte.com?${uri.fragment}');
-        tempUri.queryParameters.forEach((k, v) {
+        uri.queryParameters.forEach((k, v) {
           if (k == "code") {
             code = v;
           }
-//          if (k == "access_token") {
-//            token = v;
-//          }
 
         });
+
+        print("hohohohoohoho");
+        print(code);
 
         _makePostRequestCode(code).then((response){
           Map<String, dynamic> responseJson = jsonDecode(response.body);
           token = responseJson['access_token'];
-
+          print(responseJson);
 
           Map<String, String> pathNameMap = Map();
           _makePostRequest(token).then((response) {
