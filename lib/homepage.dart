@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:calibre_carte/helpers/language.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/settings_screen.dart';
@@ -238,6 +239,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void changeLanguage(Language language){
+    print(language.name);
+  }
+
   Widget _appBarTitle = const Text(
     "Calibre Carte",
     style: TextStyle(fontFamily: 'Montserrat', color: Colors.white),
@@ -269,6 +274,22 @@ class _MyHomePageState extends State<MyHomePage> {
                     _settingModalBottomSheet(context);
                   },
                 ),
+                DropdownButton(
+                  onChanged: (Language language) {
+                    changeLanguage(language);
+                  },
+                  icon: Icon(Icons.language, color: Colors.white,),
+                  underline: SizedBox(),
+                  items: Language.languageList().map((lang) => DropdownMenuItem(
+                    value: lang,
+                    child: Row(
+                      children: <Widget>[
+                        Text(lang.flag),
+                        Text(lang.name)
+                      ],
+                    ),
+                  )).toList(),
+                )
 //                IconButton(
 //                  icon: Icon(Icons.refresh),
 //                  onPressed: () {

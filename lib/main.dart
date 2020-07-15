@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:calibre_carte/homepage.dart';
+import 'package:calibre_carte/localisation/calibre_carte_localisation.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
@@ -79,10 +80,21 @@ class _MyAppState extends State<MyApp> {
                 Locale('hi', 'IN')
               ],
               localizationsDelegates: [
+                CalibreCarteLocalization.delegate,
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
               ],
+              localeResolutionCallback: (deviceLocale, supportedLocales) {
+                for (var locale in supportedLocales) {
+                  if (locale.languageCode == deviceLocale.languageCode && locale.countryCode == deviceLocale.countryCode){
+                    return deviceLocale;
+                  }
+                }
+
+                return supportedLocales.first;
+
+              },
             ),
           );
         } else {
