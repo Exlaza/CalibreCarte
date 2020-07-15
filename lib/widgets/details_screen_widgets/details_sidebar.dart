@@ -43,7 +43,6 @@ class DetailsSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width -
         MediaQuery.of(context).size.width / 1.5;
-    print(bookComments.text);
     Widget descriptionPopup() {
       return Scaffold(
         backgroundColor: Colors.black.withOpacity(0.2),
