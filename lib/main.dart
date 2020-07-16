@@ -17,6 +17,13 @@ void main() async {
 
 class MyApp extends StatefulWidget {
   @override
+
+  static void setLocale(BuildContext context, Locale locale){
+    _MyAppState state = context.findAncestorStateOfType<_MyAppState>();
+    state.setLocale(locale);
+
+  }
+
   _MyAppState createState() => _MyAppState();
 }
 
@@ -25,6 +32,14 @@ class _MyAppState extends State<MyApp> {
   String searchFilter;
   Future myFuture;
   bool darkMode;
+  Locale _locale;
+
+  void setLocale(Locale locale){
+    print("Chaging languge yeah bitches");
+    setState(() {
+      _locale = locale;
+    });
+  }
 
   Future<void> getTokenAndSearchFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -73,6 +88,7 @@ class _MyAppState extends State<MyApp> {
               )
             ],
             child: MaterialApp(
+              locale: _locale,
               title: "Calibre Carte",
               home: MyHomePage(),
               supportedLocales: [

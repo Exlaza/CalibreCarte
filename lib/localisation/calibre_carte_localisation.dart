@@ -22,12 +22,12 @@ class CalibreCarteLocalization {
 
     _localisedValues = mappedJson.map((key, val) => MapEntry(key, val.toString()));
 
-    String getTranslatedValues(String key) {
-      return _localisedValues[key];
-    }
-
-
   }
+
+  String getTranslatedValues(String key) {
+    return _localisedValues[key];
+  }
+
 
   static const LocalizationsDelegate<CalibreCarteLocalization> delegate = _CalibreCarteLocalizationDelegate();
 
