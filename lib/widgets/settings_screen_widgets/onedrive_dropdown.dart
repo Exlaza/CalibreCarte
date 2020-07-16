@@ -85,15 +85,15 @@ class _OneDriveDropdownState extends State<OneDriveDropdown> {
   _makePostRequest(token) async {
 //    print(token);
     // set up POST request arguments
-    String url = 'https://api.OneDriveapi.com/2/files/search_v2';
+    String url = "https://graph.microsoft.com/v1.0/me/drive/root/search(q='metadata.db')";
     Map<String, String> headers = {
       "Authorization": "Bearer $token",
-      "Content-type": "application/json"
     };
-    String json =
-        '{"query": "metadata.db", "options":{"filename_only":true, "file_extensions":["db"]}}'; // make POST request
-    Response response = await post(url, headers: headers, body: json);
+
+    Response response = await get(url, headers: headers);
     int statusCode = response.statusCode;
+    print("I am gonna search the shit out of it");
+    print(statusCode);
     String body = response.body;
     return response;
   }
@@ -219,8 +219,6 @@ class _OneDriveDropdownState extends State<OneDriveDropdown> {
       //Although this is not needed now, but Google actually recommends against using a webview for,
       //So assuming in future we need to do it the url_launcher way then we would have to use this method
 
-      print("yoyoyoyoyoyoy");
-      print(link);
       if (link.startsWith(OneDriveDropdown.redirectUri)){
 
         Update update = Provider.of<Update>(context, listen: false);
@@ -236,13 +234,10 @@ class _OneDriveDropdownState extends State<OneDriveDropdown> {
 
         });
 
-        print("hohohohoohoho");
-        print(code);
 
         _makePostRequestCode(code).then((response){
           Map<String, dynamic> responseJson = jsonDecode(response.body);
           token = responseJson['access_token'];
-          print(responseJson);
 
           Map<String, String> pathNameMap = Map();
           _makePostRequest(token).then((response) {
@@ -250,32 +245,35 @@ class _OneDriveDropdownState extends State<OneDriveDropdown> {
             // Second Value is the name of the Folder(Library)
             // I have to convert string response.body to json
             Map<String, dynamic> responseJson = jsonDecode(response.body);
-            if (responseJson['matches'].length != 0) {
-              responseJson['matches'].forEach((element) {
-                if (element["metadata"]["metadata"]["name"] ==
-                    "metadata.db") {
-                  String libPath =
-                  element["metadata"]["metadata"]["path_display"];
-                  libPath = libPath.replaceAll('metadata.db', "");
-                  List<String> directories = element["metadata"]
-                  ["metadata"]["path_display"]
+            print(responseJson['value'].length);
+//            print(responseJson['value'].length);
+            if (responseJson['value'].length != 0) {
+              responseJson['value'].forEach((element) {
+//                print(element['parentReference']['path']);
+//              });
+//             }
+                if (element["name"] == "metadata.db") {
+                  String libPath = element["parentReference"]["path"];
+//                  libPath = libPath.replaceAll('/drive/root:/', "");
+                  List<String> directories = element["parentReference"]["path"]
                       .split('/');
-                  String libName =
-                  directories.elementAt(directories.length - 2);
-                  pathNameMap.putIfAbsent(libPath, () => libName);
-//                        print(pathNameMap);
+                  String libName = directories.elementAt(directories.length -
+                      1);
+                  pathNameMap.putIfAbsent(libPath, () => libName.replaceAll('%20', " "));
+                  print(pathNameMap);
+//                  Not here spaces are given as %20 so Maybe you also have to send it in the same form back
                 }
               });
-              storeIntInSharedPrefs(
-                  'noOfCalibreLibs', pathNameMap.length);
+
+              storeIntInSharedPrefs('noOfCalibreLibsOneDrive', pathNameMap.length);
               pathNameMap.keys.toList().asMap().forEach((index, path) {
-                String keyName = 'calibre_lib_path_$index';
-                String libName = 'calibre_lib_name_$index';
+                String keyName = 'calibre_lib_path_onedrive_$index';
+                String libName = 'calibre_lib_name_onedrive_$index';
                 storeStringInSharedPrefs(keyName, path);
                 storeStringInSharedPrefs(libName, pathNameMap[path]);
               });
-
-              // TODO: Default selection
+//
+//              // TODO: Default selection
               storeStringInSharedPrefs(
                 'selected_calibre_lib_path',
                 pathNameMap.keys.first,
@@ -285,9 +283,9 @@ class _OneDriveDropdownState extends State<OneDriveDropdown> {
                 pathNameMap.values.first,
               );
               if (pathNameMap.length > 1) {
-                // First set the no of libraries in shared prefs
-                // Show a pop up which displays the list of libraries
-//                      print('I have come inside the popup dispaly htingy');
+//                // First set the no of libraries in shared prefs
+//                // Show a pop up which displays the list of libraries
+
                 List<Widget> columnChildren =
                 pathNameMap.keys.toList().map((element) {
                   return InkWell(
@@ -329,7 +327,7 @@ class _OneDriveDropdownState extends State<OneDriveDropdown> {
                               .downloadAndCacheMetadata(token:token)
                               .then((val) {
                             if (val == true) {
-                              storeStringInSharedPrefs('token', token);
+                              storeStringInSharedPrefs('tokenOneDrive', token);
                               update.changeTokenState(true);
                               update.updateFlagState(true);
                             }
@@ -388,8 +386,8 @@ class _OneDriveDropdownState extends State<OneDriveDropdown> {
               // Show the bottom snack bar that no libraries found and Pop out of this context
             }
           });
-
-
+//
+//
         });
       }
       //So, just keeping it here.
