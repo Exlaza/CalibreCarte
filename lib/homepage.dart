@@ -1,5 +1,9 @@
 import 'dart:async';
 
+import 'package:calibre_carte/helpers/language.dart';
+import 'package:calibre_carte/localisation/calibre_carte_localisation.dart';
+import 'package:calibre_carte/localisation/localisation_utils.dart';
+import 'package:calibre_carte/main.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/screens/settings_screen.dart';
@@ -25,6 +29,8 @@ class _MyHomePageState extends State<MyHomePage> {
   String sortDirection = "asc";
   String token;
   Future myFuture;
+  Widget _appBarTitle;
+  String initLocale;
   final _textUpdates = StreamController<String>();
 
   @override
@@ -32,6 +38,9 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     super.initState();
 //    TODO: Listener requires that we dispose it off when the widget terrminates
+
+
+
     controller.addListener(() => _textUpdates.add(controller.text));
 
     Observable(_textUpdates.stream)
@@ -45,6 +54,32 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     myFuture = getLayoutFromPreferences();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (initLocale == null) {
+      initLocale =
+          CalibreCarteLocalization.of(context).getTranslatedValues('title');
+      _appBarTitle = Text(
+        CalibreCarteLocalization.of(context).getTranslatedValues('title'),
+//    "Calibre carte",
+        style: TextStyle(fontFamily: 'Montserrat', color: Colors.white),
+      );
+    }
+    else if(CalibreCarteLocalization.of(context).getTranslatedValues('title') == initLocale) {
+      return;
+    } else {
+      initLocale =
+          CalibreCarteLocalization.of(context).getTranslatedValues('title');
+      _appBarTitle = Text(
+        CalibreCarteLocalization.of(context).getTranslatedValues('title'),
+//    "Calibre carte",
+        style: TextStyle(fontFamily: 'Montserrat', color: Colors.white),
+      );
+    }
   }
 
   Future<void> getLayoutFromPreferences() async {
@@ -228,20 +263,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _searchPressed(String searchFil) {
     setState(() {
-      _appBarTitle = new TextField(
+      _appBarTitle = TextField(
         style: TextStyle(color: Colors.white),
         autofocus: true,
         controller: controller,
-        decoration: new InputDecoration(
+        decoration: InputDecoration(
             prefixIcon: closeButton(), hintText: 'Search for ${searchFil}s'),
       );
     });
   }
 
-  Widget _appBarTitle = const Text(
-    "Calibre Carte",
-    style: TextStyle(fontFamily: 'Montserrat', color: Colors.white),
-  );
+  void changeLanguage(Language language) async{
+    Locale _temp = await setLocale(language.languageCode);
+    MyApp.setLocale(context, _temp);
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -253,9 +290,11 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Scaffold(
           backgroundColor: colortheme.descriptionBackground,
           appBar:
-              AppBar(backgroundColor: Color(0xff002242), title: _appBarTitle,
+          AppBar(
+              backgroundColor: Color(0xff002242),
+              title: _appBarTitle,
 //              leading:
-                  actions: <Widget>[
+              actions: <Widget>[
                 // action button
                 IconButton(
                   icon: Icon(Icons.search, color: Colors.white),
@@ -269,6 +308,23 @@ class _MyHomePageState extends State<MyHomePage> {
                     _settingModalBottomSheet(context);
                   },
                 ),
+                DropdownButton(
+                  onChanged: (Language language) {
+                    changeLanguage(language);
+                  },
+                  icon: Icon(Icons.language, color: Colors.white,),
+                  underline: SizedBox(),
+                  items: Language.languageList().map((lang) =>
+                      DropdownMenuItem(
+                        value: lang,
+                        child: Row(
+                          children: <Widget>[
+                            Text(lang.flag),
+                            Text(lang.name)
+                          ],
+                        ),
+                      )).toList(),
+                )
 //                IconButton(
 //                  icon: Icon(Icons.refresh),
 //                  onPressed: () {
@@ -294,22 +350,25 @@ class _MyHomePageState extends State<MyHomePage> {
                         text: TextSpan(children: [
                           TextSpan(
                               text:
-                                  'Please go to ',
+                              'Please go to ',
                               style: TextStyle(
                                   fontFamily: 'Montserrat',
                                   color: colortheme.headerText,
-                                  fontSize: 15)),TextSpan( recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                            return SettingsNew();
-                          }));
-                        },
+                                  fontSize: 15)),
+                          TextSpan(recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) {
+                                    return SettingsNew();
+                                  }));
+                            },
                               text:
                               'Settings',
                               style: TextStyle(
                                   fontFamily: 'Montserrat',
                                   color: Colors.blue,
-                                  fontSize: 15)),TextSpan(
+                                  fontSize: 15)),
+                          TextSpan(
                               text:
                               ' and connect to Dropbox',
                               style: TextStyle(

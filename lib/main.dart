@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:calibre_carte/homepage.dart';
+import 'package:calibre_carte/localisation/calibre_carte_localisation.dart';
+import 'package:calibre_carte/localisation/localisation_utils.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +18,12 @@ void main() async {
 
 class MyApp extends StatefulWidget {
   @override
+
+  static void setLocale(BuildContext context, Locale locale){
+    _MyAppState state = context.findAncestorStateOfType<_MyAppState>();
+    state.setLocale(locale);
+  }
+
   _MyAppState createState() => _MyAppState();
 }
 
@@ -23,13 +32,23 @@ class _MyAppState extends State<MyApp> {
   String searchFilter;
   Future myFuture;
   bool darkMode;
+  Locale _locale;
+
+  void setLocale(Locale locale){
+    setState(() {
+      _locale = locale;
+    });
+  }
 
   Future<void> getTokenAndSearchFromPreferences() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     darkMode = sp.getBool('darkMode') ?? false;
     tokenExists = sp.containsKey('token');
     searchFilter = sp.getString('searchFilter') ?? 'title';
-//    Set the default download directory here once if it not set already
+
+    _locale = await getLocale();
+
+    //    Set the default download directory here once if it not set already
     if (!sp.containsKey("downloaded_directory")) {
       Directory defaultDownloadDirectory = await getExternalStorageDirectory();
 //      Creating books if that doesn't exist
@@ -71,8 +90,29 @@ class _MyAppState extends State<MyApp> {
               )
             ],
             child: MaterialApp(
+              locale: _locale,
               title: "Calibre Carte",
               home: MyHomePage(),
+              supportedLocales: [
+                Locale('en', 'US'),
+                Locale('hi', 'IN')
+              ],
+              localizationsDelegates: [
+                CalibreCarteLocalization.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              localeResolutionCallback: (deviceLocale, supportedLocales) {
+                for (var locale in supportedLocales) {
+                  if (locale.languageCode == deviceLocale.languageCode && locale.countryCode == deviceLocale.countryCode){
+                    return deviceLocale;
+                  }
+                }
+
+                return supportedLocales.first;
+
+              },
             ),
           );
         } else {
