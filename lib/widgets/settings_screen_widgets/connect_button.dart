@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 class ConnectButton extends StatelessWidget {
   Function connect;
-  ConnectButton(this.connect);
+  String cloudService;
+  ConnectButton(this.connect, this.cloudService);
   Future<bool> checkNet() async {
     try {
       var result = await InternetAddress.lookup('www.google.com');
@@ -33,7 +34,7 @@ class ConnectButton extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Text("Connect Dropbox",
+                Text("Connect $cloudService",
                     style: TextStyle(
                         fontFamily: 'Montserrat', fontSize: 13,color: colorTheme.headerText))
               ],

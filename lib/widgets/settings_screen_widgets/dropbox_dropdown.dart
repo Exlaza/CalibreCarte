@@ -567,20 +567,9 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                 }
                 else{
                   _launchURL(url);
-
-//                  Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-//                    return DropboxAuthentication(
-//                      selectedUrl: url, oldContext: oldContext,
-//                    );
-//                  })).then((_) {
-//                    setState(() {
-//                      myFuture = loadingToken();
-//                    });
-////                              update.updateFlagState(true);
-//                  });
                 }
               });
-            });
+            }, 'dropbox');
           } else {
             return Center(
               child: Column(
