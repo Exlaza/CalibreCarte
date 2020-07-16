@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:calibre_carte/homepage.dart';
 import 'package:calibre_carte/localisation/calibre_carte_localisation.dart';
+import 'package:calibre_carte/localisation/localisation_utils.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
@@ -21,7 +22,6 @@ class MyApp extends StatefulWidget {
   static void setLocale(BuildContext context, Locale locale){
     _MyAppState state = context.findAncestorStateOfType<_MyAppState>();
     state.setLocale(locale);
-
   }
 
   _MyAppState createState() => _MyAppState();
@@ -35,7 +35,6 @@ class _MyAppState extends State<MyApp> {
   Locale _locale;
 
   void setLocale(Locale locale){
-    print("Chaging languge yeah bitches");
     setState(() {
       _locale = locale;
     });
@@ -46,7 +45,10 @@ class _MyAppState extends State<MyApp> {
     darkMode = sp.getBool('darkMode') ?? false;
     tokenExists = sp.containsKey('token');
     searchFilter = sp.getString('searchFilter') ?? 'title';
-//    Set the default download directory here once if it not set already
+
+    _locale = await getLocale();
+
+    //    Set the default download directory here once if it not set already
     if (!sp.containsKey("downloaded_directory")) {
       Directory defaultDownloadDirectory = await getExternalStorageDirectory();
 //      Creating books if that doesn't exist

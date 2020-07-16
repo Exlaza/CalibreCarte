@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:calibre_carte/helpers/language.dart';
 import 'package:calibre_carte/localisation/calibre_carte_localisation.dart';
+import 'package:calibre_carte/localisation/localisation_utils.dart';
 import 'package:calibre_carte/main.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
@@ -272,18 +273,8 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void changeLanguage(Language language) {
-    Locale _temp;
-    switch (language.languageCode) {
-      case 'en':
-        _temp = Locale(language.languageCode, 'US');
-        break;
-      case 'hi':
-        _temp = Locale(language.languageCode, 'IN');
-        break;
-      default:
-        _temp = Locale('en', 'US');
-    }
+  void changeLanguage(Language language) async{
+    Locale _temp = await setLocale(language.languageCode);
     MyApp.setLocale(context, _temp);
   }
 
