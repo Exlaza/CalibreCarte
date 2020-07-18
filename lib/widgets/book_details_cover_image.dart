@@ -74,6 +74,9 @@ class _BookDetailsCoverImageState extends State<BookDetailsCoverImage> {
             CacheInvalidator.invalidateDatabaseCache();
             update.changeTokenState(false);
             update.updateFlagState(true);
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return MyHomePage();
+            }));
           }
           if (snapshot.data == 200) {
             print("image download response");
