@@ -94,17 +94,16 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     };
     String json =
         '{"query": "metadata.db", "options":{"filename_only":true, "file_extensions":["db"]}}'; // make POST request
-    try{
-    Response response = await post(url, headers: headers, body: json);
-    print("i have the response");
-    int statusCode = response.statusCode;
-    String body = response.body;
-    print("post request ended");
-    return response;}
-    catch(e){
+    try {
+      Response response = await post(url, headers: headers, body: json);
+      print("i have the response");
+      int statusCode = response.statusCode;
+      String body = response.body;
+      print("post request ended");
+      return response;
+    } catch (e) {
       return null;
     }
-
   }
 
   _makePostRequestCode(code) async {
@@ -115,7 +114,13 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
 //      "Content-type": "application/json"
 //    };
     print(code);
-    Map<String, dynamic> json = {"code":code, "redirect_uri": DropboxDropdown.redirectUriCode, "grant_type":"authorization_code", "code_verifier":OAuthUtils.codeVerifier, "client_id":clientId} ; // make POST request
+    Map<String, dynamic> json = {
+      "code": code,
+      "redirect_uri": DropboxDropdown.redirectUriCode,
+      "grant_type": "authorization_code",
+      "code_verifier": OAuthUtils.codeVerifier,
+      "client_id": clientId
+    }; // make POST request
 
     Response response = await post(url, body: json);
     int statusCode = response.statusCode;
@@ -124,36 +129,34 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   }
 
   selectingCalibreLibrary(key, val, update) {
-
 //      Navigator.of(context).pop();
-      showDialog<void>(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return WillPopScope(
-                onWillPop: () async => false,
-                child: SimpleDialog(
-                    key: UniqueKey(),
-                    backgroundColor: Colors.black54,
-                    children: <Widget>[
-                      Center(
-                        child: Column(children: [
-                          CircularProgressIndicator(),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            "Updating library",
-                            style: TextStyle(color: Colors.blueAccent),
-                          )
-                        ]),
-                      )
-                    ]));
-          });
+    showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return WillPopScope(
+              onWillPop: () async => false,
+              child: SimpleDialog(
+                  key: UniqueKey(),
+                  backgroundColor: Colors.black54,
+                  children: <Widget>[
+                    Center(
+                      child: Column(children: [
+                        CircularProgressIndicator(),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Updating library",
+                          style: TextStyle(color: Colors.blueAccent),
+                        )
+                      ]),
+                    )
+                  ]));
+        });
 
-
-    MetadataCacher().downloadAndCacheMetadata(path:key).then((value) {
-      if(value==1){
+    MetadataCacher().downloadAndCacheMetadata(path: key).then((value) {
+      if (value == 1) {
         storeStringInSharedPrefs('selected_calibre_lib_path', key);
         storeStringInSharedPrefs('selected_calibre_lib_name', val);
         update.updateFlagState(true);
@@ -192,7 +195,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   selectingCalibreLibraryNew(key, val, update, token) {
     storeStringInSharedPrefs('selected_calibre_lib_path', key);
     storeStringInSharedPrefs('selected_calibre_lib_name', val);
-    MetadataCacher().downloadAndCacheMetadata(token:token).then((val) {
+    MetadataCacher().downloadAndCacheMetadata(token: token).then((val) {
       if (val == 1) {
 //        print("storing token");
         storeStringInSharedPrefs('token', token);
@@ -224,8 +227,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       //Although this is not needed now, but Google actually recommends against using a webview for,
       //So assuming in future we need to do it the url_launcher way then we would have to use this method
       print(link);
-      if (link.startsWith(DropboxDropdown.redirectUriCode)){
-
+      if (link.startsWith(DropboxDropdown.redirectUriCode)) {
         Update update = Provider.of<Update>(context, listen: false);
 
         var uri = Uri.parse(link);
@@ -236,13 +238,12 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
           if (k == "code") {
             code = v;
           }
-
         });
 
         print("hohohohoohoho");
         print(code);
 
-        _makePostRequestCode(code).then((response){
+        _makePostRequestCode(code).then((response) {
           Map<String, dynamic> responseJson = jsonDecode(response.body);
           token = responseJson['access_token'];
           print(responseJson);
@@ -255,22 +256,20 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
             Map<String, dynamic> responseJson = jsonDecode(response.body);
             if (responseJson['matches'].length != 0) {
               responseJson['matches'].forEach((element) {
-                if (element["metadata"]["metadata"]["name"] ==
-                    "metadata.db") {
+                if (element["metadata"]["metadata"]["name"] == "metadata.db") {
                   String libPath =
-                  element["metadata"]["metadata"]["path_display"];
+                      element["metadata"]["metadata"]["path_display"];
                   libPath = libPath.replaceAll('metadata.db', "");
-                  List<String> directories = element["metadata"]
-                  ["metadata"]["path_display"]
+                  List<String> directories = element["metadata"]["metadata"]
+                          ["path_display"]
                       .split('/');
                   String libName =
-                  directories.elementAt(directories.length - 2);
+                      directories.elementAt(directories.length - 2);
                   pathNameMap.putIfAbsent(libPath, () => libName);
 //                        print(pathNameMap);
                 }
               });
-              storeIntInSharedPrefs(
-                  'noOfCalibreLibs', pathNameMap.length);
+              storeIntInSharedPrefs('noOfCalibreLibs', pathNameMap.length);
               pathNameMap.keys.toList().asMap().forEach((index, path) {
                 String keyName = 'calibre_lib_path_$index';
                 String libName = 'calibre_lib_name_$index';
@@ -292,7 +291,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                 // Show a pop up which displays the list of libraries
 //                      print('I have come inside the popup dispaly htingy');
                 List<Widget> columnChildren =
-                pathNameMap.keys.toList().map((element) {
+                    pathNameMap.keys.toList().map((element) {
                   return InkWell(
                       onTap: () {
                         _showLoading(context);
@@ -329,7 +328,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                         onWillPop: () async {
                           _showLoading(context);
                           await MetadataCacher()
-                              .downloadAndCacheMetadata(token:token)
+                              .downloadAndCacheMetadata(token: token)
                               .then((val) {
                             if (val == 1) {
                               storeStringInSharedPrefs('token', token);
@@ -350,12 +349,12 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                               children: <Widget>[
                                 Container(
                                     child: Text(
-                                      'Select Library',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'Montserrat',
-                                          color: Color(0xff002242)),
-                                    )),
+                                  'Select Library',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontFamily: 'Montserrat',
+                                      color: Color(0xff002242)),
+                                )),
                                 SizedBox(
                                   height: 20,
                                 ),
@@ -368,9 +367,13 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                     });
               } else {
                 _showLoading(context);
-                storeStringInSharedPrefs('selected_calibre_lib_path', pathNameMap.keys.first);
-                storeStringInSharedPrefs('selected_calibre_lib_name', pathNameMap.values.first);
-                MetadataCacher().downloadAndCacheMetadata(token:token).then((val) {
+                storeStringInSharedPrefs(
+                    'selected_calibre_lib_path', pathNameMap.keys.first);
+                storeStringInSharedPrefs(
+                    'selected_calibre_lib_name', pathNameMap.values.first);
+                MetadataCacher()
+                    .downloadAndCacheMetadata(token: token)
+                    .then((val) {
                   if (val == 1) {
 //                          print("storing token");
                     storeStringInSharedPrefs('token', token);
@@ -384,15 +387,13 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                 // Her we have only one library so we make that the default
               }
             } else {
-              Scaffold.of(context).showSnackBar(
-                  SnackBar(content: Text("No Calibre libraries found"),));
-              Navigator.of(context)
-                  .pop();
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text("No Calibre libraries found"),
+              ));
+              Navigator.of(context).pop();
               // Show the bottom snack bar that no libraries found and Pop out of this context
             }
           });
-
-
         });
       }
       //So, just keeping it here.
@@ -405,7 +406,6 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   }
 
   //Let's try and figure out if I can attach a listener and then parse and do something when I finally get a URL back
-
 
   @override
   void initState() {
@@ -422,8 +422,6 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     super.dispose();
     _sub.cancel();
   }
-
-
 
 //  _makePostRequest(token) async {
 ////    print(token);
@@ -474,7 +472,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       ];
       return l;
     }
-    if(response.statusCode==401){
+    if (response.statusCode == 401) {
       Scaffold.of(context).removeCurrentSnackBar();
       deleteToken();
       CacheInvalidator.invalidateImagesCache();
@@ -560,6 +558,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       return [Text("No libraries found")];
     }
   }
+
   Future<bool> checkNet() async {
     try {
       var result = await InternetAddress.lookup('www.google.com');
@@ -569,6 +568,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       return false;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
@@ -585,11 +585,12 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
             final url =
                 'https://www.dropbox.com/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=${DropboxDropdown.redirectUriCode}&code_challenge=$codeChallenge&code_challenge_method=${OAuthUtils.codeChallengeMethod}';
             return ConnectButton(() {
-              checkNet().then((val){
-                if(val==false){
-                  Scaffold.of(context).showSnackBar(SnackBar(content: Text("No internet"),));
-                }
-                else{
+              checkNet().then((val) {
+                if (val == false) {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text("No internet"),
+                  ));
+                } else {
                   _launchURL(url);
 
 //                  Navigator.of(context).push(MaterialPageRoute(builder: (context) {

@@ -1,9 +1,13 @@
 import 'dart:io';
 
 import 'package:calibre_carte/helpers/book_downloader.dart';
+import 'package:calibre_carte/helpers/cache_invalidator.dart';
 import 'package:calibre_carte/helpers/data_provider.dart';
 import 'package:calibre_carte/models/data.dart';
+import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'downloading_progress.dart';
 
@@ -22,6 +26,11 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
   Future myFuture;
   List<Map<String, String>> dataFormatsFileNameMap = List();
 
+  Future<void> deleteToken() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.remove('token');
+  }
+
   Future<void> getBookDataFormats() async {
     List<Data> dataList = await DataProvider.getDataByBookID(widget.bookId);
 
@@ -36,11 +45,12 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
     });
   }
 
-  Future<void> bookDownloader(fileName, BuildContext context) {
+  Future<void> bookDownloader(fileName, BuildContext context, Function logout) {
     showDialog(
         context: context,
         builder: (_) {
-          return DownloadingProgress(widget.relativePath, fileName, context);
+          return DownloadingProgress(
+              widget.relativePath, fileName, context, logout);
         }).then((_) {
       Navigator.of(context).pop();
     });
@@ -65,6 +75,7 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
 
   @override
   Widget build(BuildContext context) {
+    Update update = Provider.of(context);
     return FutureBuilder(
       future: myFuture,
       builder: (context, snapshot) {
@@ -78,14 +89,22 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
                   onPressed: () {
                     checkNet().then((val) {
                       if (val == true) {
-                        bookDownloader(element["name"], context);
-                      } else
-                        {
+                        bookDownloader(element["name"], context, () {
+                          deleteToken();
+                          CacheInvalidator.invalidateImagesCache();
+                          CacheInvalidator.invalidateDatabaseCache();
+                          setState(() {
+                            update.changeTokenState(false);
+                            update.updateFlagState(true);
+                          });
+                        });
+                      } else {
 //                          print("came here");
-                          Navigator.of(context).pop();
-                          Scaffold.of(widget.oldContext).showSnackBar(SnackBar(
+                        Navigator.of(context).pop();
+                        Scaffold.of(widget.oldContext).showSnackBar(SnackBar(
                           content: Text("No internet"),
-                        ));}
+                        ));
+                      }
                     });
                   },
                 );

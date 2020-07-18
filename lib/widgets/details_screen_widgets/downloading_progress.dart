@@ -14,8 +14,10 @@ class DownloadingProgress extends StatefulWidget {
   String relativePath;
   String fileName;
   BuildContext oldContext;
+  Function logout;
 
-  DownloadingProgress(this.relativePath, this.fileName, this.oldContext);
+  DownloadingProgress(
+      this.relativePath, this.fileName, this.oldContext, this.logout);
 
   @override
   _DownloadingProgressState createState() => _DownloadingProgressState();
@@ -28,7 +30,7 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
   String url = "https://content.dropboxapi.com/2/files/download";
   CancelToken cancelToken = CancelToken();
 
-  Future<int> downloadFile() async {
+  Future downloadFile() async {
     BookDownloader bd = BookDownloader();
     String token = await bd.getTokenFromPreferences();
     String basePath = await bd.getSelectedLibPathFromSharedPrefs();
@@ -55,13 +57,18 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
       return 0;
     } catch (e) {
       setState(() {
+        print(e.message);
         progress = "ERROR";
       });
-      return e.response.statusCode;
+      if (e.message == "cancelled") { //update to handle 401
+        return e;
+      } else {
+        return e.response.statusCode;
+      }
     }
   }
 
-  void _cancelDownload(){
+  void _cancelDownload() {
     cancelToken.cancel("cancelled");
   }
 
@@ -69,22 +76,18 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.remove('token');
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Update update = Provider.of<Update>(widget.oldContext);
     downloadFile().then((value) {
-      Navigator.of(context).pop();
-      if (value == 401) {
-        print("here");
-        deleteToken();
-        CacheInvalidator.invalidateImagesCache();
-        CacheInvalidator.invalidateDatabaseCache();
-        setState(() {
-          update.changeTokenState(false);
-          update.updateFlagState(true);
-        });
+      if (value == 401) {  //update to handle 401 errors
+        widget.logout();
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return MyHomePage();
+        }));
+      } else {
         Navigator.of(context).pop();
       }
     });
@@ -99,8 +102,10 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
           "Your progress",
           style: TextStyle(fontSize: 10),
         ),
-        contentPadding: EdgeInsets.only(top: 0, left: 23, right: 23, bottom: 23),
-        content: Container( height: 100,
+        contentPadding:
+            EdgeInsets.only(top: 0, left: 23, right: 23, bottom: 23),
+        content: Container(
+          height: 100,
           child: Column(
             children: <Widget>[
               AnimatedProgressbar(
@@ -108,15 +113,19 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
                 height: 12,
               ),
               InkWell(
-                onTap: () {_cancelDownload(); },
+                onTap: () {
+                  _cancelDownload();
+                },
                 child: Container(
-                    padding:
-                        EdgeInsets.only(top: 25, left: 23, right: 23, bottom: 10),
-                    child: Text("Cancel",style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      color: Color(0xff002242),
-                      fontSize: 15
-                    ),)),
+                    padding: EdgeInsets.only(
+                        top: 25, left: 23, right: 23, bottom: 10),
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          color: Color(0xff002242),
+                          fontSize: 15),
+                    )),
               )
             ],
           ),
