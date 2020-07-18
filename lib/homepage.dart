@@ -248,7 +248,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Update update = Provider.of(context);
     String searchFilter = update.searchFilter;
     ColorTheme colortheme = Provider.of(context);
-//    print("rebuilding homepage");
+    print("rebuilding homepage");
     return Container(
       child: Scaffold(
           backgroundColor: colortheme.descriptionBackground,

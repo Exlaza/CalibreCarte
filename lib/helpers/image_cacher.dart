@@ -46,7 +46,7 @@ class ImageCacher {
     return response;
   }
 
-  Future<bool> downloadAndCacheImage(relativePath, bookID) async {
+  Future<int> downloadAndCacheImage(relativePath, bookID) async {
 //    print("I am in the download image method");
     String token = await getTokenFromPreferences();
 //    print(token);
@@ -57,14 +57,14 @@ class ImageCacher {
     //Get the bytes, get the temp directory and write a file in temp
     if (response.statusCode != 200) {
 //      print(response.statusCode);
-      return false;
+      return response.statusCode;
     }
     String bookTitle = relativePath.split("/")[1];
     List<int> bytes = response.bodyBytes;
     Directory tempDir = await getTemporaryDirectory();
     String pathMetadata = join(tempDir.path + "/cover_${bookID}_$bookTitle.jpg");
     await File(pathMetadata).writeAsBytes(bytes, flush: true);
-    return true;
+    return response.statusCode;
   }
 
   Future<void> downloadAndCacheImageThumbnail(relativePath, bookID) async {
