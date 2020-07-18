@@ -3,12 +3,18 @@ import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 class RefreshButton extends StatelessWidget {
+  Function logout;
+
+  RefreshButton(this.logout);
+
   @override
   Widget build(BuildContext context) {
-    Update update= Provider.of(context);
-    ColorTheme colorTheme=Provider.of(context);
-    return Card( color: Colors.transparent,
+    Update update = Provider.of(context);
+    ColorTheme colorTheme = Provider.of(context);
+    return Card(
+      color: Colors.transparent,
       elevation: 0.0,
       child: InkWell(
         onTap: () {
@@ -30,27 +36,33 @@ class RefreshButton extends StatelessWidget {
                               ),
                               Text(
                                 "Refreshing library",
-                                style: TextStyle(
-                                    color: Colors.blueAccent),
+                                style: TextStyle(color: Colors.blueAccent),
                               )
                             ]),
                           )
                         ]));
               });
 
-          Future<bool> m =
-          MetadataCacher().downloadAndCacheMetadata();
+          Future<int> m = MetadataCacher().downloadAndCacheMetadata();
 
           m.then((value) {
-            if (value == true) {
+            if (value == 1) {
 //                                print("Donwloading finished");
               update.updateFlagState(true);
               Navigator.of(context).pop();
             } else {
-              Navigator.of(context).pop();
-              Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text("No internet"),
-              ));
+              if (value == 0) {
+                Navigator.of(context).pop();
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text("No internet"),
+                ));
+              } else {
+                Navigator.of(context).pop();
+                logout();
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text("Authentication expired. Please login again"),
+                ));
+              }
             }
           });
 
@@ -60,8 +72,7 @@ class RefreshButton extends StatelessWidget {
           FutureBuilder(
             future: m,
             builder: (context, snapshot) {
-              if (snapshot.connectionState ==
-                  ConnectionState.done) {
+              if (snapshot.connectionState == ConnectionState.done) {
                 return null;
               } else {
                 return SnackBar(
@@ -72,7 +83,8 @@ class RefreshButton extends StatelessWidget {
             },
           );
         },
-        child: Container( color: Colors.transparent,
+        child: Container(
+          color: Colors.transparent,
           padding: EdgeInsets.fromLTRB(46, 1, 20, 0),
           child: Column(
             children: <Widget>[
@@ -87,7 +99,9 @@ class RefreshButton extends StatelessWidget {
                   ),
                   Text("Refresh library",
                       style: TextStyle(
-                          fontFamily: 'Montserrat', fontSize: 15,color: colorTheme.headerText))
+                          fontFamily: 'Montserrat',
+                          fontSize: 15,
+                          color: colorTheme.headerText))
                 ],
               ),
             ],

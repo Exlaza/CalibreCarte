@@ -153,7 +153,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
 
 
     MetadataCacher().downloadAndCacheMetadata(path:key).then((value) {
-      if(value==true){
+      if(value==1){
         storeStringInSharedPrefs('selected_calibre_lib_path', key);
         storeStringInSharedPrefs('selected_calibre_lib_name', val);
         update.updateFlagState(true);
@@ -193,7 +193,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     storeStringInSharedPrefs('selected_calibre_lib_path', key);
     storeStringInSharedPrefs('selected_calibre_lib_name', val);
     MetadataCacher().downloadAndCacheMetadata(token:token).then((val) {
-      if (val == true) {
+      if (val == 1) {
 //        print("storing token");
         storeStringInSharedPrefs('token', token);
 //        print("stored token");
@@ -331,7 +331,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                           await MetadataCacher()
                               .downloadAndCacheMetadata(token:token)
                               .then((val) {
-                            if (val == true) {
+                            if (val == 1) {
                               storeStringInSharedPrefs('token', token);
                               update.changeTokenState(true);
                               update.updateFlagState(true);
@@ -371,7 +371,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                 storeStringInSharedPrefs('selected_calibre_lib_path', pathNameMap.keys.first);
                 storeStringInSharedPrefs('selected_calibre_lib_name', pathNameMap.values.first);
                 MetadataCacher().downloadAndCacheMetadata(token:token).then((val) {
-                  if (val == true) {
+                  if (val == 1) {
 //                          print("storing token");
                     storeStringInSharedPrefs('token', token);
 //                          print("stored token");
@@ -474,8 +474,21 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       ];
       return l;
     }
+    if(response.statusCode==401){
+      Scaffold.of(context).removeCurrentSnackBar();
+      deleteToken();
+      CacheInvalidator.invalidateImagesCache();
+      CacheInvalidator.invalidateDatabaseCache();
+      setState(() {
+        myFuture = loadingToken();
+        update.changeTokenState(false);
+        update.updateFlagState(true);
+      });
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text("Authentication expired. Please login again."),
+      ));
+    }
     print("Internet check done");
-
     //Make a map Map<String, String> First value is the base path in lower case
     // Second Value is the name of the Folder(Library)
     // I have to convert string response.body to json
@@ -598,7 +611,16 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   // TODO: ADD COMPLETER TO GET LIBRARY LIST
-                  RefreshButton(),
+                  RefreshButton(() {
+                    deleteToken();
+                    CacheInvalidator.invalidateImagesCache();
+                    CacheInvalidator.invalidateDatabaseCache();
+                    setState(() {
+                      myFuture = loadingToken();
+                      update.changeTokenState(false);
+                      update.updateFlagState(true);
+                    });
+                  }),
                   selected_calibre_lib_dir == null
                       ? Text("no directory selected")
                       : ExpansionTile(

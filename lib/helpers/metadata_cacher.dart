@@ -37,7 +37,7 @@ class MetadataCacher {
     }
   }
 
-  Future<bool> downloadAndCacheMetadata({String token, String path}) async {
+  Future<int> downloadAndCacheMetadata({String token, String path}) async {
     String _path;
     String _token = await getTokenFromPreferences() ?? token;
     if (path == null) {
@@ -49,7 +49,7 @@ class MetadataCacher {
     Response response = await downloadMetadata(_token, absPath);
     //Get the bytes, get the temp directory and write a file in temp
     if (response == null) {
-      return false;
+      return 0;
     } else {
       if (response.statusCode == 200) {
         await DatabaseHelper.deleteDb();
@@ -58,9 +58,9 @@ class MetadataCacher {
         String tempDir = await getDatabasesPath();
         String pathMetadata = join(tempDir + "/metadata.db");
         await File(pathMetadata).writeAsBytes(bytes, flush: true);
-        return true;
+        return 1;
       } else {
-        return false;
+        return response.statusCode;
       }
     }
   }

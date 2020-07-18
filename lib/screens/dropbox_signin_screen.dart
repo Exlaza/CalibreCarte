@@ -111,7 +111,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
     storeStringInSharedPrefs('selected_calibre_lib_path', key);
     storeStringInSharedPrefs('selected_calibre_lib_name', val);
     MetadataCacher().downloadAndCacheMetadata(token:token).then((val) {
-      if (val == true) {
+      if (val == 1) {
 //        print("storing token");
         storeStringInSharedPrefs('token', token);
 //        print("stored token");
@@ -282,7 +282,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                                 await MetadataCacher()
                                     .downloadAndCacheMetadata(token:token)
                                     .then((val) {
-                                  if (val == true) {
+                                  if (val == 1) {
                                     storeStringInSharedPrefs('token', token);
                                     update.changeTokenState(true);
                                     update.updateFlagState(true);
@@ -322,7 +322,7 @@ class _DropboxAuthenticationState extends State<DropboxAuthentication> {
                       storeStringInSharedPrefs('selected_calibre_lib_path', pathNameMap.keys.first);
                       storeStringInSharedPrefs('selected_calibre_lib_name', pathNameMap.values.first);
                       MetadataCacher().downloadAndCacheMetadata(token:token).then((val) {
-                        if (val == true) {
+                        if (val == 1) {
 //                          print("storing token");
                           storeStringInSharedPrefs('token', token);
 //                          print("stored token");
