@@ -244,13 +244,13 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
         print(code);
         _showLoading(context);
         _makePostRequestCode(code).then((response) {
-          Navigator.of(context).pop();
           Map<String, dynamic> responseJson = jsonDecode(response.body);
           token = responseJson['access_token'];
           print(responseJson);
 
           Map<String, String> pathNameMap = Map();
           _makePostRequest(token).then((response) {
+            Navigator.of(context).pop();
             //Make a map Map<String, String> First value is the base path in lower case
             // Second Value is the name of the Folder(Library)
             // I have to convert string response.body to json
