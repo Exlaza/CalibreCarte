@@ -242,8 +242,9 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
 
         print("hohohohoohoho");
         print(code);
-
+        _showLoading(context);
         _makePostRequestCode(code).then((response) {
+          Navigator.of(context).pop();
           Map<String, dynamic> responseJson = jsonDecode(response.body);
           token = responseJson['access_token'];
           print(responseJson);
