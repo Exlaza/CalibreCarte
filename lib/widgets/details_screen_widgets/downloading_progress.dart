@@ -1,9 +1,14 @@
 import 'dart:convert';
 
 import 'package:calibre_carte/helpers/book_downloader.dart';
+import 'package:calibre_carte/helpers/cache_invalidator.dart';
+import 'package:calibre_carte/homepage.dart';
+import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/widgets/details_screen_widgets/animated_progressbar.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DownloadingProgress extends StatefulWidget {
   String relativePath;
@@ -23,7 +28,7 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
   String url = "https://content.dropboxapi.com/2/files/download";
   CancelToken cancelToken = CancelToken();
 
-  Future<bool> downloadFile() async {
+  Future<int> downloadFile() async {
     BookDownloader bd = BookDownloader();
     String token = await bd.getTokenFromPreferences();
     String basePath = await bd.getSelectedLibPathFromSharedPrefs();
@@ -47,12 +52,12 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
               "Progress  " + ((rec / total) * 100).toStringAsFixed(0) + "%";
         });
       });
-      return true;
+      return 0;
     } catch (e) {
       setState(() {
         progress = "ERROR";
       });
-      return false;
+      return e.response.statusCode;
     }
   }
 
@@ -60,16 +65,27 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
     cancelToken.cancel("cancelled");
   }
 
+  Future<void> deleteToken() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.remove('token');
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    Update update = Provider.of<Update>(widget.oldContext);
     downloadFile().then((value) {
       Navigator.of(context).pop();
-      if (value == false) {
-        Scaffold.of(widget.oldContext).showSnackBar(SnackBar(
-          content: Text("Download Error"),
-        ));
+      if (value == 401) {
+        print("here");
+        deleteToken();
+        CacheInvalidator.invalidateImagesCache();
+        CacheInvalidator.invalidateDatabaseCache();
+        setState(() {
+          update.changeTokenState(false);
+          update.updateFlagState(true);
+        });
+        Navigator.of(context).pop();
       }
     });
   }

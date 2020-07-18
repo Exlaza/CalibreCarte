@@ -84,6 +84,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   }
 
   _makePostRequest(token) async {
+    print("post request started");
 //    print(token);
     // set up POST request arguments
     String url = 'https://api.dropboxapi.com/2/files/search_v2';
@@ -93,10 +94,17 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     };
     String json =
         '{"query": "metadata.db", "options":{"filename_only":true, "file_extensions":["db"]}}'; // make POST request
+    try{
     Response response = await post(url, headers: headers, body: json);
+    print("i have the response");
     int statusCode = response.statusCode;
     String body = response.body;
-    return response;
+    print("post request ended");
+    return response;}
+    catch(e){
+      return null;
+    }
+
   }
 
   _makePostRequestCode(code) async {
@@ -445,9 +453,12 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Text("Refreshing Libraries..."),
     ));
-
+    print("before post request");
     var response = await _makePostRequest(token);
+    print("after post request");
+    print("starting internet check");
     if (response == null) {
+      print("response null no internet here");
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text("No internet"),
       ));
@@ -463,7 +474,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       ];
       return l;
     }
-//    print("Internet check done");
+    print("Internet check done");
 
     //Make a map Map<String, String> First value is the base path in lower case
     // Second Value is the name of the Folder(Library)
@@ -593,6 +604,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                       : ExpansionTile(
                           onExpansionChanged: (bool value) {
                             if (value) {
+                              print("tile explanding");
                               setState(() {
                                 if (_responseCompleter.isCompleted) {
                                   _responseCompleter = Completer();
