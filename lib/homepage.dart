@@ -251,7 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
         autofocus: true,
         controller: controller,
         decoration: new InputDecoration(
-            prefixIcon: closeButton(), hintText: 'Search for ${searchFil}s'),
+            prefixIcon: closeButton(), hintText: 'Search for ${searchFil}s',hintStyle: TextStyle(color:Colors.white60)),
       );
     });
   }
