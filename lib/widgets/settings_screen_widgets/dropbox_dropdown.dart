@@ -251,18 +251,17 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
         var uri = Uri.parse(link);
         // Step 1. Parse the token
         String code;
-        String errorMsg;
         const String ERROR = "error";
         const String CODE = 'code';
 
         if (uri.queryParameters.containsKey(ERROR)) {
-          errorMsg = errorDescription(uri.queryParameters[ERROR]);
+          String errorMsg = errorDescription(uri.queryParameters[ERROR]);
           Scaffold.of(context).showSnackBar(SnackBar(content: Text(errorMsg),));
           return;
         }
 
         if (!uri.queryParameters.containsKey(CODE)) {
-          errorMsg = errorDescription(NO_CODE_URI);
+          String errorMsg = errorDescription(NO_CODE_URI);
           Scaffold.of(context).showSnackBar(SnackBar(content: Text(errorMsg),));
           return;
         } else {
