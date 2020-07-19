@@ -88,7 +88,7 @@ class DetailsSidebar extends StatelessWidget {
     }
     textScaleFactor(BuildContext context) {
       if (MediaQuery.of(context).size.height > 610) {
-        return (1.0);
+        return MediaQuery.of(context).textScaleFactor.clamp(0.6, 1.0);
       } else {
         return MediaQuery.of(context).textScaleFactor.clamp(0.6, 0.85);
       }
