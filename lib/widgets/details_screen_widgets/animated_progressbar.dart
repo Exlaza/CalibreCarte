@@ -6,54 +6,65 @@ class AnimatedProgressbar extends StatelessWidget {
 
   AnimatedProgressbar({Key key, @required this.value, this.height = 12})
       : super(key: key);
-
+  textScaleFactor(BuildContext context) {
+    if (MediaQuery.of(context).size.height > 610) {
+      return (1.0);
+    } else {
+      return MediaQuery.of(context).textScaleFactor.clamp(0.6, 0.85);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     double boxWidth = MediaQuery.of(context).size.width / 1.5;
     String percProg = (value * 100).toStringAsFixed(0) + "%";
-    return Container(
-      width: boxWidth,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            "$percProg Downloaded",
-            style: TextStyle(
-              fontSize: 20,
-              color: Color(0xff002242),
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(
+          textScaleFactor:
+              textScaleFactor(context)),
+      child: Container(
+        width: boxWidth,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              "$percProg Downloaded",
+              style: TextStyle(
+                fontSize: 20,
+                color: Color(0xff002242),
+              ),
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Stack(
-            children: [
-              Container(
-                height: height,
-                width: boxWidth,
-                decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.3),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(height),
+            SizedBox(
+              height: 10,
+            ),
+            Stack(
+              children: [
+                Container(
+                  height: height,
+                  width: boxWidth,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.3),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(height),
+                    ),
                   ),
                 ),
-              ),
-              AnimatedContainer(
-                duration: Duration(milliseconds: 800),
-                curve: Curves.easeOutCubic,
-                height: height,
-                width: boxWidth * _floor(value),
-                decoration: BoxDecoration(
-                  color: _colorGen(value),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(height),
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 800),
+                  curve: Curves.easeOutCubic,
+                  height: height,
+                  width: boxWidth * _floor(value),
+                  decoration: BoxDecoration(
+                    color: _colorGen(value),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(height),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

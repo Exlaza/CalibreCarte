@@ -65,30 +65,34 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.grey,
         context: context,
         builder: (BuildContext bc) {
-          return Container(
-            child: Wrap(
-              children: <Widget>[
-                ListTile(
-                  leading: new Icon(Icons.apps),
-                  title: new Text(
-                    'Layout',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+          return MediaQuery(
+            data: MediaQuery.of(context)
+                .copyWith(textScaleFactor: textScaleFactor(context)),
+            child: Container(
+              child: Wrap(
+                children: <Widget>[
+                  ListTile(
+                    leading: new Icon(Icons.apps),
+                    title: new Text(
+                      'Layout',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () => {showLayouts(context)},
                   ),
-                  onTap: () => {showLayouts(context)},
-                ),
-                ListTile(
-                  leading: new Icon(Icons.sort),
-                  title: new Text('Sort',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  onTap: () => {showSortOptions(context)},
-                ),
-                ListTile(
-                  leading: new Icon(Icons.settings),
-                  title: new Text('Settings',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  onTap: () => showSettings(context),
-                )
-              ],
+                  ListTile(
+                    leading: new Icon(Icons.sort),
+                    title: new Text('Sort',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    onTap: () => {showSortOptions(context)},
+                  ),
+                  ListTile(
+                    leading: new Icon(Icons.settings),
+                    title: new Text('Settings',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    onTap: () => showSettings(context),
+                  )
+                ],
+              ),
             ),
           );
         });
@@ -114,32 +118,36 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.grey,
         context: context,
         builder: (BuildContext bc) {
-          return Container(
-            child: Wrap(
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(Icons.list),
-                  title: Text("List"),
-                  onTap: () {
-                    setState(() {
-                      layout = "list";
-                    });
-                    Navigator.of(context).pop();
-                    storeLayout('list');
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.grid_on),
-                  title: Text("Grid"),
-                  onTap: () {
-                    setState(() {
-                      layout = "grid";
-                    });
-                    Navigator.of(context).pop();
-                    storeLayout('grid');
-                  },
-                )
-              ],
+          return MediaQuery(
+            data: MediaQuery.of(context)
+                .copyWith(textScaleFactor: textScaleFactor(context)),
+            child: Container(
+              child: Wrap(
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.list),
+                    title: Text("List"),
+                    onTap: () {
+                      setState(() {
+                        layout = "list";
+                      });
+                      Navigator.of(context).pop();
+                      storeLayout('list');
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.grid_on),
+                    title: Text("Grid"),
+                    onTap: () {
+                      setState(() {
+                        layout = "grid";
+                      });
+                      Navigator.of(context).pop();
+                      storeLayout('grid');
+                    },
+                  )
+                ],
+              ),
             ),
           );
         });
@@ -152,24 +160,29 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.grey,
         context: context,
         builder: (BuildContext bc) {
-          return Container(
-            child: Wrap(
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(Icons.title),
-                  title: Text("Title"),
-                  onTap: () {
-                    showSortDirectionOptions("title");
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.alternate_email),
-                  title: Text("Author Name"),
-                  onTap: () {
-                    showSortDirectionOptions("author");
-                  },
-                ),
-              ],
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(
+                textScaleFactor:
+                    textScaleFactor(context)),
+            child: Container(
+              child: Wrap(
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.title),
+                    title: Text("Title"),
+                    onTap: () {
+                      showSortDirectionOptions("title");
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.alternate_email),
+                    title: Text("Author Name"),
+                    onTap: () {
+                      showSortDirectionOptions("author");
+                    },
+                  ),
+                ],
+              ),
             ),
           );
         });
@@ -182,32 +195,37 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.grey,
         context: context,
         builder: (BuildContext bc) {
-          return Container(
-            child: Wrap(
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(Icons.keyboard_arrow_up),
-                  title: Text("Ascending"),
-                  onTap: () {
-                    setState(() {
-                      sortOption = sortOpt;
-                      sortDirection = "asc";
-                    });
-                    Navigator.of(context).pop();
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.keyboard_arrow_down),
-                  title: Text("Descending"),
-                  onTap: () {
-                    setState(() {
-                      sortOption = sortOpt;
-                      sortDirection = "desc";
-                    });
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(
+                textScaleFactor:
+                    textScaleFactor(context)),
+            child: Container(
+              child: Wrap(
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.keyboard_arrow_up),
+                    title: Text("Ascending"),
+                    onTap: () {
+                      setState(() {
+                        sortOption = sortOpt;
+                        sortDirection = "asc";
+                      });
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.keyboard_arrow_down),
+                    title: Text("Descending"),
+                    onTap: () {
+                      setState(() {
+                        sortOption = sortOpt;
+                        sortDirection = "desc";
+                      });
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
             ),
           );
         });
@@ -243,87 +261,102 @@ class _MyHomePageState extends State<MyHomePage> {
     style: TextStyle(fontFamily: 'Montserrat', color: Colors.white),
   );
 
+  textScaleFactor(BuildContext context) {
+    if (MediaQuery.of(context).size.height > 610) {
+      return (1.0);
+    } else {
+      return MediaQuery.of(context).textScaleFactor.clamp(0.6, 0.85);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
     String searchFilter = update.searchFilter;
     ColorTheme colortheme = Provider.of(context);
     print("rebuilding homepage");
-    return Container(
-      child: Scaffold(
-          backgroundColor: colortheme.descriptionBackground,
-          appBar:
-              AppBar(backgroundColor: Color(0xff002242), title: _appBarTitle,
+    print("height");
+    print(MediaQuery.of(context).size.height);
+    return MediaQuery(
+      data: MediaQuery.of(context)
+          .copyWith(textScaleFactor: textScaleFactor(context)),
+      child: Container(
+        child: Scaffold(
+            backgroundColor: colortheme.descriptionBackground,
+            appBar:
+                AppBar(backgroundColor: Color(0xff002242), title: _appBarTitle,
 //              leading:
-                  actions: <Widget>[
-                // action button
-                IconButton(
-                  icon: Icon(Icons.search, color: Colors.white),
-                  onPressed: () {
-                    _searchPressed(searchFilter);
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.more_vert, color: Colors.white),
-                  onPressed: () {
-                    _settingModalBottomSheet(context);
-                  },
-                ),
+                    actions: <Widget>[
+                  // action button
+                  IconButton(
+                    icon: Icon(Icons.search, color: Colors.white),
+                    onPressed: () {
+                      _searchPressed(searchFilter);
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.more_vert, color: Colors.white),
+                    onPressed: () {
+                      _settingModalBottomSheet(context);
+                    },
+                  ),
 //                IconButton(
 //                  icon: Icon(Icons.refresh),
 //                  onPressed: () {
 //                    update.updateFlagState(true);
 //                  },
 //                )
-              ]),
-          body: FutureBuilder(
-              future: myFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (update.tokenExists == true) {
-                    return BooksView(
-                      layout,
-                      filter,
-                      sortDirection: sortDirection,
-                      sortOption: sortOption,
-                      update: update,
-                    );
+                ]),
+            body: FutureBuilder(
+                future: myFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (update.tokenExists == true) {
+                      return BooksView(
+                        layout,
+                        filter,
+                        sortDirection: sortDirection,
+                        sortOption: sortOption,
+                        update: update,
+                      );
+                    } else {
+                      return Center(
+                        child: RichText(
+                          text: TextSpan(children: [
+                            TextSpan(
+                                text: 'Please go to ',
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    color: colortheme.headerText,
+                                    fontSize: 15)),
+                            TextSpan(
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return SettingsNew();
+                                    }));
+                                  },
+                                text: 'Settings',
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    color: Colors.blue,
+                                    fontSize: 15)),
+                            TextSpan(
+                                text: ' and connect to Dropbox',
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    color: colortheme.headerText,
+                                    fontSize: 15))
+                          ]),
+                        ),
+                      );
+                    }
                   } else {
-                    return Center(
-                      child: RichText(
-                        text: TextSpan(children: [
-                          TextSpan(
-                              text:
-                                  'Please go to ',
-                              style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: colortheme.headerText,
-                                  fontSize: 15)),TextSpan( recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                            return SettingsNew();
-                          }));
-                        },
-                              text:
-                              'Settings',
-                              style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: Colors.blue,
-                                  fontSize: 15)),TextSpan(
-                              text:
-                              ' and connect to Dropbox',
-                              style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: colortheme.headerText,
-                                  fontSize: 15))
-                        ]),
-                      ),
-                    );
+                    return Center(child: CircularProgressIndicator());
                   }
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              })),
+                })),
+      ),
     );
   }
 }

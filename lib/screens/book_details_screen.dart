@@ -27,8 +27,7 @@ class BookDetailsScreen extends StatefulWidget {
   BookDetailsScreen({this.bookId});
 
   @override
-  _BookDetailsScreenState createState() =>
-      _BookDetailsScreenState();
+  _BookDetailsScreenState createState() => _BookDetailsScreenState();
 }
 
 class _BookDetailsScreenState extends State<BookDetailsScreen> {
@@ -121,25 +120,36 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     });
 //    mySecondFuture = checkIfLocalCopyExists();
   }
-
+  textScaleFactor(BuildContext context) {
+    if (MediaQuery.of(context).size.height > 610) {
+      return (1.0);
+    } else {
+      return MediaQuery.of(context).textScaleFactor.clamp(0.6, 0.85);
+    }
+  }
   Widget description() {
     var totalHeight = MediaQuery.of(context).size.height -
         appbar.preferredSize.height -
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
-    return Container(
-      child: Row(children: <Widget>[
-        DetailsLeftTile(
-          publishers: publishers,
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(
+          textScaleFactor:
+              textScaleFactor(context)),
+      child: Container(
+        child: Row(children: <Widget>[
+          DetailsLeftTile(
+            publishers: publishers,
 //          rating: Ratings.fromMapObject({'id':1,'rating':3}),
-          rating: rating,
-          bookId: widget.bookId,
-          bookDetails: bookDetails,
-          authorText: authorText,
-          totalHeight: totalHeight,
-        ),
-        rightTile()
-      ]),
+            rating: rating,
+            bookId: widget.bookId,
+            bookDetails: bookDetails,
+            authorText: authorText,
+            totalHeight: totalHeight,
+          ),
+          rightTile()
+        ]),
+      ),
     );
   } // TODO: change sizes
 
@@ -201,20 +211,24 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: appbar,
-      body: FutureBuilder<void>(
-          future: myFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return description();
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
+    return MediaQuery(data: MediaQuery.of(context).copyWith(
+        textScaleFactor:
+        textScaleFactor(context)),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: appbar,
+        body: FutureBuilder<void>(
+            future: myFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return description();
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }),
+      ),
     );
   }
 }

@@ -60,7 +60,8 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
         print(e.message);
         progress = "ERROR";
       });
-      if (e.message == "cancelled") { //update to handle 401
+      if (e.message == "cancelled") {
+        //update to handle 401
         return e;
       } else {
         return e.response.statusCode;
@@ -82,7 +83,8 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
     // TODO: implement initState
     super.initState();
     downloadFile().then((value) {
-      if (value == 401) {  //update to handle 401 errors
+      if (value == 401) {
+        //update to handle 401 errors
         widget.logout();
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
           return MyHomePage();
@@ -92,42 +94,53 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
       }
     });
   }
-
+  textScaleFactor(BuildContext context) {
+    if (MediaQuery.of(context).size.height > 610) {
+      return (1.0);
+    } else {
+      return MediaQuery.of(context).textScaleFactor.clamp(0.6, 0.85);
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: AlertDialog(
-        title: Text(
-          "Your progress",
-          style: TextStyle(fontSize: 10),
-        ),
-        contentPadding:
-            EdgeInsets.only(top: 0, left: 23, right: 23, bottom: 23),
-        content: Container(
-          height: 100,
-          child: Column(
-            children: <Widget>[
-              AnimatedProgressbar(
-                value: perc,
-                height: 12,
-              ),
-              InkWell(
-                onTap: () {
-                  _cancelDownload();
-                },
-                child: Container(
-                    padding: EdgeInsets.only(
-                        top: 25, left: 23, right: 23, bottom: 10),
-                    child: Text(
-                      "Cancel",
-                      style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          color: Color(0xff002242),
-                          fontSize: 15),
-                    )),
-              )
-            ],
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(
+          textScaleFactor:
+              textScaleFactor(context)),
+      child: WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          title: Text(
+            "Your progress",
+            style: TextStyle(fontSize: 10),
+          ),
+          contentPadding:
+              EdgeInsets.only(top: 0, left: 23, right: 23, bottom: 23),
+          content: Container(
+            height: 100,
+            child: Column(
+              children: <Widget>[
+                AnimatedProgressbar(
+                  value: perc,
+                  height: 12,
+                ),
+                InkWell(
+                  onTap: () {
+                    _cancelDownload();
+                  },
+                  child: Container(
+                      padding: EdgeInsets.only(
+                          top: 25, left: 23, right: 23, bottom: 10),
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            color: Color(0xff002242),
+                            fontSize: 15),
+                      )),
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -60,9 +60,13 @@ class _SettingsNewState extends State<SettingsNew> {
               fontFamily: 'Montserrat', color: Colors.grey, fontSize: 20),
         ));
   }
-
-
-
+  textScaleFactor(BuildContext context) {
+    if (MediaQuery.of(context).size.height > 610) {
+      return (1.0);
+    } else {
+      return MediaQuery.of(context).textScaleFactor.clamp(0.6, 0.85);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
@@ -70,172 +74,181 @@ class _SettingsNewState extends State<SettingsNew> {
     Widget loadingWidget = Center(
       child: CircularProgressIndicator(),
     );
-    return Scaffold(
-      backgroundColor: colorTheme.settingsBackground,
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.white, //change your color here
-        ),
-        elevation: 0.0,
-        backgroundColor: Color(0xff002242),
-        title: Text(
-          'Settings',
-          style: TextStyle(
-            fontFamily: 'Montserrat',
-            color: Colors.white,
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(
+          textScaleFactor:
+              textScaleFactor(context)),
+      child: Scaffold(
+        backgroundColor: colorTheme.settingsBackground,
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.white, //change your color here
+          ),
+          elevation: 0.0,
+          backgroundColor: Color(0xff002242),
+          title: Text(
+            'Settings',
+            style: TextStyle(
+              fontFamily: 'Montserrat',
+              color: Colors.white,
+            ),
           ),
         ),
-      ),
-      body: FutureBuilder(
-        future: myFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+        body: FutureBuilder(
+          future: myFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
 //                print('THe connection finished now');
-            return SingleChildScrollView(
-              child: Container(
-                margin: EdgeInsets.fromLTRB(8, 8, 8, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 20,
-                    ),
-                    _settingGroup("Cloud"),
-                    CloudSettings(),
-                    _settingGroup("Search"),
-                    SearchDropdown(),
-                    _settingGroup("Appearance"),
-                    DarkMode(),
-                    _settingGroup("Download Directory"),
-                    Theme(data:ThemeData(primaryColor:  Color(0xffFED962)),
-                      child:DirectoryChange()
-                    ),
-                    _settingGroup("Help"),
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return AboutUs();
-                        }));
-                      },
-                      child: Container(
-                        padding: EdgeInsets.only(left: 16, bottom: 0, top:10),
+              return SingleChildScrollView(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _settingGroup("Cloud"),
+                      CloudSettings(),
+                      _settingGroup("Search"),
+                      SearchDropdown(),
+                      _settingGroup("Appearance"),
+                      DarkMode(),
+                      _settingGroup("Download Directory"),
+                      Theme(
+                          data: ThemeData(primaryColor: Color(0xffFED962)),
+                          child: DirectoryChange()),
+                      _settingGroup("Help"),
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return AboutUs();
+                          }));
+                        },
                         child: Container(
-                          padding: EdgeInsets.only(top: 4),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.help_outline,
-                                color: Color(0xffFED962),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(" About Calibre Carte",
-                                  style: TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 15,
-                                      color: colorTheme.headerText))
-                            ],
+                          padding:
+                              EdgeInsets.only(left: 16, bottom: 0, top: 10),
+                          child: Container(
+                            padding: EdgeInsets.only(top: 4),
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.help_outline,
+                                  color: Color(0xffFED962),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(" About Calibre Carte",
+                                    style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 15,
+                                        color: colorTheme.headerText))
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return PrivacyPolicy();
-                        }));
-                      },
-                      child: Container(
-                        padding: EdgeInsets.only(left: 16, bottom: 0,top: 10),
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return PrivacyPolicy();
+                          }));
+                        },
                         child: Container(
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.help_outline,
-                                color: Color(0xffFED962),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(" Privacy Policy",
-                                  style: TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 15,
-                                      color: colorTheme.headerText))
-                            ],
+                          padding:
+                              EdgeInsets.only(left: 16, bottom: 0, top: 10),
+                          child: Container(
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.help_outline,
+                                  color: Color(0xffFED962),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(" Privacy Policy",
+                                    style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 15,
+                                        color: colorTheme.headerText))
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return Instructions();
-                        }));
-                      },
-                      child: Container(
-                        padding: EdgeInsets.only(left: 16, bottom: 0, top:10),
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return Instructions();
+                          }));
+                        },
                         child: Container(
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.help_outline,
-                                color: Color(0xffFED962),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(" Usage Instructions",
-                                  style: TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 15,
-                                      color: colorTheme.headerText))
-                            ],
+                          padding:
+                              EdgeInsets.only(left: 16, bottom: 0, top: 10),
+                          child: Container(
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.help_outline,
+                                  color: Color(0xffFED962),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(" Usage Instructions",
+                                    style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 15,
+                                        color: colorTheme.headerText))
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),InkWell(
-                      onTap: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return License();
-                        }));
-                      },
-                      child: Container(
-                        padding: EdgeInsets.only(left: 16, top: 10),
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return License();
+                          }));
+                        },
                         child: Container(
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.info_outline,
-                                color: Color(0xffFED962),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(" License",
-                                  style: TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 15,
-                                      color: colorTheme.headerText))
-                            ],
+                          padding: EdgeInsets.only(left: 16, top: 10),
+                          child: Container(
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.info_outline,
+                                  color: Color(0xffFED962),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(" License",
+                                    style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 15,
+                                        color: colorTheme.headerText))
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            );
-          } else {
+              );
+            } else {
 //                print('The connection hasn\'t finsihed yet');
-            return CircularProgressIndicator();
-          }
-        },
+              return CircularProgressIndicator();
+            }
+          },
+        ),
       ),
     );
   }

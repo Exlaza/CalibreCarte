@@ -72,7 +72,13 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
       return false;
     }
   }
-
+  textScaleFactor(BuildContext context) {
+    if (MediaQuery.of(context).size.height > 610) {
+      return (1.0);
+    } else {
+      return MediaQuery.of(context).textScaleFactor.clamp(0.6, 0.85);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Update update = Provider.of(context);
@@ -80,36 +86,41 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
       future: myFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return AlertDialog(
-            title: Text("Select Format"),
-            content: Column(
-              children: dataFormatsFileNameMap.map((element) {
-                return FlatButton(
-                  child: Text(element["format"]),
-                  onPressed: () {
-                    checkNet().then((val) {
-                      if (val == true) {
-                        bookDownloader(element["name"], context, () {
-                          deleteToken();
-                          CacheInvalidator.invalidateImagesCache();
-                          CacheInvalidator.invalidateDatabaseCache();
-                          setState(() {
-                            update.changeTokenState(false);
-                            update.updateFlagState(true);
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(
+                textScaleFactor:
+                    textScaleFactor(context)),
+            child: AlertDialog(
+              title: Text("Select Format"),
+              content: Column(
+                children: dataFormatsFileNameMap.map((element) {
+                  return FlatButton(
+                    child: Text(element["format"]),
+                    onPressed: () {
+                      checkNet().then((val) {
+                        if (val == true) {
+                          bookDownloader(element["name"], context, () {
+                            deleteToken();
+                            CacheInvalidator.invalidateImagesCache();
+                            CacheInvalidator.invalidateDatabaseCache();
+                            setState(() {
+                              update.changeTokenState(false);
+                              update.updateFlagState(true);
+                            });
                           });
-                        });
-                      } else {
+                        } else {
 //                          print("came here");
-                        Navigator.of(context).pop();
-                        Scaffold.of(widget.oldContext).showSnackBar(SnackBar(
-                          content: Text("No internet"),
-                        ));
-                      }
-                    });
-                  },
-                );
-              }).toList(),
-              mainAxisSize: MainAxisSize.min,
+                          Navigator.of(context).pop();
+                          Scaffold.of(widget.oldContext).showSnackBar(SnackBar(
+                            content: Text("No internet"),
+                          ));
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+                mainAxisSize: MainAxisSize.min,
+              ),
             ),
           );
         } else {
