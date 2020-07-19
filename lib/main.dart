@@ -4,13 +4,19 @@ import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) => runApp(MyApp()));
+
 }
 
 class MyApp extends StatefulWidget {
