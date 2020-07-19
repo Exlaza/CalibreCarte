@@ -91,7 +91,7 @@ class BookDetailsText extends StatelessWidget {
 //              maxLines: 2,
                     ),
                   ),
-                  SmoothStarRating(
+                  SmoothStarRating( isReadOnly: true,
                     allowHalfRating: false,
                     starCount: 5,
                     rating: rating == null ? 5 : (rating.rating / 2).toDouble(),
