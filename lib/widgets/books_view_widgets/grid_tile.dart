@@ -6,24 +6,36 @@ import 'package:calibre_carte/widgets/download_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CalibreGridTile extends StatelessWidget {
+class CalibreGridTile extends StatefulWidget {
   final int index;
   final Books book;
   final List<Books> books;
-
   CalibreGridTile(this.index, this.book, this.books);
+
+  @override
+  _CalibreGridTileState createState() => _CalibreGridTileState();
+}
+
+class _CalibreGridTileState extends State<CalibreGridTile> {
+  bool refresh=false;
+
+  void refreshTile() {
+    setState(() {
+      refresh = false;
+    });
+  }
 
   void viewBookDetails(int bookId, BuildContext context) {
 //    print(bookId);
     BookDetailsNavigation bn =
         Provider.of<BookDetailsNavigation>(context, listen: false);
     bn.bookID = bookId;
-    bn.booksList = books;
-    bn.index = index;
+    bn.booksList = widget.books;
+    bn.index = widget.index;
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
       return Consumer<BookDetailsNavigation>(
         builder: (ctx, bookNav, child) => BookDetailsScreen(
-          bookId: bookNav.bookID != null ? bookNav.bookID : bookId,
+          bookId: bookNav.bookID != null ? bookNav.bookID : bookId,refreshTile: refreshTile,
         ),
       );
     })).then((_) {
@@ -39,12 +51,12 @@ class CalibreGridTile extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           Container(
-              key: Key(book.path),
-              child: BookDetailsCoverImage(book.id, book.path, null, null)),
+              key: Key(widget.book.path),
+              child: BookDetailsCoverImage(widget.book.id, widget.book.path, null, null)),
           Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: () => viewBookDetails(book.id, context),
+              onTap: () => viewBookDetails(widget.book.id, context),
               child: Container(),
             ),
           ),
@@ -67,13 +79,13 @@ class CalibreGridTile extends StatelessWidget {
                       width: MediaQuery.of(context).size.width / 2.5,
                       padding: EdgeInsets.only(left: 3),
                       child: Text(
-                        book.title,
+                        widget.book.title,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                         style: TextStyle(fontFamily: 'Montserrat'),
                       ),
                     ),
-                    DownloadIcon(book.id),
+                    DownloadIcon(widget.book.id),
                   ],
                 ),
               ),

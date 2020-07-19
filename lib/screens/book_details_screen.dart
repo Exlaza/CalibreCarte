@@ -23,8 +23,8 @@ import '../models/books.dart';
 class BookDetailsScreen extends StatefulWidget {
   static const routeName = '/book-detailsbeta';
   final int bookId;
-
-  BookDetailsScreen({this.bookId});
+  final Function refreshTile;
+  BookDetailsScreen({this.bookId, this.refreshTile});
 
   @override
   _BookDetailsScreenState createState() => _BookDetailsScreenState();
@@ -76,6 +76,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     setState(() {
       mySecondFuture = checkIfLocalCopyExists();
     });
+    widget.refreshTile();
   }
 
   Future<void> getBookDetails() async {

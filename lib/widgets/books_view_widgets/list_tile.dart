@@ -7,23 +7,36 @@ import 'package:calibre_carte/widgets/download_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CoolTile extends StatelessWidget {
+class CoolTile extends StatefulWidget {
   final index;
   final books;
 
   CoolTile(this.index, this.books);
+
+  @override
+  _CoolTileState createState() => _CoolTileState();
+}
+
+class _CoolTileState extends State<CoolTile> {
+  bool refresh = true;
+
+  void refreshTile() {
+    setState(() {
+      refresh = false;
+    });
+  }
 
   void viewBookDetails(int bookId, BuildContext context) {
 //      print(bookId);
     BookDetailsNavigation bn =
         Provider.of<BookDetailsNavigation>(context, listen: false);
     bn.bookID = bookId;
-    bn.booksList = books;
-    bn.index = index;
+    bn.booksList = widget.books;
+    bn.index = widget.index;
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
       return Consumer<BookDetailsNavigation>(
         builder: (ctx, bookNav, child) => BookDetailsScreen(
-          bookId: bookNav.bookID != null ? bookNav.bookID : bookId,
+          bookId: bookNav.bookID != null ? bookNav.bookID : bookId, refreshTile: refreshTile
         ),
       );
     })).then((_) {
@@ -33,13 +46,15 @@ class CoolTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ColorTheme colorTheme=Provider.of(context);
+    ColorTheme colorTheme = Provider.of(context);
     return GestureDetector(
-      onTap: () => viewBookDetails(books[index].id, context),
+      onTap: () => viewBookDetails(widget.books[widget.index].id, context),
       child: Container(
         height: MediaQuery.of(context).size.height / 5,
         decoration: new BoxDecoration(
-          color: index % 2 == 0 ? colorTheme.tileColor1 : colorTheme.tileColor2,
+          color: widget.index % 2 == 0
+              ? colorTheme.tileColor1
+              : colorTheme.tileColor2,
           shape: BoxShape.rectangle,
           boxShadow: <BoxShadow>[
             new BoxShadow(
@@ -52,10 +67,13 @@ class CoolTile extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Container(
-              child: Container( color: Colors.white, key: Key(books[index].id.toString()+books[index].title),
+              child: Container(
+                color: Colors.white,
+                key: Key(widget.books[widget.index].id.toString() +
+                    widget.books[widget.index].title),
                 child: BookDetailsCoverImage(
-                    books[index].id,
-                    books[index].path,
+                    widget.books[widget.index].id,
+                    widget.books[widget.index].path,
                     MediaQuery.of(context).size.height / 5,
                     MediaQuery.of(context).size.width / 3.7),
               ),
@@ -70,15 +88,17 @@ class CoolTile extends StatelessWidget {
                 children: <Widget>[
                   Container(height: 15.0),
                   Text(
-                    books[index].title,
-                    style: TextStyling.headerTextStyle.copyWith(color: colorTheme.headerText),
+                    widget.books[widget.index].title,
+                    style: TextStyling.headerTextStyle
+                        .copyWith(color: colorTheme.headerText),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                   ),
                   Container(height: 10.0),
                   Text(
-                    books[index].author_sort,
-                    style: TextStyling.subHeaderTextStyle.copyWith(color: colorTheme.subHeaderText),
+                    widget.books[widget.index].author_sort,
+                    style: TextStyling.subHeaderTextStyle
+                        .copyWith(color: colorTheme.subHeaderText),
                     overflow: TextOverflow.ellipsis,
                   ),
                   Column(
@@ -89,7 +109,13 @@ class CoolTile extends StatelessWidget {
                         height: 2.0,
                         width: 18.0,
                         color: Color(0xff00c6ff),
-                      ),Container(height: 2,),DownloadIcon(books[index].id)
+                      ),
+                      Container(
+                        height: 2,
+                      ),
+                      DownloadIcon(
+                        widget.books[widget.index].id,
+                      )
                     ],
                   ),
                 ],
