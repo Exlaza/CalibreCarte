@@ -24,7 +24,9 @@ class BookDetailsScreen extends StatefulWidget {
   static const routeName = '/book-detailsbeta';
   final int bookId;
   final Function refreshTile;
-  BookDetailsScreen({this.bookId, this.refreshTile});
+  BookDetailsScreen({this.bookId, this.refreshTile}){
+    print(this.bookId);
+  }
 
   @override
   _BookDetailsScreenState createState() => _BookDetailsScreenState();
@@ -100,11 +102,14 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     rating = await BooksRatingLinkProvider.getRatingByBookID(widget.bookId);
     publishers =
         await BooksPublisherLinkProvider.getPublisherByBookID(widget.bookId);
+
+    print("I'm done with the first future");
   }
 
   @override
   void initState() {
     super.initState();
+    print('Fucking naya page is that even woerking');
     myFuture = getBookDetails();
     mySecondFuture = checkIfLocalCopyExists();
   }
@@ -121,6 +126,8 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     });
 //    mySecondFuture = checkIfLocalCopyExists();
   }
+
+
   textScaleFactor(BuildContext context) {
     if (MediaQuery.of(context).size.height > 610) {
       return MediaQuery.of(context).textScaleFactor.clamp(0.6, 1.0);

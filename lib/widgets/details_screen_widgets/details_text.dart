@@ -1,7 +1,10 @@
+import 'package:calibre_carte/helpers/slide_transition_route.dart';
 import 'package:calibre_carte/models/publishers.dart';
 import 'package:calibre_carte/models/ratings.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
+import 'package:calibre_carte/providers/list_tile.dart';
+import 'package:calibre_carte/screens/book_details_screen.dart';
 import 'package:calibre_carte/widgets/details_screen_widgets/rating.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +22,28 @@ class BookDetailsText extends StatelessWidget {
   BookDetailsText(this.bottomSize, this.width, this.bookDetails,
       this.authorText, this.rating, this.publishers);
 
+  void gotoNextBook(context, refreshTile) {
+    BookDetailsNavigation bn =
+    Provider.of<BookDetailsNavigation>(context, listen: false);
+
+    int currIndex = bn.index;
+    bn.index = (currIndex + 1)% bn.booksList.length;
+
+    Navigator.of(context)
+        .pushReplacement(SlideRightRoute(
+            page: BookDetailsScreen(
+                bookId: bn.booksList[bn.index].id, refreshTile: refreshTile)))
+        .then((_) {
+      print("I am now popping out of somewhere");
+    });
+  }
+
+  void gotoPrevBook() {}
+
   @override
   Widget build(BuildContext context) {
     ColorTheme colorTheme = Provider.of(context);
+    ListTileProvider lstp = Provider.of(context, listen: false);
     BookDetailsNavigation bn =
         Provider.of<BookDetailsNavigation>(context, listen: false);
     return Column(
@@ -76,22 +98,25 @@ class BookDetailsText extends StatelessWidget {
                             ),
 //              maxLines: 2,
                           ),
-                        ),bookDetails.pubdate==null?Container():
-                  Container(
-                    padding: EdgeInsets.fromLTRB(5, 10, 2, 20),
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Date Published: ${bookDetails.pubdate.substring(0, 10)}",
+                        ),
+                  bookDetails.pubdate == null
+                      ? Container()
+                      : Container(
+                          padding: EdgeInsets.fromLTRB(5, 10, 2, 20),
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Date Published: ${bookDetails.pubdate.substring(0, 10)}",
 //              overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
 //                        fontStyle: FontStyle.italic,
-                        fontSize: 14, color: colorTheme.subHeaderText,
-                      ),
+                              fontSize: 14, color: colorTheme.subHeaderText,
+                            ),
 //              maxLines: 2,
-                    ),
-                  ),
-                  SmoothStarRating( isReadOnly: true,
+                          ),
+                        ),
+                  SmoothStarRating(
+                    isReadOnly: true,
                     allowHalfRating: false,
                     starCount: 5,
                     rating: rating == null ? 5 : (rating.rating / 2).toDouble(),
@@ -126,7 +151,7 @@ class BookDetailsText extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: bn.incrementIndex,
+                onTap: () => gotoNextBook(context, lstp.refreshTile),
                 child: Container(
                   height: (bottomSize * 0.15),
                   width: width / 2,

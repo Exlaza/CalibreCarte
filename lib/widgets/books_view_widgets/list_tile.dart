@@ -1,3 +1,6 @@
+import 'package:calibre_carte/helpers/enter_exit_slide_page.dart';
+import 'package:calibre_carte/helpers/slide_left_transition.dart';
+import 'package:calibre_carte/helpers/slide_transition_route.dart';
 import 'package:calibre_carte/helpers/text_style.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
@@ -33,13 +36,13 @@ class _CoolTileState extends State<CoolTile> {
     bn.bookID = bookId;
     bn.booksList = widget.books;
     bn.index = widget.index;
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-      return Consumer<BookDetailsNavigation>(
-        builder: (ctx, bookNav, child) => BookDetailsScreen(
-          bookId: bookNav.bookID != null ? bookNav.bookID : bookId, refreshTile: refreshTile
-        ),
-      );
-    })).then((_) {
+    Navigator.of(context).push(SlideRightRoute(
+        page: Consumer<BookDetailsNavigation>(builder: (ctx, bookNav, child) {
+          print("I am pushing another page");
+      return BookDetailsScreen(
+          bookId: bookNav.bookID != null ? bookNav.bookID : bookId,
+          refreshTile: refreshTile);
+    }))).then((_) {
       bn.bookID = null;
     });
   }

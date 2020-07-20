@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:calibre_carte/homepage.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
+import 'package:calibre_carte/providers/list_tile.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,6 +75,9 @@ class _MyAppState extends State<MyApp> {
               ),
               ChangeNotifierProvider(
                 create: (_) => ColorTheme(darkMode),
+              ),
+              ChangeNotifierProvider(
+                create: (_) => ListTileProvider(),
               )
             ],
             child: MaterialApp(
