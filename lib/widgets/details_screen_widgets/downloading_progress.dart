@@ -90,7 +90,7 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
           return MyHomePage();
         }));
       } else if (value == 0) {
-        Navigator.of(context).pop("Download completed successfully.");
+        Navigator.of(context).pop("Download Finished!");
       } else {
         Navigator.pop(context, "Download Failed.");
       }
