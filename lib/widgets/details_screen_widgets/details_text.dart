@@ -1,3 +1,4 @@
+import 'package:calibre_carte/helpers/slide_left_transition.dart';
 import 'package:calibre_carte/helpers/slide_transition_route.dart';
 import 'package:calibre_carte/models/publishers.dart';
 import 'package:calibre_carte/models/ratings.dart';
@@ -38,7 +39,22 @@ class BookDetailsText extends StatelessWidget {
     });
   }
 
-  void gotoPrevBook() {}
+  void gotoPrevBook(context, refreshTile) {
+    BookDetailsNavigation bn =
+    Provider.of<BookDetailsNavigation>(context, listen: false);
+
+    int currIndex = bn.index;
+    bn.index = (currIndex - 1) % bn.booksList.length;
+
+    Navigator.of(context)
+        .pushReplacement(SlideLeftRoute(
+        page: BookDetailsScreen(
+            bookId: bn.booksList[bn.index].id, refreshTile: refreshTile)))
+        .then((_) {
+      print("I am now popping out of somewhere");
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +155,7 @@ class BookDetailsText extends StatelessWidget {
           child: Row(
             children: <Widget>[
               GestureDetector(
-                onTap: bn.decrementIndex,
+                onTap: () => gotoPrevBook(context, lstp.refreshTile),
                 child: Container(
                   width: width / 2,
                   height: (bottomSize * 0.15),
