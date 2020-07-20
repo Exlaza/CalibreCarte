@@ -51,8 +51,8 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
         builder: (_) {
           return DownloadingProgress(
               widget.relativePath, fileName, context, logout);
-        }).then((_) {
-      Navigator.of(context).pop();
+        }).then((val) {
+      Navigator.of(context).pop(val);
     });
   }
 

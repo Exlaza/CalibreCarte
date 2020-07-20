@@ -112,7 +112,8 @@ class DetailsSidebar extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (_) => SelectFormatDialog(
-                        bookId, bookDetails.path, context)).then((_) {
+                        bookId, bookDetails.path, context)).then((val) {
+                          Scaffold.of(context).showSnackBar(SnackBar(content: Text(val),));
                   checkCopies();
                 });
               },

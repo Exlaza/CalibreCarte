@@ -89,11 +89,14 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
           return MyHomePage();
         }));
+      } else if (value == 0) {
+        Navigator.of(context).pop("Download completed successfully.");
       } else {
-        Navigator.of(context).pop();
+        Navigator.pop(context, "Download Failed.");
       }
     });
   }
+
   textScaleFactor(BuildContext context) {
     if (MediaQuery.of(context).size.height > 610) {
       return MediaQuery.of(context).textScaleFactor.clamp(0.6, 1.0);
@@ -101,12 +104,12 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
       return MediaQuery.of(context).textScaleFactor.clamp(0.6, 0.85);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(
-          textScaleFactor:
-              textScaleFactor(context)),
+      data: MediaQuery.of(context)
+          .copyWith(textScaleFactor: textScaleFactor(context)),
       child: WillPopScope(
         onWillPop: () async => false,
         child: AlertDialog(
