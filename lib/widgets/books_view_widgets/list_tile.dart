@@ -29,13 +29,10 @@ class _CoolTileState extends State<CoolTile> {
     bn.bookID = bookId;
     bn.booksList = widget.books;
     bn.index = widget.index;
-    Navigator.of(context).push(SlideRightRoute(
-        page: Consumer<BookDetailsNavigation>(builder: (ctx, bookNav, child) {
-      print("I am pushing another page");
-      return BookDetailsScreen(
-          bookId: bookNav.bookID != null ? bookNav.bookID : bookId,
-          refreshTile: refreshTile);
-    }))).then((_) {
+    Navigator.of(context)
+        .push(SlideRightRoute(
+            page: BookDetailsScreen(bookId: bookId, refreshTile: refreshTile)))
+        .then((_) {
       bn.bookID = null;
     });
   }
