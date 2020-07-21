@@ -39,6 +39,7 @@ class _DownloadIconState extends State<DownloadIcon> {
 
   @override
   Widget build(BuildContext context) {
+    print("Building download icon again");
     return FutureBuilder(
         future: checkIfLocalCopyExists(),
         builder: (context, snapshot) {

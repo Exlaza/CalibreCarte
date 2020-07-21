@@ -4,6 +4,7 @@ import 'package:calibre_carte/helpers/slide_transition_route.dart';
 import 'package:calibre_carte/helpers/text_style.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
+import 'package:calibre_carte/providers/list_tile.dart';
 import 'package:calibre_carte/screens/book_details_screen.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
 import 'package:calibre_carte/widgets/download_icon.dart';
@@ -21,15 +22,7 @@ class CoolTile extends StatefulWidget {
 }
 
 class _CoolTileState extends State<CoolTile> {
-  bool refresh = true;
-
-  void refreshTile() {
-    setState(() {
-      refresh = false;
-    });
-  }
-
-  void viewBookDetails(int bookId, BuildContext context) {
+  void viewBookDetails(int bookId, BuildContext context, refreshTile) {
 //      print(bookId);
     BookDetailsNavigation bn =
         Provider.of<BookDetailsNavigation>(context, listen: false);
@@ -38,7 +31,7 @@ class _CoolTileState extends State<CoolTile> {
     bn.index = widget.index;
     Navigator.of(context).push(SlideRightRoute(
         page: Consumer<BookDetailsNavigation>(builder: (ctx, bookNav, child) {
-          print("I am pushing another page");
+      print("I am pushing another page");
       return BookDetailsScreen(
           bookId: bookNav.bookID != null ? bookNav.bookID : bookId,
           refreshTile: refreshTile);
@@ -50,8 +43,12 @@ class _CoolTileState extends State<CoolTile> {
   @override
   Widget build(BuildContext context) {
     ColorTheme colorTheme = Provider.of(context);
+    ListTileProvider lstp = Provider.of(context, listen: false);
+    print("Updating list tile for some reason");
+    print("THis is the book ${widget.books[widget.index].title}");
     return GestureDetector(
-      onTap: () => viewBookDetails(widget.books[widget.index].id, context),
+      onTap: () => viewBookDetails(
+          widget.books[widget.index].id, context, lstp.refreshTile),
       child: Container(
         height: MediaQuery.of(context).size.height / 5,
         decoration: new BoxDecoration(
@@ -116,9 +113,11 @@ class _CoolTileState extends State<CoolTile> {
                       Container(
                         height: 2,
                       ),
-                      DownloadIcon(
-                        widget.books[widget.index].id,
-                      )
+                      Consumer<ListTileProvider>(builder: (ctx, lstp, child) {
+                        return DownloadIcon(
+                          widget.books[widget.index].id,
+                        );
+                      }),
                     ],
                   ),
                 ],
