@@ -6,8 +6,8 @@ Color _colorFromHex(String hexColor) {
   return Color(int.parse('FF$hexCode', radix: 16));
 }
 
-const String TILE1_DARK = "#222831";
-const String TILE2_DARK = "#393e46";
+const String TILE1_DARK = "#08121c";
+const String TILE2_DARK = "#132436";
 const String DESCRIPTION_TEXT_DARK = "#eeeeee";
 
 
@@ -25,11 +25,9 @@ class ColorTheme with ChangeNotifier{
   ColorTheme(this._darkMode){
     if(_darkMode==true){
 //      _tileColor1=Colors.black87;
-//      _tileColor1=_colorFromHex(TILE1_DARK);
-      _tileColor1=_colorFromHex("#08121c");
+      _tileColor1=_colorFromHex(TILE1_DARK);
 //      _tileColor2=Colors.black;
-//      _tileColor2=_colorFromHex(TILE2_DARK);
-      _tileColor2=_colorFromHex("#132436");
+      _tileColor2=_colorFromHex(TILE2_DARK);
 
       _descriptionBackground=Colors.black;
 //      _settingsBackground=Colors.black54;
