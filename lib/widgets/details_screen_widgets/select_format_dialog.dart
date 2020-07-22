@@ -14,9 +14,8 @@ import 'downloading_progress.dart';
 class SelectFormatDialog extends StatefulWidget {
   int bookId;
   String relativePath;
-  BuildContext oldContext;
 
-  SelectFormatDialog(this.bookId, this.relativePath, this.oldContext);
+  SelectFormatDialog(this.bookId, this.relativePath);
 
   @override
   _SelectFormatDialogState createState() => _SelectFormatDialogState();
@@ -51,8 +50,8 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
         builder: (_) {
           return DownloadingProgress(
               widget.relativePath, fileName, context, logout);
-        }).then((_) {
-      Navigator.of(context).pop();
+        }).then((val) {
+      Navigator.of(context).pop(val);
     });
   }
 
@@ -110,10 +109,7 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
                           });
                         } else {
 //                          print("came here");
-                          Navigator.of(context).pop();
-                          Scaffold.of(widget.oldContext).showSnackBar(SnackBar(
-                            content: Text("No internet"),
-                          ));
+                          Navigator.of(context).pop("No internet");
                         }
                       });
                     },

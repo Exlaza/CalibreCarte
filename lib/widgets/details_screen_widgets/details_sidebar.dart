@@ -86,6 +86,7 @@ class DetailsSidebar extends StatelessWidget {
         ),
       );
     }
+
     textScaleFactor(BuildContext context) {
       if (MediaQuery.of(context).size.height > 610) {
         return MediaQuery.of(context).textScaleFactor.clamp(0.6, 1.0);
@@ -93,10 +94,10 @@ class DetailsSidebar extends StatelessWidget {
         return MediaQuery.of(context).textScaleFactor.clamp(0.6, 0.85);
       }
     }
+
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(
-          textScaleFactor:
-              textScaleFactor(context)),
+      data: MediaQuery.of(context)
+          .copyWith(textScaleFactor: textScaleFactor(context)),
       child: Container(
         // TODO: change sizes
 
@@ -110,9 +111,13 @@ class DetailsSidebar extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 showDialog(
-                    context: context,
-                    builder: (_) => SelectFormatDialog(
-                        bookId, bookDetails.path, context)).then((_) {
+                        context: context,
+                        builder: (_) =>
+                            SelectFormatDialog(bookId, bookDetails.path))
+                    .then((val) {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text(val),
+                  ));
                   checkCopies();
                 });
               },
