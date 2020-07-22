@@ -25,12 +25,16 @@ class ColorTheme with ChangeNotifier{
   ColorTheme(this._darkMode){
     if(_darkMode==true){
 //      _tileColor1=Colors.black87;
-      _tileColor1=_colorFromHex(TILE1_DARK);
+//      _tileColor1=_colorFromHex(TILE1_DARK);
+      _tileColor1=_colorFromHex("#08121c");
 //      _tileColor2=Colors.black;
-      _tileColor2=_colorFromHex(TILE2_DARK);
+//      _tileColor2=_colorFromHex(TILE2_DARK);
+      _tileColor2=_colorFromHex("#132436");
+
       _descriptionBackground=Colors.black;
 //      _settingsBackground=Colors.black54;
-      _settingsBackground=Color(0xff303841);
+//      _settingsBackground=Color(0xff303841);
+      _settingsBackground=Color(0xff132436);
 //      _headerText=Colors.white;
 //    _headerText=Color(0xfff6c90e);
       _headerText=_colorFromHex(DESCRIPTION_TEXT_DARK);
