@@ -62,7 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
     showModalBottomSheet(
         elevation: 5,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        backgroundColor: Colors.grey,
+        backgroundColor: Colors.white.withOpacity(0.8),
+//        barrierColor: Colors.white,
         context: context,
         builder: (BuildContext bc) {
           return MediaQuery(
