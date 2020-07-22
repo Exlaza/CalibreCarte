@@ -8,7 +8,12 @@ Color _colorFromHex(String hexColor) {
 
 const String TILE1_DARK = "#08121c";
 const String TILE2_DARK = "#132436";
-const String DESCRIPTION_TEXT_DARK = "#eeeeee";
+const String HEADER_TEXT_DARK = "#eeeeee";
+const String DESCRIPTION_BG_DARK = "";
+const String SETTING_BG_DARK = "";
+const String SETTINGS_TILE_DARK = "";
+const String APP_BAR_DARK = "#FED428";
+const String APP_BAR_TITLE_DARK = "#242725";
 
 
 class ColorTheme with ChangeNotifier{
@@ -22,9 +27,14 @@ class ColorTheme with ChangeNotifier{
   Color _subHeaderText;
   Color _iconColor=Color(0xffFED962);
   Color _di;
+  Color _appBarColor;
+  Color _appBarTitleColor;
+
   ColorTheme(this._darkMode){
     if(_darkMode==true){
 //      _tileColor1=Colors.black87;
+      _appBarColor=_colorFromHex(APP_BAR_DARK);
+      _appBarTitleColor=_colorFromHex(APP_BAR_TITLE_DARK);
       _tileColor1=_colorFromHex(TILE1_DARK);
 //      _tileColor2=Colors.black;
       _tileColor2=_colorFromHex(TILE2_DARK);
@@ -35,7 +45,7 @@ class ColorTheme with ChangeNotifier{
       _settingsBackground=Color(0xff132436);
 //      _headerText=Colors.white;
 //    _headerText=Color(0xfff6c90e);
-      _headerText=_colorFromHex(DESCRIPTION_TEXT_DARK);
+      _headerText=_colorFromHex(HEADER_TEXT_DARK);
 //    _subHeaderText=Color(0xffeeeeee);
       _subHeaderText=Color(0xff6b778d);
       _settingsTile=Colors.grey;
@@ -60,8 +70,10 @@ class ColorTheme with ChangeNotifier{
   bool get darkMode => _darkMode;
 
   void darkModeOn(){
+    _appBarColor=_colorFromHex(APP_BAR_DARK);
 //      _tileColor1=Colors.black87;
     _tileColor1=_colorFromHex(TILE1_DARK);
+    _appBarTitleColor=_colorFromHex(APP_BAR_TITLE_DARK);
 //      _tileColor2=Colors.black;
     _tileColor2=_colorFromHex(TILE2_DARK);
     _descriptionBackground=Colors.black;
@@ -69,7 +81,7 @@ class ColorTheme with ChangeNotifier{
     _settingsBackground=Color(0xff303841);
 //      _headerText=Colors.white;
 //    _headerText=Color(0xfff6c90e);
-    _headerText=_colorFromHex(DESCRIPTION_TEXT_DARK);
+    _headerText=_colorFromHex(HEADER_TEXT_DARK);
 //    _subHeaderText=Color(0xffeeeeee);
     _subHeaderText=Color(0xff6b778d);
     _settingsTile=Colors.grey;
@@ -113,5 +125,9 @@ class ColorTheme with ChangeNotifier{
   Color get subHeaderText => _subHeaderText;
 
   Color get di => _di;
+
+  Color get appBarColor => _appBarColor;
+
+  Color get appBarTitleColor => _appBarTitleColor;
 
 }

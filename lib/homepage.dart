@@ -257,10 +257,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Widget _appBarTitle = const Text(
-    "Calibre Carte",
-    style: TextStyle(fontFamily: 'Montserrat', color: Colors.white),
-  );
+
 
   textScaleFactor(BuildContext context) {
     if (MediaQuery.of(context).size.height > 610) {
@@ -275,8 +272,13 @@ class _MyHomePageState extends State<MyHomePage> {
     Update update = Provider.of(context);
     String searchFilter = update.searchFilter;
     ColorTheme colortheme = Provider.of(context);
-    print("rebuilding homepage");
-    print("height");
+
+    Widget _appBarTitle = const Text(
+      "Calibre Carte",
+      style: TextStyle(fontFamily: 'Montserrat', color: colortheme.),
+    );
+
+
     print(MediaQuery.of(context).size.height);
     return MediaQuery(
       data: MediaQuery.of(context)
@@ -285,7 +287,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Scaffold(
             backgroundColor: colortheme.descriptionBackground,
             appBar:
-                AppBar(backgroundColor: Color(0xff002242), title: _appBarTitle,
+                AppBar(backgroundColor: colortheme.appBarColor, title: _appBarTitle,
 //              leading:
                     actions: <Widget>[
                   // action button
