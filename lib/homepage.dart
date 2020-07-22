@@ -26,6 +26,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String token;
   Future myFuture;
   final _textUpdates = StreamController<String>();
+  Widget _appBarTitle;
 
   @override
   void initState() {
@@ -245,20 +246,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _searchPressed(String searchFil) {
-    setState(() {
-      _appBarTitle = new TextField(
-        style: TextStyle(color: Colors.white),
-        autofocus: true,
-        controller: controller,
-        decoration: new InputDecoration(
-            prefixIcon: closeButton(), hintText: 'Search for ${searchFil}s',hintStyle: TextStyle(color:Colors.white60)),
-      );
-    });
-  }
-
-
-
   textScaleFactor(BuildContext context) {
     if (MediaQuery.of(context).size.height > 610) {
       return MediaQuery.of(context).textScaleFactor.clamp(0.6, 1.0);
@@ -273,13 +260,25 @@ class _MyHomePageState extends State<MyHomePage> {
     String searchFilter = update.searchFilter;
     ColorTheme colortheme = Provider.of(context);
 
-    Widget _appBarTitle = const Text(
+    print(MediaQuery.of(context).size.height);
+
+    _appBarTitle = Text(
       "Calibre Carte",
-      style: TextStyle(fontFamily: 'Montserrat', color: colortheme.),
+      style: TextStyle(fontFamily: 'Montserrat', color: colortheme.appBarTitleColor),
     );
 
+    void _searchPressed(String searchFil) {
+      setState(() {
+        _appBarTitle = new TextField(
+          style: TextStyle(color: Colors.white),
+          autofocus: true,
+          controller: controller,
+          decoration: new InputDecoration(
+              prefixIcon: closeButton(), hintText: 'Search for ${searchFil}s',hintStyle: TextStyle(color:Colors.white60)),
+        );
+      });
+    }
 
-    print(MediaQuery.of(context).size.height);
     return MediaQuery(
       data: MediaQuery.of(context)
           .copyWith(textScaleFactor: textScaleFactor(context)),
