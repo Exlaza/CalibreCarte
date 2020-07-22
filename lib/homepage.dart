@@ -27,12 +27,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Future myFuture;
   final _textUpdates = StreamController<String>();
   Widget _appBarTitle;
+  bool isSearching;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 //    TODO: Listener requires that we dispose it off when the widget terrminates
+    isSearching = false;
     controller.addListener(() => _textUpdates.add(controller.text));
 
     Observable(_textUpdates.stream)
@@ -237,11 +239,11 @@ class _MyHomePageState extends State<MyHomePage> {
     return IconButton(
       icon: Icon(Icons.close),
       onPressed: () {
-        _appBarTitle = Text(
-          "Calibre Carte",
-          style: TextStyle(fontFamily: 'Montserrat', color: Colors.white),
-        );
-        controller.clear();
+        setState(() {
+          controller.clear();
+          isSearching = false;
+        });
+
       },
     );
   }
@@ -262,22 +264,29 @@ class _MyHomePageState extends State<MyHomePage> {
 
     print(MediaQuery.of(context).size.height);
 
-    _appBarTitle = Text(
-      "Calibre Carte",
-      style: TextStyle(fontFamily: 'Montserrat', color: colortheme.appBarTitleColor),
-    );
+    if (isSearching == false) {
+      _appBarTitle = Text(
+        "Calibre Carte",
+        style: TextStyle(
+            fontFamily: 'Montserrat', color: colortheme.appBarTitleColor),
+      );
+    }
 
     void _searchPressed(String searchFil) {
+
       setState(() {
-        _appBarTitle = new TextField(
+        isSearching = true;
+        _appBarTitle = TextField(
           style: TextStyle(color: Colors.white),
           autofocus: true,
           controller: controller,
-          decoration: new InputDecoration(
+          decoration: InputDecoration(
               prefixIcon: closeButton(), hintText: 'Search for ${searchFil}s',hintStyle: TextStyle(color:Colors.white60)),
         );
       });
     }
+
+//    print("I am running build of homepage");
 
     return MediaQuery(
       data: MediaQuery.of(context)
@@ -293,6 +302,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   IconButton(
                     icon: Icon(Icons.search, color: Colors.white),
                     onPressed: () {
+//                      print("Icon pressed");
                       _searchPressed(searchFilter);
                     },
                   ),

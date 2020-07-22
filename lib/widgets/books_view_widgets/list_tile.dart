@@ -41,8 +41,8 @@ class _CoolTileState extends State<CoolTile> {
   Widget build(BuildContext context) {
     ColorTheme colorTheme = Provider.of(context);
     ListTileProvider lstp = Provider.of(context, listen: false);
-    print("Updating list tile for some reason");
-    print("THis is the book ${widget.books[widget.index].title}");
+//    print("Updating list tile for some reason");
+//    print("THis is the book ${widget.books[widget.index].title}");
     return GestureDetector(
       onTap: () => viewBookDetails(
           widget.books[widget.index].id, context, lstp.refreshTile),
