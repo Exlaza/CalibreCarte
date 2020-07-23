@@ -24,7 +24,7 @@ const String DESCRIPTION_ICON_ALT_COLOR_DARK = "#303346";
 const String DESCRIPTION_ICON_COLOR_LIGHT = "#FED962";
 const String DESCRIPTION_ICON_ALT_COLOR_LIGHT = "#FFE06F";
 const String DESCRIPTION_ICON_ENABLED_LIGHT = "#FFFFFF";
-const String DESCRIPTION_ICON_ENABLED_DARK = "#";
+const String DESCRIPTION_ICON_ENABLED_DARK = "#2CCA90";
 const String DESCRIPTION_ICON_DISABLED_LIGHT = "#";
 const String DESCRIPTION_ICON_DISABLED_DARK = "#2CCA90";
 
@@ -46,10 +46,12 @@ class ColorTheme with ChangeNotifier{
   Color _tileUnderlineColor;
   Color _descriptionIconAltColor;
   Color _descriptionIconColor;
+  Color _descriptionIconEnabled;
 
   Color get alertBoxColor => _alertBoxColor;
   Color get descriptionIconColor => _descriptionIconColor;
   Color get descriptionIconAltColor => _descriptionIconAltColor;
+  Color get descriptionIconEnabledColor => _descriptionIconEnabled;
 
   Color get modalSheetColor => _modalSheetColor;
   Color get tileUnderlineColor => _tileUnderlineColor;
@@ -77,6 +79,7 @@ class ColorTheme with ChangeNotifier{
       _settingsTile=Colors.grey;
       _di = Color(0xffff6768);
       _tileUnderlineColor = _colorFromHex(TILE_UNDERLINE_DARK);
+      _descriptionIconEnabled = _colorFromHex(DESCRIPTION_ICON_ENABLED_DARK);
 
     }
     else{
@@ -93,6 +96,7 @@ class ColorTheme with ChangeNotifier{
       _tileUnderlineColor = _colorFromHex(TILE_UNDERLINE_LIGHT);
       _descriptionIconColor = _colorFromHex(DESCRIPTION_ICON_COLOR_LIGHT);
       _descriptionIconAltColor = _colorFromHex(DESCRIPTION_ICON_ALT_COLOR_LIGHT);
+      _descriptionIconEnabled = _colorFromHex(DESCRIPTION_ICON_ENABLED_LIGHT);
 
 
     }
@@ -109,6 +113,7 @@ class ColorTheme with ChangeNotifier{
     _tileUnderlineColor = _colorFromHex(TILE_UNDERLINE_DARK);
     _descriptionIconAltColor = _colorFromHex(DESCRIPTION_ICON_ALT_COLOR_DARK);
     _descriptionIconColor = _colorFromHex(DESCRIPTION_ICON_COLOR_DARK);
+    _descriptionIconEnabled = _colorFromHex(DESCRIPTION_ICON_ENABLED_DARK);
 
 
 //      _tileColor1=Colors.black87;
@@ -141,6 +146,7 @@ class ColorTheme with ChangeNotifier{
     _alertBoxColor=_colorFromHex(ALERTBOX_LIGHT);
     _descriptionIconColor = _colorFromHex(DESCRIPTION_ICON_COLOR_LIGHT);
     _descriptionIconAltColor = _colorFromHex(DESCRIPTION_ICON_ALT_COLOR_LIGHT);
+    _descriptionIconEnabled = _colorFromHex(DESCRIPTION_ICON_ENABLED_LIGHT);
     _darkMode=false;
     _tileColor1= Colors.white;
     _tileColor2=Colors.white70;
