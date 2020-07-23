@@ -92,11 +92,11 @@ class _SelectFormatDialogState extends State<SelectFormatDialog> {
                 textScaleFactor:
                     textScaleFactor(context)),
             child: AlertDialog( backgroundColor: colorTheme.alertBoxColor,
-              title: Text("Select Format"),
+              title: Text("Select Format",style: TextStyle(color: colorTheme.headerText)),
               content: Column(
                 children: dataFormatsFileNameMap.map((element) {
                   return FlatButton(
-                    child: Text(element["format"]),
+                    child: Text(element["format"],style: TextStyle(color: colorTheme.headerText)),
                     onPressed: () {
                       checkNet().then((val) {
                         if (val == true) {

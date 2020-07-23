@@ -6,15 +6,15 @@ Color _colorFromHex(String hexColor) {
   return Color(int.parse('FF$hexCode', radix: 16));
 }
 
-const String TILE1_DARK = "#08121c";
-const String TILE2_DARK = "#132436";
-const String HEADER_TEXT_DARK = "#eeeeee";
+const String TILE1_DARK = "#000b14";
+const String TILE2_DARK = "#0e101c";
+const String HEADER_TEXT_DARK = "#ffffff";
 const String DESCRIPTION_BG_DARK = "";
 const String SETTING_BG_DARK = "";
 const String SETTINGS_TILE_DARK = "";
-const String APP_BAR_DARK = "#FED428";
-const String APP_BAR_TITLE_DARK = "#242725";
-const String ALERTBOX_DARK="#EEEEEE";
+const String APP_BAR_DARK = "#002242";
+const String APP_BAR_TITLE_DARK = "#eeeeee";
+const String ALERTBOX_DARK="#000000";
 const String ALERTBOX_LIGHT="#FFFFFF";
 const String APPBAR_LIGHT="#002242";
 class ColorTheme with ChangeNotifier{
@@ -48,16 +48,16 @@ class ColorTheme with ChangeNotifier{
       _tileColor2=_colorFromHex(TILE2_DARK);
 
       _descriptionBackground=Colors.black;
-//      _settingsBackground=Colors.black54;
+      _settingsBackground=Colors.black54;
 //      _settingsBackground=Color(0xff303841);
-      _settingsBackground=Color(0xff132436);
+//      _settingsBackground=Color(0xff132436);
 //      _headerText=Colors.white;
 //    _headerText=Color(0xfff6c90e);
       _headerText=_colorFromHex(HEADER_TEXT_DARK);
 //    _subHeaderText=Color(0xffeeeeee);
-      _subHeaderText=Color(0xff6b778d);
-      _settingsTile=Colors.grey;
-      _di = Color(0xffff6768);
+      _subHeaderText=Color(0xffFED962);
+      _settingsTile=Colors.black;
+      _di = Color(0xffFED962);
 
     }
     else{
