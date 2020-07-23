@@ -1,4 +1,6 @@
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AnimatedProgressbar extends StatelessWidget {
   final double value;
@@ -15,6 +17,7 @@ class AnimatedProgressbar extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
+    ColorTheme colorTheme=Provider.of(context);
     double boxWidth = MediaQuery.of(context).size.width / 1.5;
     String percProg = (value * 100).toStringAsFixed(0) + "%";
     return MediaQuery(
@@ -31,7 +34,7 @@ class AnimatedProgressbar extends StatelessWidget {
               "$percProg Downloaded",
               style: TextStyle(
                 fontSize: 20,
-                color: Color(0xff002242),
+                color: colorTheme.headerText,
               ),
             ),
             SizedBox(

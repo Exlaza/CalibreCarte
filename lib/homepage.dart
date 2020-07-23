@@ -61,11 +61,11 @@ class _MyHomePageState extends State<MyHomePage> {
 //    print("storing $value");
   }
 
-  void _settingModalBottomSheet(context) {
+  void _settingModalBottomSheet(context, ColorTheme colorTheme) {
     showModalBottomSheet(
         elevation: 5,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        backgroundColor: Colors.white.withOpacity(0.8),
+        backgroundColor: colorTheme.modalSheetColor,
 //        barrierColor: Colors.white,
         context: context,
         builder: (BuildContext bc) {
@@ -81,13 +81,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       'Layout',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    onTap: () => {showLayouts(context)},
+                    onTap: () => {showLayouts(context, colorTheme)},
                   ),
                   ListTile(
                     leading: new Icon(Icons.sort),
                     title: new Text('Sort',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    onTap: () => {showSortOptions(context)},
+                    onTap: () => {showSortOptions(context, colorTheme)},
                   ),
                   ListTile(
                     leading: new Icon(Icons.settings),
@@ -115,11 +115,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }));
   }
 
-  void showLayouts(BuildContext context) {
+  void showLayouts(BuildContext context, ColorTheme colorTheme) {
+    ColorTheme colorTheme= Provider.of(context);
     Navigator.of(context).pop();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        backgroundColor: Colors.grey,
+        backgroundColor: colorTheme.modalSheetColor,
         context: context,
         builder: (BuildContext bc) {
           return MediaQuery(
@@ -157,11 +158,11 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  void showSortOptions(BuildContext context) {
+  void showSortOptions(BuildContext context, ColorTheme colorTheme) {
     Navigator.of(context).pop();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        backgroundColor: Colors.grey,
+        backgroundColor: colorTheme.modalSheetColor,
         context: context,
         builder: (BuildContext bc) {
           return MediaQuery(
@@ -175,14 +176,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     leading: Icon(Icons.title),
                     title: Text("Title"),
                     onTap: () {
-                      showSortDirectionOptions("title");
+                      showSortDirectionOptions("title", colorTheme);
                     },
                   ),
                   ListTile(
                     leading: Icon(Icons.alternate_email),
                     title: Text("Author Name"),
                     onTap: () {
-                      showSortDirectionOptions("author");
+                      showSortDirectionOptions("author", colorTheme);
                     },
                   ),
                 ],
@@ -192,11 +193,11 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  void showSortDirectionOptions(String sortOpt) {
+  void showSortDirectionOptions(String sortOpt, ColorTheme colorTheme) {
     Navigator.of(context).pop();
     showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        backgroundColor: Colors.grey,
+        backgroundColor: colorTheme.modalSheetColor,
         context: context,
         builder: (BuildContext bc) {
           return MediaQuery(
@@ -309,7 +310,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   IconButton(
                     icon: Icon(Icons.more_vert, color: Colors.white),
                     onPressed: () {
-                      _settingModalBottomSheet(context);
+                      _settingModalBottomSheet(context,colortheme);
                     },
                   ),
 //                IconButton(

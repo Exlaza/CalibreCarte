@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:calibre_carte/helpers/book_downloader.dart';
 import 'package:calibre_carte/helpers/cache_invalidator.dart';
 import 'package:calibre_carte/homepage.dart';
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 import 'package:calibre_carte/widgets/details_screen_widgets/animated_progressbar.dart';
 import 'package:flutter/material.dart';
@@ -107,12 +108,13 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
 
   @override
   Widget build(BuildContext context) {
+    ColorTheme colorTheme=Provider.of(context);
     return MediaQuery(
       data: MediaQuery.of(context)
           .copyWith(textScaleFactor: textScaleFactor(context)),
       child: WillPopScope(
         onWillPop: () async => false,
-        child: AlertDialog(
+        child: AlertDialog( backgroundColor: colorTheme.alertBoxColor,
           title: Text(
             "Your progress",
             style: TextStyle(fontSize: 10),
@@ -138,7 +140,7 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
                         "Cancel",
                         style: TextStyle(
                             fontFamily: 'Montserrat',
-                            color: Color(0xff002242),
+                            color: colorTheme.headerText,
                             fontSize: 15),
                       )),
                 )

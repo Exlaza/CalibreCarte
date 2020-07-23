@@ -29,6 +29,12 @@ class ColorTheme with ChangeNotifier{
   Color _di;
   Color _appBarColor;
   Color _appBarTitleColor;
+  Color _modalSheetColor=Colors.white.withOpacity(0.8);
+  Color _alertBoxColor=Colors.white;
+
+  Color get alertBoxColor => _alertBoxColor;
+
+  Color get modalSheetColor => _modalSheetColor;
 
   ColorTheme(this._darkMode){
     if(_darkMode==true){

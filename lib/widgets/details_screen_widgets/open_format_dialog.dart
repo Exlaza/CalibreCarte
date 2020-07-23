@@ -1,8 +1,10 @@
 import 'package:calibre_carte/helpers/book_downloader.dart';
 import 'package:calibre_carte/helpers/data_provider.dart';
 import 'package:calibre_carte/models/data.dart';
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
+import 'package:provider/provider.dart';
 
 import 'downloading_progress.dart';
 
@@ -77,6 +79,7 @@ class _OpenFormatDialogState extends State<OpenFormatDialog> {
   }
   @override
   Widget build(BuildContext context) {
+    ColorTheme colorTheme=Provider.of(context);
     return FutureBuilder(
       future: myFuture,
       builder: (context, snapshot) {
@@ -85,7 +88,7 @@ class _OpenFormatDialogState extends State<OpenFormatDialog> {
             data: MediaQuery.of(context).copyWith(
                 textScaleFactor:
                     textScaleFactor(context)),
-            child: AlertDialog(
+            child: AlertDialog( backgroundColor: colorTheme.alertBoxColor,
               title: Text("Select Format"),
               content: Column(
                 children: dataFormatsFileNameMap.map((element) {

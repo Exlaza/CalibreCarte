@@ -14,9 +14,11 @@ import 'package:calibre_carte/models/comments.dart';
 import 'package:calibre_carte/models/data.dart';
 import 'package:calibre_carte/models/publishers.dart';
 import 'package:calibre_carte/models/ratings.dart';
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/widgets/details_screen_widgets/details_lefttile.dart';
 import 'package:calibre_carte/widgets/details_screen_widgets/details_sidebar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../helpers/books_provider.dart';
 import '../models/books.dart';
 
@@ -203,7 +205,20 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
       },
     );
   }
-
+  Widget getAppbar(ColorTheme colorTheme) {
+    return AppBar(
+        backgroundColor: colorTheme.appBarColor,
+        iconTheme: IconThemeData(
+            color: colorTheme.appBarTitleColor //change your color here
+        ),
+        title: Text(
+          'Details',
+          style: TextStyle(
+            fontFamily: 'Montserrat',
+            color: colorTheme.appBarTitleColor,
+          ),
+        ));
+  }
   var appbar = AppBar(
       backgroundColor: Color(0xff002242),
       iconTheme: IconThemeData(
@@ -219,12 +234,13 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ColorTheme colorTheme=Provider.of(context);
     return MediaQuery(data: MediaQuery.of(context).copyWith(
         textScaleFactor:
         textScaleFactor(context)),
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: appbar,
+        appBar: getAppbar(colorTheme),
         body: FutureBuilder<void>(
             future: myFuture,
             builder: (context, snapshot) {
