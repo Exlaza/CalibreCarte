@@ -25,7 +25,7 @@ class SearchDropdown extends StatelessWidget {
                 children: <Widget>[
                   Icon(
                     Icons.search,
-                    color: Color(0xffFED962),
+                    color: colorTheme.settingsIcon,
                   ),
                   SizedBox(
                     width: 10,

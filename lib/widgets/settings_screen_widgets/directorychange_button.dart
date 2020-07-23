@@ -56,7 +56,7 @@ class DirectoryChange extends StatelessWidget {
               children: <Widget>[
                 Icon(
                   Icons.folder_open,
-                  color: Color(0xffFED962),
+                  color: colorTheme.settingsIcon,
                 ),
                 SizedBox(
                   width: 10,

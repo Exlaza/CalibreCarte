@@ -127,6 +127,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
       mySecondFuture = checkIfLocalCopyExists();
     });
 //    mySecondFuture = checkIfLocalCopyExists();
+//    mySecondFuture = checkIfLocalCopyExists();
   }
 
 

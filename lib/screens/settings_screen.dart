@@ -85,7 +85,7 @@ class _SettingsNewState extends State<SettingsNew> {
             color: Colors.white, //change your color here
           ),
           elevation: 0.0,
-          backgroundColor: Color(0xff002242),
+          backgroundColor: colorTheme.appBarColor,
           title: Text(
             'Settings',
             style: TextStyle(
@@ -135,7 +135,7 @@ class _SettingsNewState extends State<SettingsNew> {
                               children: <Widget>[
                                 Icon(
                                   Icons.help_outline,
-                                  color: Color(0xffFED962),
+                                  color:colorTheme.settingsIcon,
                                 ),
                                 SizedBox(
                                   width: 10,
@@ -165,7 +165,7 @@ class _SettingsNewState extends State<SettingsNew> {
                               children: <Widget>[
                                 Icon(
                                   Icons.help_outline,
-                                  color: Color(0xffFED962),
+                                  color: colorTheme.settingsIcon,
                                 ),
                                 SizedBox(
                                   width: 10,
@@ -195,7 +195,7 @@ class _SettingsNewState extends State<SettingsNew> {
                               children: <Widget>[
                                 Icon(
                                   Icons.help_outline,
-                                  color: Color(0xffFED962),
+                                  color: colorTheme.settingsIcon,
                                 ),
                                 SizedBox(
                                   width: 10,
@@ -224,7 +224,7 @@ class _SettingsNewState extends State<SettingsNew> {
                               children: <Widget>[
                                 Icon(
                                   Icons.info_outline,
-                                  color: Color(0xffFED962),
+                                  color: colorTheme.settingsIcon,
                                 ),
                                 SizedBox(
                                   width: 10,

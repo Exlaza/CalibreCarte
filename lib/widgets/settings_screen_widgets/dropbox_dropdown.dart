@@ -555,7 +555,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Icon(Icons.cloud_download, color: Color(0xffFED962)),
+                      Icon(Icons.cloud_download, color: colorTheme.settingsIcon),
                       SizedBox(
                         width: 10,
                       ),
@@ -569,7 +569,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                     ],
                   ),
                   selected_lib_name == pathNameMap[element]
-                      ? Icon(Icons.done, color: Color(0xffFED962))
+                      ? Icon(Icons.done, color: colorTheme.settingsIcon)
                       : Container()
                 ],
               ),
@@ -679,7 +679,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                                       children: <Widget>[
                                         Icon(
                                           Icons.folder,
-                                          color: Color(0xffFED962),
+                                          color: colorTheme.settingsIcon,
                                         ),
                                         SizedBox(
                                           width: 10,

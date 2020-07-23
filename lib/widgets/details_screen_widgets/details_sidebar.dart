@@ -138,7 +138,7 @@ class DetailsSidebar extends StatelessWidget {
                   child: IconButton(
                     icon: Icon(
                       Icons.file_download,
-                      color: colorTheme.descriptionIconEnabledColor,
+                      color: activeIcon,
                     ),
                     iconSize: 40,
                   )),

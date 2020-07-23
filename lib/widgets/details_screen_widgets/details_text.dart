@@ -159,10 +159,10 @@ class BookDetailsText extends StatelessWidget {
                 child: Container(
                   width: width / 2,
                   height: (bottomSize * 0.15),
-                  color: Color(0xFF002242),
+                  color: colorTheme.descriptionArrowBackground,
                   child: Icon(
                     Icons.arrow_back,
-                    color: Color(0xffFED962),
+                    color: colorTheme.descriptionArrow,
                   ),
                 ),
               ),
@@ -171,10 +171,10 @@ class BookDetailsText extends StatelessWidget {
                 child: Container(
                   height: (bottomSize * 0.15),
                   width: width / 2,
-                  color: Color(0xFF002242),
+                  color: colorTheme.descriptionArrowBackground,
                   child: Icon(
                     Icons.arrow_forward,
-                    color: Color(0xffFED962),
+                    color: colorTheme.descriptionArrow,
                   ),
                 ),
               )

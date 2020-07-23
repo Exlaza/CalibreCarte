@@ -21,7 +21,7 @@ class LogoutButton extends StatelessWidget {
                 children: <Widget>[
                   Icon(
                     Icons.exit_to_app,
-                    color: Color(0xffFED962),
+                    color: colorTheme.settingsIcon,
                   ),
                   SizedBox(
                     width: 10,
