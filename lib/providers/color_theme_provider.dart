@@ -14,8 +14,9 @@ const String SETTING_BG_DARK = "";
 const String SETTINGS_TILE_DARK = "";
 const String APP_BAR_DARK = "#FED428";
 const String APP_BAR_TITLE_DARK = "#242725";
-
-
+const String ALERTBOX_DARK="#EEEEEE";
+const String ALERTBOX_LIGHT="#FFFFFF";
+const String APPBAR_LIGHT="#002242";
 class ColorTheme with ChangeNotifier{
   bool _darkMode;
   Color _tileColor1;
@@ -30,7 +31,7 @@ class ColorTheme with ChangeNotifier{
   Color _appBarColor;
   Color _appBarTitleColor;
   Color _modalSheetColor=Colors.white.withOpacity(0.8);
-  Color _alertBoxColor=Colors.white;
+  Color _alertBoxColor;
 
   Color get alertBoxColor => _alertBoxColor;
 
@@ -38,6 +39,7 @@ class ColorTheme with ChangeNotifier{
 
   ColorTheme(this._darkMode){
     if(_darkMode==true){
+      _alertBoxColor=_colorFromHex(ALERTBOX_DARK);
 //      _tileColor1=Colors.black87;
       _appBarColor=_colorFromHex(APP_BAR_DARK);
       _appBarTitleColor=_colorFromHex(APP_BAR_TITLE_DARK);
@@ -67,6 +69,8 @@ class ColorTheme with ChangeNotifier{
       _subHeaderText=Color(0xffb6b2df);
       _settingsTile=Colors.white;
       _di = Color(0xffFFE06F);
+      _alertBoxColor=_colorFromHex(ALERTBOX_LIGHT);
+      _appBarColor=_colorFromHex(APPBAR_LIGHT);
     }
   }
 
@@ -76,6 +80,7 @@ class ColorTheme with ChangeNotifier{
   bool get darkMode => _darkMode;
 
   void darkModeOn(){
+    _alertBoxColor=_colorFromHex(ALERTBOX_DARK);
     _appBarColor=_colorFromHex(APP_BAR_DARK);
 //      _tileColor1=Colors.black87;
     _tileColor1=_colorFromHex(TILE1_DARK);
@@ -104,6 +109,7 @@ class ColorTheme with ChangeNotifier{
   }
 
   void darkModeOff(){
+    _alertBoxColor=_colorFromHex(ALERTBOX_LIGHT);
     _darkMode=false;
     _tileColor1= Colors.white;
     _tileColor2=Colors.white70;
@@ -113,6 +119,7 @@ class ColorTheme with ChangeNotifier{
     _subHeaderText=Color(0xffb6b2df);
     _settingsTile=Colors.white;
     _di = Color(0xffFFE06F);
+    _appBarColor=_colorFromHex(APPBAR_LIGHT);
     notifyListeners();
   }
 
