@@ -6,8 +6,8 @@ Color _colorFromHex(String hexColor) {
   return Color(int.parse('FF$hexCode', radix: 16));
 }
 
-const String TILE1_DARK = "#08121c";
-const String TILE2_DARK = "#132436";
+const String TILE1_DARK = "#242633";
+const String TILE2_DARK = "#303346";
 const String HEADER_TEXT_DARK = "#eeeeee";
 const String DESCRIPTION_BG_DARK = "";
 const String SETTING_BG_DARK = "";
@@ -17,6 +17,17 @@ const String APP_BAR_TITLE_DARK = "#242725";
 const String ALERTBOX_DARK="#EEEEEE";
 const String ALERTBOX_LIGHT="#FFFFFF";
 const String APPBAR_LIGHT="#002242";
+const String TILE_UNDERLINE_LIGHT = "#00c6ff";
+const String TILE_UNDERLINE_DARK = "#E35E58";
+const String DESCRIPTION_ICON_COLOR_DARK = "#242633";
+const String DESCRIPTION_ICON_ALT_COLOR_DARK = "#303346";
+const String DESCRIPTION_ICON_COLOR_LIGHT = "#FED962";
+const String DESCRIPTION_ICON_ALT_COLOR_LIGHT = "#FFE06F";
+const String DESCRIPTION_ICON_ENABLED_LIGHT = "#FFFFFF";
+const String DESCRIPTION_ICON_ENABLED_DARK = "#";
+const String DESCRIPTION_ICON_DISABLED_LIGHT = "#";
+const String DESCRIPTION_ICON_DISABLED_DARK = "#2CCA90";
+
 class ColorTheme with ChangeNotifier{
   bool _darkMode;
   Color _tileColor1;
@@ -32,10 +43,16 @@ class ColorTheme with ChangeNotifier{
   Color _appBarTitleColor;
   Color _modalSheetColor=Colors.white.withOpacity(0.8);
   Color _alertBoxColor;
+  Color _tileUnderlineColor;
+  Color _descriptionIconAltColor;
+  Color _descriptionIconColor;
 
   Color get alertBoxColor => _alertBoxColor;
+  Color get descriptionIconColor => _descriptionIconColor;
+  Color get descriptionIconAltColor => _descriptionIconAltColor;
 
   Color get modalSheetColor => _modalSheetColor;
+  Color get tileUnderlineColor => _tileUnderlineColor;
 
   ColorTheme(this._darkMode){
     if(_darkMode==true){
@@ -46,7 +63,8 @@ class ColorTheme with ChangeNotifier{
       _tileColor1=_colorFromHex(TILE1_DARK);
 //      _tileColor2=Colors.black;
       _tileColor2=_colorFromHex(TILE2_DARK);
-
+      _descriptionIconAltColor = _colorFromHex(DESCRIPTION_ICON_ALT_COLOR_DARK);
+      _descriptionIconColor = _colorFromHex(DESCRIPTION_ICON_COLOR_DARK);
       _descriptionBackground=Colors.black;
 //      _settingsBackground=Colors.black54;
 //      _settingsBackground=Color(0xff303841);
@@ -58,6 +76,7 @@ class ColorTheme with ChangeNotifier{
       _subHeaderText=Color(0xff6b778d);
       _settingsTile=Colors.grey;
       _di = Color(0xffff6768);
+      _tileUnderlineColor = _colorFromHex(TILE_UNDERLINE_DARK);
 
     }
     else{
@@ -71,6 +90,11 @@ class ColorTheme with ChangeNotifier{
       _di = Color(0xffFFE06F);
       _alertBoxColor=_colorFromHex(ALERTBOX_LIGHT);
       _appBarColor=_colorFromHex(APPBAR_LIGHT);
+      _tileUnderlineColor = _colorFromHex(TILE_UNDERLINE_LIGHT);
+      _descriptionIconColor = _colorFromHex(DESCRIPTION_ICON_COLOR_LIGHT);
+      _descriptionIconAltColor = _colorFromHex(DESCRIPTION_ICON_ALT_COLOR_LIGHT);
+
+
     }
   }
 
@@ -82,6 +106,11 @@ class ColorTheme with ChangeNotifier{
   void darkModeOn(){
     _alertBoxColor=_colorFromHex(ALERTBOX_DARK);
     _appBarColor=_colorFromHex(APP_BAR_DARK);
+    _tileUnderlineColor = _colorFromHex(TILE_UNDERLINE_DARK);
+    _descriptionIconAltColor = _colorFromHex(DESCRIPTION_ICON_ALT_COLOR_DARK);
+    _descriptionIconColor = _colorFromHex(DESCRIPTION_ICON_COLOR_DARK);
+
+
 //      _tileColor1=Colors.black87;
     _tileColor1=_colorFromHex(TILE1_DARK);
     _appBarTitleColor=_colorFromHex(APP_BAR_TITLE_DARK);
@@ -110,6 +139,8 @@ class ColorTheme with ChangeNotifier{
 
   void darkModeOff(){
     _alertBoxColor=_colorFromHex(ALERTBOX_LIGHT);
+    _descriptionIconColor = _colorFromHex(DESCRIPTION_ICON_COLOR_LIGHT);
+    _descriptionIconAltColor = _colorFromHex(DESCRIPTION_ICON_ALT_COLOR_LIGHT);
     _darkMode=false;
     _tileColor1= Colors.white;
     _tileColor2=Colors.white70;
@@ -120,6 +151,7 @@ class ColorTheme with ChangeNotifier{
     _settingsTile=Colors.white;
     _di = Color(0xffFFE06F);
     _appBarColor=_colorFromHex(APPBAR_LIGHT);
+    _tileUnderlineColor = _colorFromHex(TILE_UNDERLINE_LIGHT);
     notifyListeners();
   }
 
