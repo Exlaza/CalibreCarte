@@ -1,10 +1,12 @@
 import 'package:calibre_carte/helpers/book_downloader.dart';
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/widgets/details_screen_widgets/open_format_dialog.dart';
 import 'package:calibre_carte/widgets/details_screen_widgets/select_format_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/html_parser.dart';
+import 'package:provider/provider.dart';
 //import 'package:flutter_html/style.dart';
 
 class DetailsSidebar extends StatelessWidget {
@@ -41,6 +43,7 @@ class DetailsSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ColorTheme colorTheme = Provider.of<ColorTheme>(context);
     var width = MediaQuery.of(context).size.width -
         MediaQuery.of(context).size.width / 1.5;
     Widget descriptionPopup() {
@@ -124,7 +127,7 @@ class DetailsSidebar extends StatelessWidget {
               child: Container(
                   decoration: BoxDecoration(
                       border: Border.all(width: 1, color: Colors.white),
-                      color: color
+                      color: colorTheme.descriptionIconColor
 //                  boxShadow: [BoxShadow(blurRadius: 10)],
                       ),
                   padding: EdgeInsets.all(10),
@@ -135,7 +138,7 @@ class DetailsSidebar extends StatelessWidget {
                   child: IconButton(
                     icon: Icon(
                       Icons.file_download,
-                      color: activeIcon,
+                      color: colorTheme.descriptionIconEnabledColor,
                     ),
                     iconSize: 40,
                   )),
@@ -157,7 +160,7 @@ class DetailsSidebar extends StatelessWidget {
 //              padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     border: Border.all(width: 1, color: Colors.white),
-                    color: altColor,
+                    color: colorTheme.descriptionIconAltColor,
 //                boxShadow: [BoxShadow(blurRadius: 10)],
                   ),
                   child: IconButton(
@@ -188,7 +191,7 @@ class DetailsSidebar extends StatelessWidget {
 //              padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   border: Border.all(width: 1, color: Colors.white),
-                  color: color,
+                  color: colorTheme.descriptionIconColor,
 //                boxShadow: [BoxShadow(blurRadius: 10)],
                 ),
                 child: IconButton(
@@ -213,7 +216,7 @@ class DetailsSidebar extends StatelessWidget {
 //              padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                     border: Border.all(width: 1, color: Colors.white),
-                    color: altColor,
+                    color: colorTheme.descriptionIconAltColor,
                     boxShadow: [
 //                BoxShadow(blurRadius: 10),
                     ]),
