@@ -41,6 +41,9 @@ const String DIRECTORY_PICKER_TEXT_DARK = "#FFFFFF";
 const String DESCRIPTION_ICON_BORDER_LIGHT = "#FFFFFF";
 const String DESCRIPTION_ICON__BORDER_DARK = "#000000";
 
+const String PROGRESSBAR_LIGHT = "#";
+const String PROGRESSBAR_DARK = "#ff6768";
+
 class ColorTheme with ChangeNotifier {
   bool _darkMode;
   Color _tileColor1;
@@ -67,6 +70,8 @@ class ColorTheme with ChangeNotifier {
   Color _directoryPickerText;
   Color _directoryPickerBg;
 
+  Color _progressBar;
+
   Color get settingsIcon => _settingsIcon;
 
   Color get descriptionArrowBackground => _descriptionArrowBackground;
@@ -89,6 +94,8 @@ class ColorTheme with ChangeNotifier {
 
   Color get directoryPickerBg => _directoryPickerBg;
 
+  Color get progressBar => _progressBar;
+
   ColorTheme(this._darkMode) {
     if (_darkMode == true) {
       _settingsIcon = _colorFromHex(SETTINGS_ICON_DARK);
@@ -103,21 +110,18 @@ class ColorTheme with ChangeNotifier {
       _descriptionBackground = Color(0xff232324);
       _descriptionArrow = _colorFromHex(DESCRIPTION_ARROW_DARK);
       _settingsBackground = Color(0xff000000);
-
       _headerText = _colorFromHex(HEADER_TEXT_DARK);
       _subHeaderText = Color(0xff6b778d);
       _settingsTile = Colors.black;
       _di = Color(0xffff6768);
       _tileUnderlineColor = _colorFromHex(TILE_UNDERLINE_DARK);
       _descriptionIconEnabled = _colorFromHex(DESCRIPTION_ICON_ENABLED_DARK);
-
       _directoryPickerText = _colorFromHex(DIRECTORY_PICKER_TEXT_DARK);
+      _progressBar = _colorFromHex(PROGRESSBAR_LIGHT);
 
     } else {
       _settingsIcon = _colorFromHex(SETTINGS_ICON_LIGHT);
-
       _descriptionArrowBackground = _colorFromHex(DESCRIPTION_ARROW_BGD_LIGHT);
-
       _tileColor1 = Colors.white;
       _tileColor2 = Colors.white70;
       _descriptionBackground = Colors.white;
@@ -135,8 +139,7 @@ class ColorTheme with ChangeNotifier {
       _descriptionIconEnabled = _colorFromHex(DESCRIPTION_ICON_ENABLED_LIGHT);
       _descriptionArrow = _colorFromHex(DESCRIPTION_ARROW_LIGHT);
       _directoryPickerText = _colorFromHex(DIRECTORY_PICKER_TEXT_LIGHT);
-
-
+      _progressBar = _colorFromHex(PROGRESSBAR_LIGHT);
     }
   }
 
@@ -195,6 +198,8 @@ class ColorTheme with ChangeNotifier {
     _tileUnderlineColor = _colorFromHex(TILE_UNDERLINE_LIGHT);
     _descriptionArrow = _colorFromHex(DESCRIPTION_ARROW_LIGHT);
     _directoryPickerText = _colorFromHex(DIRECTORY_PICKER_TEXT_LIGHT);
+    _progressBar = _colorFromHex(PROGRESSBAR_LIGHT);
+
 
     notifyListeners();
   }
