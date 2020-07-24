@@ -238,7 +238,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget closeButton() {
     return IconButton(
-      icon: Icon(Icons.close),
+      icon: Icon(Icons.close, color: Colors.white,),
       onPressed: () {
         setState(() {
           controller.clear();
@@ -281,7 +281,11 @@ class _MyHomePageState extends State<MyHomePage> {
           style: TextStyle(color: Colors.white),
           autofocus: true,
           controller: controller,
-          decoration: InputDecoration(
+          decoration: InputDecoration( enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+          ),
               prefixIcon: closeButton(), hintText: 'Search for ${searchFil}s',hintStyle: TextStyle(color:Colors.white60)),
         );
       });

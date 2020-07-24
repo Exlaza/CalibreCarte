@@ -54,13 +54,13 @@ class DetailsSidebar extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.black.withOpacity(0.2),
           floatingActionButton: FloatingActionButton(
-              backgroundColor: Color(0xff002242),
+              backgroundColor: colorTheme.appBarColor,
               onPressed: () {
                 Navigator.of(context).pop();
               },
               child: Icon(
                 Icons.arrow_back,
-                color: Color(0xffFED962),
+                color: colorTheme.descriptionArrow,
               )),
           body: Container(
             child: SingleChildScrollView(
