@@ -27,12 +27,16 @@ const String DESCRIPTION_ICON_ENABLED_LIGHT = "#FFFFFF";
 const String DESCRIPTION_ICON_ENABLED_DARK = "#2CCA90";
 const String DESCRIPTION_ICON_DISABLED_LIGHT = "#";
 const String DESCRIPTION_ICON_DISABLED_DARK = "#2CCA90";
-const String DESCRIPTION_ARROW_DARK="#FFFFFF";
-const String DESCRIPTION_ARROW_LIGHT="#FED962";
-const String DESCRIPTION_ARROW_BGD_LIGHT="#002242";
-const String DESCRIPTION_ARROW_BGD_DARK="#000000";
-const String SETTINGS_ICON_LIGHT="#FED962";
-const String SETTINGS_ICON_DARK="#ff6768";
+const String DESCRIPTION_ARROW_DARK = "#FFFFFF";
+const String DESCRIPTION_ARROW_LIGHT = "#FED962";
+const String DESCRIPTION_ARROW_BGD_LIGHT = "#002242";
+const String DESCRIPTION_ARROW_BGD_DARK = "#000000";
+const String SETTINGS_ICON_LIGHT = "#FED962";
+const String SETTINGS_ICON_DARK = "#ff6768";
+
+const String DIRECTORY_PICKER_TEXT_LIGHT = "#000000";
+const String DIRECTORY_PICKER_TEXT_DARK = "#FFFFFF";
+
 class ColorTheme with ChangeNotifier {
   bool _darkMode;
   Color _tileColor1;
@@ -56,6 +60,9 @@ class ColorTheme with ChangeNotifier {
   Color _descriptionArrowBackground;
   Color _settingsIcon;
 
+  Color _directoryPickerText;
+  Color _directoryPickerBg;
+
   Color get settingsIcon => _settingsIcon;
 
   Color get descriptionArrowBackground => _descriptionArrowBackground;
@@ -74,10 +81,14 @@ class ColorTheme with ChangeNotifier {
 
   Color get tileUnderlineColor => _tileUnderlineColor;
 
+  Color get directoryPickerText => _directoryPickerText;
+
+  Color get directoryPickerBg => _directoryPickerBg;
+
   ColorTheme(this._darkMode) {
     if (_darkMode == true) {
-      _settingsIcon=_colorFromHex(SETTINGS_ICON_DARK);
-      _descriptionArrowBackground=_colorFromHex(DESCRIPTION_ARROW_BGD_DARK);
+      _settingsIcon = _colorFromHex(SETTINGS_ICON_DARK);
+      _descriptionArrowBackground = _colorFromHex(DESCRIPTION_ARROW_BGD_DARK);
       _alertBoxColor = _colorFromHex(ALERTBOX_DARK);
       _appBarColor = _colorFromHex(APP_BAR_DARK);
       _appBarTitleColor = _colorFromHex(APP_BAR_TITLE_DARK);
@@ -86,7 +97,7 @@ class ColorTheme with ChangeNotifier {
       _descriptionIconAltColor = _colorFromHex(DESCRIPTION_ICON_ALT_COLOR_DARK);
       _descriptionIconColor = _colorFromHex(DESCRIPTION_ICON_COLOR_DARK);
       _descriptionBackground = Color(0xff232324);
-      _descriptionArrow=_colorFromHex(DESCRIPTION_ARROW_DARK);
+      _descriptionArrow = _colorFromHex(DESCRIPTION_ARROW_DARK);
       _settingsBackground = Color(0xff000000);
 
       _headerText = _colorFromHex(HEADER_TEXT_DARK);
@@ -95,10 +106,13 @@ class ColorTheme with ChangeNotifier {
       _di = Color(0xffff6768);
       _tileUnderlineColor = _colorFromHex(TILE_UNDERLINE_DARK);
       _descriptionIconEnabled = _colorFromHex(DESCRIPTION_ICON_ENABLED_DARK);
-    } else {
-      _settingsIcon=_colorFromHex(SETTINGS_ICON_LIGHT);
 
-      _descriptionArrowBackground=_colorFromHex(DESCRIPTION_ARROW_BGD_LIGHT);
+      _directoryPickerText = _colorFromHex(DIRECTORY_PICKER_TEXT_DARK);
+
+    } else {
+      _settingsIcon = _colorFromHex(SETTINGS_ICON_LIGHT);
+
+      _descriptionArrowBackground = _colorFromHex(DESCRIPTION_ARROW_BGD_LIGHT);
 
       _tileColor1 = Colors.white;
       _tileColor2 = Colors.white70;
@@ -115,7 +129,9 @@ class ColorTheme with ChangeNotifier {
       _descriptionIconAltColor =
           _colorFromHex(DESCRIPTION_ICON_ALT_COLOR_LIGHT);
       _descriptionIconEnabled = _colorFromHex(DESCRIPTION_ICON_ENABLED_LIGHT);
-      _descriptionArrow=_colorFromHex(DESCRIPTION_ARROW_LIGHT);
+      _descriptionArrow = _colorFromHex(DESCRIPTION_ARROW_LIGHT);
+      _directoryPickerText = _colorFromHex(DIRECTORY_PICKER_TEXT_LIGHT);
+
 
     }
   }
@@ -125,10 +141,10 @@ class ColorTheme with ChangeNotifier {
   bool get darkMode => _darkMode;
 
   void darkModeOn() {
-    _settingsIcon=_colorFromHex(SETTINGS_ICON_DARK);
+    _settingsIcon = _colorFromHex(SETTINGS_ICON_DARK);
 
-    _descriptionArrowBackground=_colorFromHex(DESCRIPTION_ARROW_BGD_DARK);
-    _descriptionArrow=_colorFromHex(DESCRIPTION_ARROW_DARK);
+    _descriptionArrowBackground = _colorFromHex(DESCRIPTION_ARROW_BGD_DARK);
+    _descriptionArrow = _colorFromHex(DESCRIPTION_ARROW_DARK);
     _alertBoxColor = _colorFromHex(ALERTBOX_DARK);
     _appBarColor = _colorFromHex(APP_BAR_DARK);
     _tileUnderlineColor = _colorFromHex(TILE_UNDERLINE_DARK);
@@ -146,14 +162,17 @@ class ColorTheme with ChangeNotifier {
     _subHeaderText = Color(0xff6b778d);
     _settingsTile = Colors.black;
     _di = Color(0xffff6768);
+    _directoryPickerText = _colorFromHex(DIRECTORY_PICKER_TEXT_DARK);
+
+
     _darkMode = true;
     notifyListeners();
   }
 
   void darkModeOff() {
-    _settingsIcon=_colorFromHex(SETTINGS_ICON_LIGHT);
+    _settingsIcon = _colorFromHex(SETTINGS_ICON_LIGHT);
 
-    _descriptionArrowBackground=_colorFromHex(DESCRIPTION_ARROW_BGD_LIGHT);
+    _descriptionArrowBackground = _colorFromHex(DESCRIPTION_ARROW_BGD_LIGHT);
 
     _alertBoxColor = _colorFromHex(ALERTBOX_LIGHT);
     _descriptionIconColor = _colorFromHex(DESCRIPTION_ICON_COLOR_LIGHT);
@@ -170,7 +189,8 @@ class ColorTheme with ChangeNotifier {
     _di = Color(0xffFFE06F);
     _appBarColor = _colorFromHex(APPBAR_LIGHT);
     _tileUnderlineColor = _colorFromHex(TILE_UNDERLINE_LIGHT);
-    _descriptionArrow=_colorFromHex(DESCRIPTION_ARROW_LIGHT);
+    _descriptionArrow = _colorFromHex(DESCRIPTION_ARROW_LIGHT);
+    _directoryPickerText = _colorFromHex(DIRECTORY_PICKER_TEXT_LIGHT);
 
     notifyListeners();
   }
