@@ -1,11 +1,15 @@
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Instructions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ColorTheme colorTheme = Provider.of(context);
     return Scaffold(
+      backgroundColor: colorTheme.descriptionBackground,
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
@@ -14,7 +18,7 @@ class Instructions extends StatelessWidget {
           "Instructions",
           style: TextStyle(fontFamily: 'Montserrat', color: Colors.white),
         ),
-        backgroundColor: Color(0xff002242),
+        backgroundColor: colorTheme.appBarColor,
       ),
       body: Container(
         margin: EdgeInsets.fromLTRB(20, 20, 10, 10),
@@ -26,7 +30,10 @@ class Instructions extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     "\u2022",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: colorTheme.headerText),
                   ),
                   Expanded(
                       child: RichText(
@@ -36,7 +43,7 @@ class Instructions extends StatelessWidget {
                               " Before logging in, you should upload your entire Calibre Library folder to dropbox. You can find the location of the folder by clicking on the \"Calibre Library\" button in the Calibre Application.",
                           style: TextStyle(
                               fontFamily: 'Montserrat',
-                              color: Colors.black,
+                              color: colorTheme.headerText,
                               fontSize: 15))
                     ]),
                   ))
@@ -50,7 +57,10 @@ class Instructions extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     "\u2022",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: colorTheme.headerText),
                   ),
                   Expanded(
                       child: RichText(
@@ -60,7 +70,7 @@ class Instructions extends StatelessWidget {
                               " You can read more about how to export and move Calibre's libraries ",
                           style: TextStyle(
                               fontFamily: 'Montserrat',
-                              color: Colors.black,
+                              color: colorTheme.headerText,
                               fontSize: 15)),
                       TextSpan(
                           text: "here.",
@@ -85,7 +95,10 @@ class Instructions extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     "\u2022",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: colorTheme.headerText),
                   ),
                   Expanded(
                       child: RichText(
@@ -95,7 +108,7 @@ class Instructions extends StatelessWidget {
                               " For the best experience with Calibre Carte, download e-book metadata and covers using Calibre. You can find the instructions to download and edit metadata",
                           style: TextStyle(
                               fontFamily: 'Montserrat',
-                              color: Colors.black,
+                              color: colorTheme.headerText,
                               fontSize: 15)),
                       TextSpan(
                           text: " here.",

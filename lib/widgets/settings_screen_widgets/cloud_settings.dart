@@ -1,6 +1,6 @@
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
-import 'package:calibre_carte/widgets/Settings%20Screen%20Widgets/dropbox_dropdown.dart';
+import 'package:calibre_carte/widgets/settings_screen_widgets/dropbox_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +29,7 @@ class _CloudSettingsState extends State<CloudSettings> {
                     children: <Widget>[
                       Icon(
                         settingIcon,
-                        color: Color(0xffFED962),
+                        color: colorTheme.settingsIcon,
                       ),
                       SizedBox(
                         width: 10,

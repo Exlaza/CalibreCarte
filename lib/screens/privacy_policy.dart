@@ -1,5 +1,7 @@
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PrivacyPolicy extends StatelessWidget {
@@ -12,7 +14,9 @@ class PrivacyPolicy extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ColorTheme colorTheme=Provider.of(context);
     return Scaffold(
+      backgroundColor: colorTheme.descriptionBackground,
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
@@ -21,7 +25,7 @@ class PrivacyPolicy extends StatelessWidget {
           "Privacy Policy",
           style: TextStyle(fontFamily: 'Montserrat', color: Colors.white),
         ),
-        backgroundColor: Color(0xff002242),
+        backgroundColor: colorTheme.appBarColor,
       ),
       body: Container(
         margin: EdgeInsets.fromLTRB(20, 20, 10, 10),
@@ -33,7 +37,7 @@ class PrivacyPolicy extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     "\u2022",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: colorTheme.headerText),
                   ),
                   Expanded(
                       child: RichText(
@@ -42,7 +46,7 @@ class PrivacyPolicy extends StatelessWidget {
                           text: points[0],
                           style: TextStyle(
                               fontFamily: 'Montserrat',
-                              color: Colors.black,
+                              color: colorTheme.headerText,
                               fontSize: 15))
                     ]),
                   ))
@@ -56,7 +60,7 @@ class PrivacyPolicy extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     "\u2022",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: colorTheme.headerText),
                   ),
                   Expanded(
                       child: RichText(
@@ -66,7 +70,7 @@ class PrivacyPolicy extends StatelessWidget {
                               " When you connect to Dropbox, and use the app, data is sent to and requested from",
                           style: TextStyle(
                               fontFamily: 'Montserrat',
-                              color: Colors.black,
+                              color: colorTheme.headerText,
                               fontSize: 15)),
                       TextSpan(
                           text: " Dropbox",
@@ -76,14 +80,14 @@ class PrivacyPolicy extends StatelessWidget {
                             },
                           style: TextStyle(
                               fontFamily: 'Montserrat',
-                              color: Colors.blue,
+                              color: colorTheme.headerText,
                               fontSize: 15)),
                       TextSpan(
                           text:
                               ", which is governed by its own privacy policy. Dropbox is not affiliated with Calibre Carte, and as such, anything that it does or does not do with your data is completely out of this app’s control.",
                           style: TextStyle(
                               fontFamily: 'Montserrat',
-                              color: Colors.black,
+                              color: colorTheme.headerText,
                               fontSize: 15))
                     ]),
                   ))
@@ -97,7 +101,7 @@ class PrivacyPolicy extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     "\u2022",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: colorTheme.headerText),
                   ),
                   Expanded(
                       child: RichText(
@@ -107,7 +111,7 @@ class PrivacyPolicy extends StatelessWidget {
                           " Calibre Carte runs on top of",
                           style: TextStyle(
                               fontFamily: 'Montserrat',
-                              color: Colors.black,
+                              color: colorTheme.headerText,
                               fontSize: 15)),
                       TextSpan(
                           text: " Calibre",
@@ -124,7 +128,7 @@ class PrivacyPolicy extends StatelessWidget {
                           ", which is governed by its own privacy policy. Calibre is not affiliated with Calibre Carte, and as such, anything that it does or does not do with your data is completely out of Calibre Carte's control.",
                           style: TextStyle(
                               fontFamily: 'Montserrat',
-                              color: Colors.black,
+                              color: colorTheme.headerText,
                               fontSize: 15))
                     ]),
                   ))
@@ -138,7 +142,7 @@ class PrivacyPolicy extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     "\u2022",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: colorTheme.headerText),
                   ),
                   Expanded(
                       child: RichText(
@@ -147,7 +151,7 @@ class PrivacyPolicy extends StatelessWidget {
                           text: points[3],
                           style: TextStyle(
                               fontFamily: 'Montserrat',
-                              color: Colors.black,
+                              color: colorTheme.headerText,
                               fontSize: 15))
                     ]),
                   ))
@@ -161,7 +165,7 @@ class PrivacyPolicy extends StatelessWidget {
           children: <Widget>[
             Text(
               "\u2022",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: colorTheme.headerText),
             ),
             Expanded(
                 child: RichText(
@@ -170,7 +174,7 @@ class PrivacyPolicy extends StatelessWidget {
                         text: "Calibre Carte requires permissions to access device storage only for storing and accessing downloaded books.",
                         style: TextStyle(
                             fontFamily: 'Montserrat',
-                            color: Colors.black,
+                            color: colorTheme.headerText,
                             fontSize: 15))
                   ]),
                 ))
@@ -184,7 +188,7 @@ class PrivacyPolicy extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     "\u2022",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: colorTheme.headerText),
                   ),
                   Expanded(
                       child: RichText(
@@ -193,7 +197,7 @@ class PrivacyPolicy extends StatelessWidget {
                               text: "Calibre Carte requires permissions to access files and folders on your Dropbox© account only to scan for available Calibre Libraries and download Calibre Libraries. Calibre Carte does not do anything else with your data on Dropbox.",
                               style: TextStyle(
                                   fontFamily: 'Montserrat',
-                                  color: Colors.black,
+                                  color: colorTheme.headerText,
                                   fontSize: 15))
                         ]),
                       ))

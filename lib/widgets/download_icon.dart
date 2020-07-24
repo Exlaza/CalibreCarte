@@ -1,7 +1,9 @@
 import 'package:calibre_carte/helpers/book_downloader.dart';
 import 'package:calibre_carte/helpers/data_provider.dart';
 import 'package:calibre_carte/models/data.dart';
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DownloadIcon extends StatefulWidget {
   int bookId;
@@ -39,12 +41,14 @@ class _DownloadIconState extends State<DownloadIcon> {
 
   @override
   Widget build(BuildContext context) {
+    print("Building download icon again");
+    ColorTheme ct = Provider.of<ColorTheme>(context);
     return FutureBuilder(
         future: checkIfLocalCopyExists(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data == true) {
-              return CircleAvatar(radius: 10,backgroundColor: Color(0xffFFE06F),
+              return CircleAvatar(radius: 10,backgroundColor: ct.di,
                 child: Icon(
                   Icons.done,
                   color: Colors.white,size: 15,

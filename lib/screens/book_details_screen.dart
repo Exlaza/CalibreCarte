@@ -14,21 +14,24 @@ import 'package:calibre_carte/models/comments.dart';
 import 'package:calibre_carte/models/data.dart';
 import 'package:calibre_carte/models/publishers.dart';
 import 'package:calibre_carte/models/ratings.dart';
-import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/details_lefttile.dart';
-import 'package:calibre_carte/widgets/Details%20Screen%20Widgets/details_sidebar.dart';
+import 'package:calibre_carte/providers/color_theme_provider.dart';
+import 'package:calibre_carte/widgets/details_screen_widgets/details_lefttile.dart';
+import 'package:calibre_carte/widgets/details_screen_widgets/details_sidebar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../helpers/books_provider.dart';
 import '../models/books.dart';
 
 class BookDetailsScreen extends StatefulWidget {
   static const routeName = '/book-detailsbeta';
   final int bookId;
-
-  BookDetailsScreen({this.bookId});
+  final Function refreshTile;
+  BookDetailsScreen({this.bookId, this.refreshTile}){
+    print(this.bookId);
+  }
 
   @override
-  _BookDetailsScreenState createState() =>
-      _BookDetailsScreenState();
+  _BookDetailsScreenState createState() => _BookDetailsScreenState();
 }
 
 class _BookDetailsScreenState extends State<BookDetailsScreen> {
@@ -77,6 +80,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     setState(() {
       mySecondFuture = checkIfLocalCopyExists();
     });
+    widget.refreshTile();
   }
 
   Future<void> getBookDetails() async {
@@ -100,11 +104,14 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     rating = await BooksRatingLinkProvider.getRatingByBookID(widget.bookId);
     publishers =
         await BooksPublisherLinkProvider.getPublisherByBookID(widget.bookId);
+
+    print("I'm done with the first future");
   }
 
   @override
   void initState() {
     super.initState();
+    print('Fucking naya page is that even woerking');
     myFuture = getBookDetails();
     mySecondFuture = checkIfLocalCopyExists();
   }
@@ -120,26 +127,40 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
       mySecondFuture = checkIfLocalCopyExists();
     });
 //    mySecondFuture = checkIfLocalCopyExists();
+//    mySecondFuture = checkIfLocalCopyExists();
   }
 
+
+  textScaleFactor(BuildContext context) {
+    if (MediaQuery.of(context).size.height > 610) {
+      return MediaQuery.of(context).textScaleFactor.clamp(0.6, 1.0);
+    } else {
+      return MediaQuery.of(context).textScaleFactor.clamp(0.6, 0.85);
+    }
+  }
   Widget description() {
     var totalHeight = MediaQuery.of(context).size.height -
         appbar.preferredSize.height -
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
-    return Container(
-      child: Row(children: <Widget>[
-        DetailsLeftTile(
-          publishers: publishers,
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(
+          textScaleFactor:
+              textScaleFactor(context)),
+      child: Container(
+        child: Row(children: <Widget>[
+          DetailsLeftTile(
+            publishers: publishers,
 //          rating: Ratings.fromMapObject({'id':1,'rating':3}),
-          rating: rating,
-          bookId: widget.bookId,
-          bookDetails: bookDetails,
-          authorText: authorText,
-          totalHeight: totalHeight,
-        ),
-        rightTile()
-      ]),
+            rating: rating,
+            bookId: widget.bookId,
+            bookDetails: bookDetails,
+            authorText: authorText,
+            totalHeight: totalHeight,
+          ),
+          rightTile()
+        ]),
+      ),
     );
   } // TODO: change sizes
 
@@ -185,7 +206,20 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
       },
     );
   }
-
+  Widget getAppbar(ColorTheme colorTheme) {
+    return AppBar(
+        backgroundColor: colorTheme.appBarColor,
+        iconTheme: IconThemeData(
+            color: colorTheme.appBarTitleColor //change your color here
+        ),
+        title: Text(
+          'Details',
+          style: TextStyle(
+            fontFamily: 'Montserrat',
+            color: colorTheme.appBarTitleColor,
+          ),
+        ));
+  }
   var appbar = AppBar(
       backgroundColor: Color(0xff002242),
       iconTheme: IconThemeData(
@@ -201,20 +235,25 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: appbar,
-      body: FutureBuilder<void>(
-          future: myFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return description();
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
+    ColorTheme colorTheme=Provider.of(context);
+    return MediaQuery(data: MediaQuery.of(context).copyWith(
+        textScaleFactor:
+        textScaleFactor(context)),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: getAppbar(colorTheme),
+        body: FutureBuilder<void>(
+            future: myFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return description();
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }),
+      ),
     );
   }
 }

@@ -1,5 +1,7 @@
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class License extends StatelessWidget {
@@ -12,7 +14,8 @@ class License extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    ColorTheme colorTheme=Provider.of(context);
+    return Scaffold( backgroundColor: colorTheme.descriptionBackground,
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
@@ -21,7 +24,7 @@ class License extends StatelessWidget {
           "License",
           style: TextStyle(fontFamily: 'Montserrat', color: Colors.white),
         ),
-        backgroundColor: Color(0xff002242),
+        backgroundColor: colorTheme.appBarColor,
       ),
       body: Container(
         padding: EdgeInsets.only(left: 10, top: 30),
@@ -32,33 +35,33 @@ class License extends StatelessWidget {
             children: <Widget>[
               Text(
                 "Copyright (c) 2019 Ekansh Jain",
-                style: TextStyle(fontFamily: 'Montserrat', color: Colors.black),
+                style: TextStyle(fontFamily: 'Montserrat', color: colorTheme.headerText),
               ),
               SizedBox(
                 height: 10,
               ),
               Text(
                 "Copyright (c) 2019 Prerna Dave",
-                style: TextStyle(fontFamily: 'Montserrat', color: Colors.black),
+                style: TextStyle(fontFamily: 'Montserrat', color: colorTheme.headerText),
               ),
               SizedBox(
                 height: 20,
               ),
               Text(
                 licenseText,
-                style: TextStyle(fontFamily: 'Montserrat', color: Colors.black),
+                style: TextStyle(fontFamily: 'Montserrat', color: colorTheme.headerText),
               ), SizedBox(
                 height: 20,
               ),
               Text(
                 licenseText2,
-                style: TextStyle(fontFamily: 'Montserrat', color: Colors.black),
+                style: TextStyle(fontFamily: 'Montserrat', color: colorTheme.headerText),
               ), SizedBox(
                 height: 20,
               ),
               Text(
                 licenseText3,
-                style: TextStyle(fontFamily: 'Montserrat', color: Colors.black),
+                style: TextStyle(fontFamily: 'Montserrat', color: colorTheme.headerText),
               )
             ],
           ),
