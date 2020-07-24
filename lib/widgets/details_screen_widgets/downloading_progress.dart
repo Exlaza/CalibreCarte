@@ -117,7 +117,7 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
         child: AlertDialog( backgroundColor: colorTheme.alertBoxColor,
           title: Text(
             "Your progress",
-            style: TextStyle(fontSize: 10),
+            style: TextStyle(fontSize: 10, color: colorTheme.headerText),
           ),
           contentPadding:
               EdgeInsets.only(top: 0, left: 23, right: 23, bottom: 23),
