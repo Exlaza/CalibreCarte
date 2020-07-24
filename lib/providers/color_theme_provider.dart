@@ -10,11 +10,12 @@ const String TILE1_DARK = "#000000";
 const String TILE2_DARK = "#121212";
 const String HEADER_TEXT_DARK = "#eeeeee";
 const String DESCRIPTION_BG_DARK = "";
-const String SETTING_BG_DARK = "";
+const String SETTING_BG_DARK = "#242633";
+const String SETTING_BG_LIGHT="#FFFFFF";
 const String SETTINGS_TILE_DARK = "";
 const String APP_BAR_DARK = "#242633";
 const String APP_BAR_TITLE_DARK = "#eeeeee";
-const String ALERTBOX_DARK = "#14151c";
+const String ALERTBOX_DARK = "#242633";
 const String ALERTBOX_LIGHT = "#FFFFFF";
 const String APPBAR_LIGHT = "#002242";
 const String TILE_UNDERLINE_LIGHT = "#00c6ff";
@@ -102,7 +103,7 @@ class ColorTheme with ChangeNotifier {
       _descriptionIconColor = _colorFromHex(DESCRIPTION_ICON_COLOR_DARK);
       _descriptionBackground = Color(0xff232324);
       _descriptionArrow = _colorFromHex(DESCRIPTION_ARROW_DARK);
-      _settingsBackground = Color(0xff000000);
+      _settingsBackground = _colorFromHex(SETTING_BG_DARK);
 
       _headerText = _colorFromHex(HEADER_TEXT_DARK);
       _subHeaderText = Color(0xff6b778d);
@@ -121,7 +122,7 @@ class ColorTheme with ChangeNotifier {
       _tileColor1 = Colors.white;
       _tileColor2 = Colors.white70;
       _descriptionBackground = Colors.white;
-      _settingsBackground = Colors.white;
+      _settingsBackground = _colorFromHex(SETTING_BG_LIGHT);
       _headerText = Color(0xff002242);
       _subHeaderText = Color(0xffb6b2df);
       _settingsTile = Colors.white;
@@ -161,7 +162,7 @@ class ColorTheme with ChangeNotifier {
     _appBarTitleColor = _colorFromHex(APP_BAR_TITLE_DARK);
     _tileColor2 = _colorFromHex(TILE2_DARK);
     _descriptionBackground = Colors.black;
-    _settingsBackground = Color(0xff242633);
+    _settingsBackground = _colorFromHex(SETTING_BG_DARK);
     _headerText = _colorFromHex(HEADER_TEXT_DARK);
     _subHeaderText = Color(0xff6b778d);
     _settingsTile = Colors.black;
@@ -186,7 +187,7 @@ class ColorTheme with ChangeNotifier {
     _tileColor1 = Colors.white;
     _tileColor2 = Colors.white70;
     _descriptionBackground = Colors.white;
-    _settingsBackground = Colors.white;
+    _settingsBackground = _colorFromHex(SETTING_BG_LIGHT);
     _headerText = Color(0xff002242);
     _subHeaderText = Color(0xffb6b2df);
     _settingsTile = Colors.white;
