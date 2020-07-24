@@ -41,7 +41,7 @@ const String DIRECTORY_PICKER_TEXT_DARK = "#FFFFFF";
 const String DESCRIPTION_ICON_BORDER_LIGHT = "#FFFFFF";
 const String DESCRIPTION_ICON__BORDER_DARK = "#000000";
 
-const String PROGRESSBAR_LIGHT = "#";
+const String PROGRESSBAR_LIGHT = "#FED962";
 const String PROGRESSBAR_DARK = "#ff6768";
 
 class ColorTheme with ChangeNotifier {
@@ -117,7 +117,7 @@ class ColorTheme with ChangeNotifier {
       _tileUnderlineColor = _colorFromHex(TILE_UNDERLINE_DARK);
       _descriptionIconEnabled = _colorFromHex(DESCRIPTION_ICON_ENABLED_DARK);
       _directoryPickerText = _colorFromHex(DIRECTORY_PICKER_TEXT_DARK);
-      _progressBar = _colorFromHex(PROGRESSBAR_LIGHT);
+      _progressBar = _colorFromHex(PROGRESSBAR_DARK);
 
     } else {
       _settingsIcon = _colorFromHex(SETTINGS_ICON_LIGHT);
@@ -170,8 +170,7 @@ class ColorTheme with ChangeNotifier {
     _settingsTile = Colors.black;
     _di = Color(0xffff6768);
     _directoryPickerText = _colorFromHex(DIRECTORY_PICKER_TEXT_DARK);
-
-
+    _progressBar = _colorFromHex(PROGRESSBAR_DARK);
     _darkMode = true;
     notifyListeners();
   }
@@ -199,7 +198,6 @@ class ColorTheme with ChangeNotifier {
     _descriptionArrow = _colorFromHex(DESCRIPTION_ARROW_LIGHT);
     _directoryPickerText = _colorFromHex(DIRECTORY_PICKER_TEXT_LIGHT);
     _progressBar = _colorFromHex(PROGRESSBAR_LIGHT);
-
 
     notifyListeners();
   }
