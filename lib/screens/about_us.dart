@@ -1,11 +1,14 @@
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    ColorTheme colorTheme=Provider.of(context);
+    return Scaffold( backgroundColor: colorTheme.descriptionBackground,
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
@@ -14,7 +17,7 @@ class AboutUs extends StatelessWidget {
           "About Calibre Carte",
           style: TextStyle(fontFamily: 'Montserrat', color: Colors.white),
         ),
-        backgroundColor: Color(0xff002242),
+        backgroundColor: colorTheme.appBarColor,
       ),
       body: Container(
         margin: EdgeInsets.fromLTRB(20, 20, 10, 10),
@@ -32,7 +35,7 @@ class AboutUs extends StatelessWidget {
                           fontFamily: 'Montserrat', color: Colors.grey, fontSize: 25),
                     ),SizedBox(height: 20,),
                     Text("Ekansh Jain, Prerna Dave",style: TextStyle(
-                        fontFamily: 'Montserrat', color: Colors.black, fontSize: 20))
+                        fontFamily: 'Montserrat', color: colorTheme.headerText, fontSize: 20))
                   ],
                 ),
               ), SizedBox(height: 40,),Container(
@@ -46,7 +49,7 @@ class AboutUs extends StatelessWidget {
                           fontFamily: 'Montserrat', color: Colors.grey, fontSize: 25),
                     ),SizedBox(height: 20,),
                     Text("calibre.carte@gmail.com",style: TextStyle(
-                        fontFamily: 'Montserrat', color: Colors.black, fontSize: 20))
+                        fontFamily: 'Montserrat', color: colorTheme.headerText, fontSize: 20))
                   ],
                 ),
               )

@@ -717,7 +717,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                                     return Column(
                                       children: <Widget>[
                                         Center(
-                                          child: const Text('Loading...'),
+                                          child: Text('Loading...', style: TextStyle(color: colorTheme.headerText),),
                                         ),
                                         SizedBox(
                                           height: 7,

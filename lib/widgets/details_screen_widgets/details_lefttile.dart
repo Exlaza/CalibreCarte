@@ -1,8 +1,10 @@
 import 'package:calibre_carte/models/publishers.dart';
 import 'package:calibre_carte/models/ratings.dart';
+import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
 import 'package:calibre_carte/widgets/details_screen_widgets/details_text.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DetailsLeftTile extends StatelessWidget {
   final bookId;
@@ -19,8 +21,8 @@ class DetailsLeftTile extends StatelessWidget {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width / 1.5;
     var bottomSize = totalHeight / 2;
-
-    return Container(
+    ColorTheme colorTheme=Provider.of(context);
+    return Container( color: colorTheme.descriptionBackground,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

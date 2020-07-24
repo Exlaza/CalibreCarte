@@ -81,9 +81,11 @@ packages:
   directory_picker:
     dependency: "direct main"
     description:
-      name: directory_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: master
+      resolved-ref: ae1d886d0c832c712121908359773450dc3c8fb8
+      url: "git://github.com/Exlaza/flutter_directory_picker"
+    source: git
     version: "1.0.0"
   file:
     dependency: transitive
