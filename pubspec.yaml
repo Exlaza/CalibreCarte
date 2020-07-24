@@ -27,13 +27,21 @@ dependencies:
   url_launcher: ^5.4.11
   shared_preferences: ^0.5.7+3
   http: ^0.12.1
-  dio: ^3.0.9
+  dio: ^3.0.4
   open_file: ^2.0.3
+#  open_file:
+#    git:
+#      url: git://github.com/Exlaza/open_file
+#      ref: master
   pull_to_refresh: ^1.5.7
   provider: ^3.1.0+1
   rxdart: ^0.22.6
   smooth_star_rating: ^1.0.3
-  directory_picker: ^1.0.0
+#  directory_picker: ^1.0.0
+  directory_picker:
+    git:
+      url: git://github.com/Exlaza/flutter_directory_picker
+      ref: master
   flutter_launcher_icons: ^0.7.5
 
   # The following adds the Cupertino Icons font to your application.

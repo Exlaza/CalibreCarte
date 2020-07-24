@@ -9,7 +9,6 @@ class BookDetailsCoverImage extends StatefulWidget {
   final String relativePath;
   final height;
   final width;
-
   BookDetailsCoverImage(this.bookId, this.relativePath,this.height,this.width);
 
   @override

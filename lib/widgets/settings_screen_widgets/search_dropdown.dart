@@ -25,7 +25,7 @@ class SearchDropdown extends StatelessWidget {
                 children: <Widget>[
                   Icon(
                     Icons.search,
-                    color: Color(0xffFED962),
+                    color: colorTheme.settingsIcon,
                   ),
                   SizedBox(
                     width: 10,
@@ -53,14 +53,14 @@ class SearchDropdown extends StatelessWidget {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Icon(Icons.person, color: Color(0xffFED962)),
+                      Icon(Icons.person, color: colorTheme.settingsIcon),
                       Text(" Author",
                           style:
                               TextStyle(fontFamily: 'Montserrat', fontSize: 15,color: colorTheme.headerText))
                     ],
                   ),
                   update.searchFilter == "author"
-                      ? Icon(Icons.done, color: Color(0xffFED962))
+                      ? Icon(Icons.done, color: colorTheme.settingsIcon)
                       : Container()
                 ],
               ),
@@ -78,7 +78,7 @@ class SearchDropdown extends StatelessWidget {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Icon(Icons.title, color: Color(0xffFED962)),
+                      Icon(Icons.title, color: colorTheme.settingsIcon),
                       Text(" Title",
                           style:
                               TextStyle(fontFamily: 'Montserrat', fontSize: 15,color: colorTheme.headerText))
@@ -87,7 +87,7 @@ class SearchDropdown extends StatelessWidget {
                   update.searchFilter == "title"
                       ? Icon(
                           Icons.done,
-                          color: Color(0xffFED962),
+                          color: colorTheme.settingsIcon,
                         )
                       : Container()
                 ],

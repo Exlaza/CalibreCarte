@@ -46,7 +46,7 @@ class _DarkModeState extends State<DarkMode> {
                   ],
                 ),
                 Switch(
-                  activeColor: Color(0xffFED962),
+                  activeColor: colorTheme.settingsIcon,
                   value: colorTheme.darkMode,
                   onChanged: (val) async{
 //                    print("dark mode clicked");

@@ -15,7 +15,7 @@ class DirectoryChange extends StatelessWidget {
     Directory newDirectory = await DirectoryPicker.pick(
         context: context,
         rootDirectory: exd,
-        backgroundColor: colorTheme.darkMode ? Colors.grey : Colors.white);
+        backgroundColor: colorTheme.alertBoxColor);
 
     if (newDirectory != null) {
       SharedPreferences _prefs= await SharedPreferences.getInstance();
@@ -56,7 +56,7 @@ class DirectoryChange extends StatelessWidget {
               children: <Widget>[
                 Icon(
                   Icons.folder_open,
-                  color: Color(0xffFED962),
+                  color: colorTheme.settingsIcon,
                 ),
                 SizedBox(
                   width: 10,

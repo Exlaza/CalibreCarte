@@ -64,15 +64,15 @@ class _BooksViewState extends State<BooksView> {
   Future<void> sortBooks() async {
     if (widget.sortOption == 'author') {
       books.sort((a, b) {
-        return a.author_sort.compareTo(b.author_sort);
+        return a.author_sort.toLowerCase().compareTo(b.author_sort.toLowerCase());
       });
     } else if (widget.sortOption == 'title') {
       books.sort((a, b) {
-        return a.title.compareTo(b.title);
+        return a.title.toLowerCase().compareTo(b.title.toLowerCase());
       });
     } else {
       books.sort((a, b) {
-        return a.title.compareTo(b.title);
+        return a.title.toLowerCase().compareTo(b.title.toLowerCase());
       });
     }
 

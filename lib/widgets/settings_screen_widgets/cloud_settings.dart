@@ -29,7 +29,7 @@ class _CloudSettingsState extends State<CloudSettings> {
                     children: <Widget>[
                       Icon(
                         settingIcon,
-                        color: Color(0xffFED962),
+                        color: colorTheme.settingsIcon,
                       ),
                       SizedBox(
                         width: 10,
