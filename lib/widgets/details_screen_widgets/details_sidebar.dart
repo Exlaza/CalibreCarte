@@ -126,7 +126,14 @@ class DetailsSidebar extends StatelessWidget {
               },
               child: Container(
                   decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: Colors.white),
+                      border: colorTheme.darkMode
+                          ? Border(
+                              top: BorderSide.none,
+                              left: BorderSide.none,
+                              right: BorderSide.none,
+                              bottom: BorderSide(width: 1, color: Colors.white),
+                            )
+                          : Border.all(width: 1, color: Colors.white),
                       color: colorTheme.descriptionIconColor
 //                  boxShadow: [BoxShadow(blurRadius: 10)],
                       ),
@@ -159,7 +166,14 @@ class DetailsSidebar extends StatelessWidget {
                   height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: Colors.white),
+                    border: colorTheme.darkMode
+                        ? Border(
+                            top: BorderSide.none,
+                            left: BorderSide.none,
+                            right: BorderSide.none,
+                            bottom: BorderSide(width: 1, color: Colors.white),
+                          )
+                        : Border.all(width: 1, color: Colors.white),
                     color: colorTheme.descriptionIconAltColor,
 //                boxShadow: [BoxShadow(blurRadius: 10)],
                   ),
@@ -190,7 +204,14 @@ class DetailsSidebar extends StatelessWidget {
                 height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.white),
+                  border: colorTheme.darkMode
+                      ? Border(
+                          top: BorderSide.none,
+                          left: BorderSide.none,
+                          right: BorderSide.none,
+                          bottom: BorderSide(width: 1, color: Colors.white),
+                        )
+                      : Border.all(width: 1, color: Colors.white),
                   color: colorTheme.descriptionIconColor,
 //                boxShadow: [BoxShadow(blurRadius: 10)],
                 ),
@@ -215,7 +236,14 @@ class DetailsSidebar extends StatelessWidget {
                 height: totalHeight / 4,
 //              padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: Colors.white),
+                    border: colorTheme.darkMode
+                        ? Border(
+                            top: BorderSide.none,
+                            left: BorderSide.none,
+                            right: BorderSide.none,
+                            bottom: BorderSide.none,
+                          )
+                        : Border.all(width: 1, color: Colors.white),
                     color: colorTheme.descriptionIconAltColor,
                     boxShadow: [
 //                BoxShadow(blurRadius: 10),

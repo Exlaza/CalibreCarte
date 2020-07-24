@@ -37,6 +37,10 @@ const String SETTINGS_ICON_DARK = "#ff6768";
 const String DIRECTORY_PICKER_TEXT_LIGHT = "#000000";
 const String DIRECTORY_PICKER_TEXT_DARK = "#FFFFFF";
 
+
+const String DESCRIPTION_ICON_BORDER_LIGHT = "#FFFFFF";
+const String DESCRIPTION_ICON__BORDER_DARK = "#000000";
+
 class ColorTheme with ChangeNotifier {
   bool _darkMode;
   Color _tileColor1;
