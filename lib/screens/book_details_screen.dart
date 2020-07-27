@@ -210,7 +210,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     return AppBar(
         backgroundColor: colorTheme.appBarColor,
         iconTheme: IconThemeData(
-            color: colorTheme.appBarTitleColor //change your color here
+            color: Colors.white //change your color here
         ),
         title: Text(
           'Details',

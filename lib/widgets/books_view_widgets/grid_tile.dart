@@ -1,5 +1,6 @@
 import 'package:calibre_carte/models/books.dart';
 import 'package:calibre_carte/providers/book_details_navigation_provider.dart';
+import 'package:calibre_carte/providers/list_tile.dart';
 import 'package:calibre_carte/screens/book_details_screen.dart';
 import 'package:calibre_carte/widgets/book_details_cover_image.dart';
 import 'package:calibre_carte/widgets/download_icon.dart';
@@ -45,6 +46,7 @@ class _CalibreGridTileState extends State<CalibreGridTile> {
 
   @override
   Widget build(BuildContext context) {
+    ListTileProvider lstp = Provider.of(context, listen: false);
     return DefaultTextStyle(
       style: const TextStyle(color: Colors.white),
       child: Stack(
@@ -85,7 +87,11 @@ class _CalibreGridTileState extends State<CalibreGridTile> {
                         style: TextStyle(fontFamily: 'Montserrat'),
                       ),
                     ),
-                    DownloadIcon(widget.book.id),
+                    Consumer<ListTileProvider>(builder: (ctx, lstp, child) {
+                      return DownloadIcon(
+                        widget.books[widget.index].id,
+                      );
+                    }),
                   ],
                 ),
               ),

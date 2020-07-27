@@ -413,10 +413,11 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                   // Her we have only one library so we make that the default
                 }
               } else {
+                print("no libraries found");
                 Scaffold.of(context).showSnackBar(SnackBar(
                   content: Text("No Calibre libraries found"),
                 ));
-                Navigator.of(context).pop();
+//                Navigator.of(context).pop();
                 // Show the bottom snack bar that no libraries found and Pop out of this context
               }
             });
@@ -579,6 +580,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       Scaffold.of(context).removeCurrentSnackBar();
       return columnChildren;
     } else {
+      print("No libs found");
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text("No libraries found"),
       ));
