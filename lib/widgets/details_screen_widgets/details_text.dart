@@ -35,7 +35,7 @@ class BookDetailsText extends StatelessWidget {
             page: BookDetailsScreen(
                 bookId: bn.booksList[bn.index].id, refreshTile: refreshTile)))
         .then((_) {
-      print("I am now popping out of somewhere");
+//      print("I am now popping out of somewhere");
     });
   }
 
@@ -51,7 +51,7 @@ class BookDetailsText extends StatelessWidget {
         page: BookDetailsScreen(
             bookId: bn.booksList[bn.index].id, refreshTile: refreshTile)))
         .then((_) {
-      print("I am now popping out of somewhere");
+//      print("I am now popping out of somewhere");
     });
 
   }

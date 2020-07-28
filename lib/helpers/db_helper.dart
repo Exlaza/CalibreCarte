@@ -41,7 +41,7 @@ class DatabaseHelper {
     bool exists;
     try{await databaseExists(path);
     exists=true;}catch(e){
-      print("database exception partial download $e");
+//      print("database exception partial download $e");
     }
 
     if (!exists) {
@@ -59,7 +59,7 @@ class DatabaseHelper {
     }
 //    print("Open gets called asfter this stateemnt");
     try{return await openDatabase("metadata.db");}catch(e){
-      print("fucking exception $e");
+//      print(" exception $e");
       MetadataCacher mc = MetadataCacher();
 //      print('Metdata cacher should now run"');
       await mc.downloadAndCacheMetadata();

@@ -263,7 +263,7 @@ class _MyHomePageState extends State<MyHomePage> {
     String searchFilter = update.searchFilter;
     ColorTheme colortheme = Provider.of(context);
 
-    print(MediaQuery.of(context).size.height);
+//    print(MediaQuery.of(context).size.height);
 
     if (isSearching == false) {
       _appBarTitle = Text(

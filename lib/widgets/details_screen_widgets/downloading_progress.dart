@@ -58,7 +58,7 @@ class _DownloadingProgressState extends State<DownloadingProgress> {
       return 0;
     } catch (e) {
       setState(() {
-        print(e.message);
+//        print(e.message);
         progress = "ERROR";
       });
       if (e.message == "cancelled") {
