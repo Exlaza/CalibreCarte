@@ -6,9 +6,12 @@ import 'package:calibre_carte/helpers/cache_invalidator.dart';
 import 'package:calibre_carte/helpers/configuration.dart';
 import 'package:calibre_carte/helpers/config_loader.dart';
 import 'package:calibre_carte/helpers/metadata_cacher.dart';
+import 'package:calibre_carte/oauth/access_token_response.dart';
+import 'package:calibre_carte/oauth/oauth_client.dart';
 import 'package:calibre_carte/oauth/oauth_helper.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
+
 //import 'package:calibre_carte/screens/dropbox_signin_screen.dart';
 import 'package:calibre_carte/widgets/settings_screen_widgets/connect_button.dart';
 import 'package:calibre_carte/widgets/settings_screen_widgets/logout_button.dart';
@@ -210,9 +213,9 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     });
   }
 
-  String errorDescription(String errorCode){
+  String errorDescription(String errorCode) {
     String errorMsg;
-    switch (errorCode){
+    switch (errorCode) {
       case 'access_denied':
         errorMsg = "User did not authorize the app";
         break;
@@ -224,7 +227,6 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     }
 
     return errorMsg;
-
   }
 
   _launchURL(String url) async {
@@ -256,13 +258,17 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
 
         if (uri.queryParameters.containsKey(ERROR)) {
           String errorMsg = errorDescription(uri.queryParameters[ERROR]);
-          Scaffold.of(context).showSnackBar(SnackBar(content: Text(errorMsg),));
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text(errorMsg),
+          ));
           return;
         }
 
         if (!uri.queryParameters.containsKey(CODE)) {
           String errorMsg = errorDescription(NO_CODE_URI);
-          Scaffold.of(context).showSnackBar(SnackBar(content: Text(errorMsg),));
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text(errorMsg),
+          ));
           return;
         } else {
           code = uri.queryParameters[CODE];
@@ -284,13 +290,13 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                   if (element["metadata"]["metadata"]["name"] ==
                       "metadata.db") {
                     String libPath =
-                    element["metadata"]["metadata"]["path_display"];
+                        element["metadata"]["metadata"]["path_display"];
                     libPath = libPath.replaceAll('metadata.db', "");
                     List<String> directories = element["metadata"]["metadata"]
-                    ["path_display"]
+                            ["path_display"]
                         .split('/');
                     String libName =
-                    directories.elementAt(directories.length - 2);
+                        directories.elementAt(directories.length - 2);
                     pathNameMap.putIfAbsent(libPath, () => libName);
 //                        print(pathNameMap);
                   }
@@ -317,7 +323,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                   // Show a pop up which displays the list of libraries
 //                      print('I have come inside the popup dispaly htingy');
                   List<Widget> columnChildren =
-                  pathNameMap.keys.toList().map((element) {
+                      pathNameMap.keys.toList().map((element) {
                     return InkWell(
                         onTap: () {
                           _showLoading(context);
@@ -375,12 +381,12 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                                 children: <Widget>[
                                   Container(
                                       child: Text(
-                                        'Select Library',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: 'Montserrat',
-                                            color: Color(0xff002242)),
-                                      )),
+                                    'Select Library',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: 'Montserrat',
+                                        color: Color(0xff002242)),
+                                  )),
                                   SizedBox(
                                     height: 20,
                                   ),
@@ -435,11 +441,176 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
 
   //Let's try and figure out if I can attach a listener and then parse and do something when I finally get a URL back
 
+  void onConnectDropBox() async{
+    OAuth2Client dropboxClient = OAuth2Client(
+        redirectUri: DropboxDropdown.redirectUriCode,
+        authorizeUrl: 'https://www.dropbox.com/oauth2/authorize',
+        tokenUrl: 'https://api.dropbox.com/oauth2/token',
+        customUriScheme: 'calibrecarte'
+    );
+
+    AccessTokenResponse tokenResponse = await dropboxClient.getTokenFromAuthCodeFlow(clientID: clientId);
+
+    var token = tokenResponse.accessToken;
+    Update update = Provider.of(context, listen: false);
+
+    Map<String, String> pathNameMap = Map();
+    _makePostRequest(token).then((response) {
+//      Navigator.of(context).pop();
+      //Make a map Map<String, String> First value is the base path in lower case
+      // Second Value is the name of the Folder(Library)
+      // I have to convert string response.body to json
+      Map<String, dynamic> responseJson = jsonDecode(response.body);
+      if (responseJson['matches'].length != 0) {
+        responseJson['matches'].forEach((element) {
+          if (element["metadata"]["metadata"]["name"] ==
+              "metadata.db") {
+            String libPath =
+            element["metadata"]["metadata"]["path_display"];
+            libPath = libPath.replaceAll('metadata.db', "");
+            List<String> directories = element["metadata"]["metadata"]
+            ["path_display"]
+                .split('/');
+            String libName =
+            directories.elementAt(directories.length - 2);
+            pathNameMap.putIfAbsent(libPath, () => libName);
+//                        print(pathNameMap);
+          }
+        });
+        storeIntInSharedPrefs('noOfCalibreLibs', pathNameMap.length);
+        pathNameMap.keys.toList().asMap().forEach((index, path) {
+          String keyName = 'calibre_lib_path_$index';
+          String libName = 'calibre_lib_name_$index';
+          storeStringInSharedPrefs(keyName, path);
+          storeStringInSharedPrefs(libName, pathNameMap[path]);
+        });
+
+        // TODO: Default selection
+        storeStringInSharedPrefs(
+          'selected_calibre_lib_path',
+          pathNameMap.keys.first,
+        );
+        storeStringInSharedPrefs(
+          'selected_calibre_lib_name',
+          pathNameMap.values.first,
+        );
+        if (pathNameMap.length > 1) {
+          // First set the no of libraries in shared prefs
+          // Show a pop up which displays the list of libraries
+//                      print('I have come inside the popup dispaly htingy');
+          List<Widget> columnChildren =
+          pathNameMap.keys.toList().map((element) {
+            return InkWell(
+                onTap: () {
+                  _showLoading(context);
+                  selectingCalibreLibraryNew(
+                      element, pathNameMap[element], update, token);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Icon(
+                        Icons.folder,
+                        color: Color(0xffFED962),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        pathNameMap[element],
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'Montserrat',
+                            color: Color(0xff002242)),
+                      )
+                    ],
+                  ),
+                ));
+          }).toList();
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return WillPopScope(
+                  onWillPop: () async {
+                    _showLoading(context);
+                    await MetadataCacher()
+                        .downloadAndCacheMetadata(token: token)
+                        .then((val) {
+                      if (val == 1) {
+                        storeStringInSharedPrefs('token', token);
+                        update.changeTokenState(true);
+                        update.updateFlagState(true);
+                      }
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                    });
+                    return true;
+                  },
+                  child: AlertDialog(
+                    contentPadding: EdgeInsets.all(10),
+                    content: Container(
+                      width: 300,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Container(
+                              child: Text(
+                                'Select Library',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: 'Montserrat',
+                                    color: Color(0xff002242)),
+                              )),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Column(children: columnChildren)
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              });
+        } else {
+          _showLoading(context);
+          storeStringInSharedPrefs(
+              'selected_calibre_lib_path', pathNameMap.keys.first);
+          storeStringInSharedPrefs(
+              'selected_calibre_lib_name', pathNameMap.values.first);
+          MetadataCacher()
+              .downloadAndCacheMetadata(token: token)
+              .then((val) {
+            if (val == 1) {
+//                          print("storing token");
+              storeStringInSharedPrefs('token', token);
+//                          print("stored token");
+              update.changeTokenState(true);
+              update.updateFlagState(true);
+            }
+            Navigator.of(context).pop();
+//            Navigator.of(context).pop();
+          });
+          // Her we have only one library so we make that the default
+        }
+      } else {
+//                print("no libraries found");
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text("No Calibre libraries found"),
+        ));
+//                Navigator.of(context).pop();
+        // Show the bottom snack bar that no libraries found and Pop out of this context
+      }
+    });
+
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    initUniLinks();
+//    initUniLinks();
     //    print('Hitting it');
     myFuture = loadingToken();
   }
@@ -448,26 +619,8 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _sub.cancel();
+//    _sub.cancel();
   }
-
-//  _makePostRequest(token) async {
-////    print(token);
-//    // set up POST request arguments
-//    String url = 'https://api.dropboxapi.com/2/files/search_v2';
-//    Map<String, String> headers = {
-//      "Authorization": "Bearer $token",
-//      "Content-type": "application/json"
-//    };
-//    String json =
-//        '{"query": "metadata.db", "options":{"filename_only":true, "file_extensions":["db"]}}'; // make POST request
-//    try {
-//      Response response = await post(url, headers: headers, body: json);
-//      return response;
-//    } on SocketException catch (_) {
-//      return null;
-//    }
-//  }
 
   Future<List<Widget>> refreshLibrary(
       BuildContext context, Update update, ColorTheme colorTheme) async {
@@ -556,7 +709,8 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Icon(Icons.cloud_download, color: colorTheme.settingsIcon),
+                      Icon(Icons.cloud_download,
+                          color: colorTheme.settingsIcon),
                       SizedBox(
                         width: 10,
                       ),
@@ -609,10 +763,10 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == false) {
-            final codeChallenge = OAuthUtils.generateAndEncodeCodeChallenge();
-
-            final url =
-                'https://www.dropbox.com/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=${DropboxDropdown.redirectUriCode}&code_challenge=$codeChallenge&code_challenge_method=${OAuthUtils.codeChallengeMethod}';
+//            final codeChallenge = OAuthUtils.generateAndEncodeCodeChallenge();
+//
+//            final url =
+//                'https://www.dropbox.com/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=${DropboxDropdown.redirectUriCode}&code_challenge=$codeChallenge&code_challenge_method=${OAuthUtils.codeChallengeMethod}';
             return ConnectButton(() {
               checkNet().then((val) {
                 if (val == false) {
@@ -620,8 +774,8 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                     content: Text("No internet"),
                   ));
                 } else {
-                  _launchURL(url);
-
+//                  _launchURL(url);
+                  onConnectDropBox();
 //                  Navigator.of(context).push(MaterialPageRoute(builder: (context) {
 //                    return DropboxAuthentication(
 //                      selectedUrl: url, oldContext: oldContext,
@@ -719,7 +873,11 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                                     return Column(
                                       children: <Widget>[
                                         Center(
-                                          child: Text('Loading...', style: TextStyle(color: colorTheme.headerText),),
+                                          child: Text(
+                                            'Loading...',
+                                            style: TextStyle(
+                                                color: colorTheme.headerText),
+                                          ),
                                         ),
                                         SizedBox(
                                           height: 7,

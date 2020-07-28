@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:calibre_carte/oauth/web_auth.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:calibre_carte/oauth/access_token_response.dart';
@@ -22,20 +23,26 @@ class OAuth2Client {
   String refreshUrl;
   String revokeUrl;
 
+  WebAuth webAuthClient;
+
   OAuth2Client(
       {@required this.redirectUri,
       this.codeVerifier,
       @required this.authorizeUrl,
       @required this.tokenUrl,
       this.refreshUrl,
-      this.revokeUrl});
+      this.customUriScheme,
+      this.revokeUrl}){
+
+    webAuthClient = WebAuth();
+
+  }
 
   Future<AccessTokenResponse> getTokenFromAuthCodeFlow({
     @required String clientID,
     List<String> scopes,
     bool enablePKCE = true,
     String state,
-    String codeVerifier,
     Function afterAuthorizationCodeCb,
     Map<String, dynamic> authCoedParams,
     Map<String, dynamic> accessTokenParams,
@@ -52,6 +59,8 @@ class OAuth2Client {
     var authResp = await requestAuthorization(
         clientID: clientID, scopes: scopes, codeChallenge: codeChallenge);
 
+    print("Autorisation response recieved");
+
     if (authResp.isAccessGranted()) {
       if (afterAuthorizationCodeCb != null) {
         afterAuthorizationCodeCb(authResp);
@@ -59,11 +68,9 @@ class OAuth2Client {
 
       tokenResponse = await requestAccessToken(
           code: authResp.code, clientID: clientID, codeVerifier: codeVerifier);
-
     }
 
     return tokenResponse;
-
   }
 
   Future<AccessTokenResponse> requestAccessToken({
@@ -149,9 +156,16 @@ class OAuth2Client {
         customParams: customParams);
 
 //    Now I have to launch this authorised url in the system browser
+    print("Just before launching url");
+    print(authorizeUrl);
+    print(codeVerifier);
 
-    final result = await FlutterWebAuth.authenticate(
+    webAuthClient = this.webAuthClient;
+
+    final result = await webAuthClient.authenticate(
         callbackUrlScheme: customUriScheme, url: authorizeUrl);
+
+    print("Yahan se aage hi nhi badh pa rhe sahab");
 
     return AuthorizationResponse.fromRedirectUri(result, state);
   }

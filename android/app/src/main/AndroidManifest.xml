@@ -30,14 +30,17 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <intent-filter>
+        </activity>
+
+        <activity android:name="com.linusu.flutter_web_auth.CallbackActivity" >
+            <intent-filter android:label="flutter_web_auth">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "example://gizmos” -->
-                <data android:host="dropbox"
-                    android:scheme="calibrecarte"/>
+                <data android:scheme="calibrecarte"/>
             </intent-filter>
+        </activity>
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.VIEW"/>-->
 <!--                <category android:name="android.intent.category.DEFAULT"/>-->
@@ -46,6 +49,5 @@
 <!--                    android:host="example.com"-->
 <!--                    android:pathPrefix="/"/>-->
 <!--            </intent-filter>-->
-        </activity>
     </application>
 </manifest>
