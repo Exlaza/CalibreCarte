@@ -117,4 +117,26 @@ class AccessTokenResponse extends OAuth2Response {
 
   }
 
+  bool hasRefreshToken() {
+    return refreshToken != null;
+  }
+
+  bool isBearer() {
+    return tokenType.toLowerCase() == 'bearer';
+  }
+
+  @override
+  String toString() {
+    if (httpStatusCode == 200) {
+      return 'Access Token: ' + accessToken;
+    } else {
+      return 'HTTP ' +
+          httpStatusCode.toString() +
+          ' - ' +
+          (error ?? '') +
+          ' ' +
+          (errorDescription ?? '');
+    }
+  }
+
 }

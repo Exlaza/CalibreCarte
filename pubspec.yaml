@@ -36,7 +36,9 @@ dependencies:
   pull_to_refresh: ^1.5.7
   provider: ^3.1.0+1
   rxdart: ^0.22.6
+  random_string: ^2.1.0
   smooth_star_rating: ^1.0.3
+  flutter_web_auth: ^0.2.4
 #  directory_picker: ^1.0.0
   directory_picker:
     git:

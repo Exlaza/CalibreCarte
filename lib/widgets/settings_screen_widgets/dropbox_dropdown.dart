@@ -6,7 +6,7 @@ import 'package:calibre_carte/helpers/cache_invalidator.dart';
 import 'package:calibre_carte/helpers/configuration.dart';
 import 'package:calibre_carte/helpers/config_loader.dart';
 import 'package:calibre_carte/helpers/metadata_cacher.dart';
-import 'package:calibre_carte/helpers/oauth_helper.dart';
+import 'package:calibre_carte/oauth/oauth_helper.dart';
 import 'package:calibre_carte/providers/color_theme_provider.dart';
 import 'package:calibre_carte/providers/update_provider.dart';
 //import 'package:calibre_carte/screens/dropbox_signin_screen.dart';
