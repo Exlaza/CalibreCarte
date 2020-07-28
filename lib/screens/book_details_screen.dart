@@ -27,7 +27,7 @@ class BookDetailsScreen extends StatefulWidget {
   final int bookId;
   final Function refreshTile;
   BookDetailsScreen({this.bookId, this.refreshTile}){
-    print(this.bookId);
+//    print(this.bookId);
   }
 
   @override
@@ -105,13 +105,13 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     publishers =
         await BooksPublisherLinkProvider.getPublisherByBookID(widget.bookId);
 
-    print("I'm done with the first future");
+//    print("I'm done with the first future");
   }
 
   @override
   void initState() {
     super.initState();
-    print('Fucking naya page is that even woerking');
+//    print('naya page is that even woerking');
     myFuture = getBookDetails();
     mySecondFuture = checkIfLocalCopyExists();
   }
@@ -210,7 +210,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     return AppBar(
         backgroundColor: colorTheme.appBarColor,
         iconTheme: IconThemeData(
-            color: colorTheme.appBarTitleColor //change your color here
+            color: Colors.white //change your color here
         ),
         title: Text(
           'Details',

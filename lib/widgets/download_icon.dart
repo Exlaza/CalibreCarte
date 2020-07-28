@@ -41,7 +41,7 @@ class _DownloadIconState extends State<DownloadIcon> {
 
   @override
   Widget build(BuildContext context) {
-    print("Building download icon again");
+//    print("Building download icon again");
     ColorTheme ct = Provider.of<ColorTheme>(context);
     return FutureBuilder(
         future: checkIfLocalCopyExists(),

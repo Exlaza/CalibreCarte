@@ -85,7 +85,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   }
 
   _makePostRequest(token) async {
-    print("post request started");
+//    print("post request started");
 //    print(token);
     // set up POST request arguments
     String url = 'https://api.dropboxapi.com/2/files/search_v2';
@@ -97,10 +97,10 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
         '{"query": "metadata.db", "options":{"filename_only":true, "file_extensions":["db"]}}'; // make POST request
     try {
       Response response = await post(url, headers: headers, body: json);
-      print("i have the response");
+//      print("i have the response");
       int statusCode = response.statusCode;
       String body = response.body;
-      print("post request ended");
+//      print("post request ended");
       return response;
     } catch (e) {
       return null;
@@ -114,7 +114,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
 //    Map<String, String> headers = {
 //      "Content-type": "application/json"
 //    };
-    print(code);
+//    print(code);
     Map<String, dynamic> json = {
       "code": code,
       "redirect_uri": DropboxDropdown.redirectUriCode,
@@ -413,10 +413,11 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                   // Her we have only one library so we make that the default
                 }
               } else {
+//                print("no libraries found");
                 Scaffold.of(context).showSnackBar(SnackBar(
                   content: Text("No Calibre libraries found"),
                 ));
-                Navigator.of(context).pop();
+//                Navigator.of(context).pop();
                 // Show the bottom snack bar that no libraries found and Pop out of this context
               }
             });
@@ -478,12 +479,12 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Text("Refreshing Libraries..."),
     ));
-    print("before post request");
+//    print("before post request");
     var response = await _makePostRequest(token);
-    print("after post request");
-    print("starting internet check");
+//    print("after post request");
+//    print("starting internet check");
     if (response == null) {
-      print("response null no internet here");
+//      print("response null no internet here");
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text("No internet"),
       ));
@@ -513,7 +514,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
         content: Text("Authentication expired. Please login again."),
       ));
     }
-    print("Internet check done");
+//    print("Internet check done");
     //Make a map Map<String, String> First value is the base path in lower case
     // Second Value is the name of the Folder(Library)
     // I have to convert string response.body to json
@@ -579,6 +580,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
       Scaffold.of(context).removeCurrentSnackBar();
       return columnChildren;
     } else {
+//      print("No libs found");
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text("No libraries found"),
       ));
@@ -601,7 +603,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     Update update = Provider.of(context);
 //    BuildContext oldContext = context;
     ColorTheme colorTheme = Provider.of(context);
-    print(OAuthUtils.codeVerifier);
+//    print(OAuthUtils.codeVerifier);
     return FutureBuilder(
       future: myFuture,
       builder: (context, snapshot) {
@@ -654,7 +656,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                       : ExpansionTile(
                           onExpansionChanged: (bool value) {
                             if (value) {
-                              print("tile explanding");
+//                              print("tile explanding");
                               setState(() {
                                 if (_responseCompleter.isCompleted) {
                                   _responseCompleter = Completer();
