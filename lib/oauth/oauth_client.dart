@@ -32,10 +32,8 @@ class OAuth2Client {
       @required this.tokenUrl,
       this.refreshUrl,
       this.customUriScheme,
-      this.revokeUrl}){
-
+      this.revokeUrl}) {
     webAuthClient = WebAuth();
-
   }
 
   Future<AccessTokenResponse> getTokenFromAuthCodeFlow({
@@ -44,7 +42,7 @@ class OAuth2Client {
     bool enablePKCE = true,
     String state,
     Function afterAuthorizationCodeCb,
-    Map<String, dynamic> authCoedParams,
+    Map<String, dynamic> authCodeParams,
     Map<String, dynamic> accessTokenParams,
     httpClient,
   }) async {
@@ -156,16 +154,11 @@ class OAuth2Client {
         customParams: customParams);
 
 //    Now I have to launch this authorised url in the system browser
-    print("Just before launching url");
-    print(authorizeUrl);
-    print(codeVerifier);
 
     webAuthClient = this.webAuthClient;
 
     final result = await webAuthClient.authenticate(
         callbackUrlScheme: customUriScheme, url: authorizeUrl);
-
-    print("Yahan se aage hi nhi badh pa rhe sahab");
 
     return AuthorizationResponse.fromRedirectUri(result, state);
   }
@@ -200,5 +193,36 @@ class OAuth2Client {
     }
 
     return OAuthPKCEUtils.addParamsToURL(authorizeUrl, params);
+  }
+
+  Future<AccessTokenResponse> refreshToken(String refreshToken,
+      {httpClient, String clientId, String clientSecret}) async {
+    httpClient ??= http.Client();
+
+    final Map body =
+        getRefreshUrlParams(refreshToken: refreshToken, clientId: clientId);
+
+    http.Response response =
+        await httpClient.post(_getRefreshUrl(), body: body);
+
+    return AccessTokenResponse.fromHttpResponse(response);
+  }
+
+  Map<String, String> getRefreshUrlParams(
+      {@required String refreshToken, String clientId}) {
+    final params = <String, String>{
+      'grant_type': 'refresh_token',
+      'refresh_token': refreshToken
+    };
+
+    if (clientId != null && clientId.isNotEmpty) {
+      params['client_id'] = clientId;
+    }
+
+    return params;
+  }
+
+  String _getRefreshUrl() {
+    return refreshUrl ?? tokenUrl;
   }
 }
