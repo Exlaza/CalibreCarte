@@ -2,6 +2,7 @@ import 'package:calibre_carte/oauth/access_token_response.dart';
 import 'package:calibre_carte/oauth/oauth2_exception.dart';
 import 'package:calibre_carte/oauth/oauth_client.dart';
 import 'package:calibre_carte/oauth/token_storage.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class OAuth2Helper {
@@ -93,5 +94,73 @@ class OAuth2Helper {
     }
 
     return tknResp;
+  }
+
+  Future<http.Response> post(String url,
+      {Map<String, String> headers, dynamic body, httpClient}) async {
+    httpClient ??= http.Client();
+
+    headers ??= {};
+
+    http.Response resp;
+
+    var tknResp = await getToken();
+
+    try {
+      headers['Authorization'] = 'Bearer ' + tknResp.accessToken;
+      resp = await httpClient.post(url, body: body, headers: headers);
+
+      if (resp.statusCode == 401) {
+        if (tknResp.hasRefreshToken()) {
+          tknResp = await refreshToken(tknResp.refreshToken);
+        } else {
+//          At this point in time I should just logout and redirect to settings or homepage
+          throw OAuth2Exception('Unauthorised',
+              errorDescription: 'Access and Refresh Token both expired');
+        }
+
+        if (tknResp != null) {
+          headers['Authorization'] = 'Bearer ' + tknResp.accessToken;
+          resp = await httpClient.post(url, body: body, headers: headers);
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
+    return resp;
+  }
+
+  Future<http.Response> get(String url,
+      {Map<String, String> headers, httpClient}) async {
+    httpClient ??= http.Client();
+
+    headers ??= {};
+
+    http.Response resp;
+
+    var tknResp = await getToken();
+
+    try {
+      headers['Authorization'] = 'Bearer ' + tknResp.accessToken;
+      resp = await httpClient.get(url, headers: headers);
+
+      if (resp.statusCode == 401) {
+        if (tknResp.hasRefreshToken()) {
+          tknResp = await refreshToken(tknResp.refreshToken);
+        } else {
+          throw OAuth2Exception('Unauthorised',
+              errorDescription: 'Access and Refresh Token both expired');
+        }
+
+        if (tknResp != null) {
+          headers['Authorization'] = 'Bearer ' + tknResp.accessToken;
+          resp = await httpClient.get(url, headers: headers);
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
+
+    return resp;
   }
 }
