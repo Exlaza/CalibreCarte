@@ -6,6 +6,8 @@ import 'package:calibre_carte/helpers/cache_invalidator.dart';
 import 'package:calibre_carte/helpers/configuration.dart';
 import 'package:calibre_carte/helpers/config_loader.dart';
 import 'package:calibre_carte/helpers/metadata_cacher.dart';
+import 'package:calibre_carte/library/dropbox_library_helper.dart';
+import 'package:calibre_carte/library/library.dart';
 import 'package:calibre_carte/oauth/access_token_response.dart';
 import 'package:calibre_carte/oauth/oauth2_helper.dart';
 import 'package:calibre_carte/oauth/oauth_client.dart';
@@ -42,7 +44,6 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
   String selected_calibre_lib_dir;
   String selected_lib_name;
   String token;
-  List<String> dirNames = [];
   int noOfCalibreLibs;
   bool hasChanged;
   String clientId;
@@ -56,73 +57,16 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     String temp;
     SharedPreferences sp = await SharedPreferences.getInstance();
     if (sp.containsKey('token')) {
-      dirNames.clear();
       dropboxEmail = sp.getString('dropboxEmail');
       selected_calibre_lib_dir = sp.getString('selected_calibre_lib_path');
       selected_lib_name = sp.getString('selected_calibre_lib_name');
-      noOfCalibreLibs = sp.getInt('noOfCalibreLibs');
-      for (int i = 0; i < noOfCalibreLibs; i++) {
-        temp = sp.getString('calibre_lib_name_$i');
-        dirNames.add(temp);
-      }
+
       return true;
     }
     config = await ConfigLoader(secretPath: "dropbox.json").load();
     clientId = config.clientID;
 
     return false;
-  }
-
-  Future<void> deleteToken() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.remove('token');
-  }
-
-  Future<void> storeStringInSharedPrefs(key, val) async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.setString(key, val);
-  }
-
-  Future<void> storeIntInSharedPrefs(key, val) async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.setInt(key, val);
-  }
-
-  _makePostRequest(OAuth2Helper oauth2Helper) async {
-    String url = 'https://api.dropboxapi.com/2/files/search_v2';
-    Map<String, String> headers = {
-      "Content-type": "application/json"
-    };
-    String json =
-        '{"query": "metadata.db", "options":{"filename_only":true, "file_extensions":["db"]}}'; // make POST request
-    try {
-      Response response = await oauth2Helper.post(url, headers: headers, body: json);
-      return response;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  _makePostRequestCode(code) async {
-//    print(token);
-    // set up POST request arguments
-    String url = 'https://api.dropbox.com/oauth2/token';
-//    Map<String, String> headers = {
-//      "Content-type": "application/json"
-//    };
-//    print(code);
-    Map<String, dynamic> json = {
-      "code": code,
-      "redirect_uri": DropboxDropdown.redirectUriCode,
-      "grant_type": "authorization_code",
-      "code_verifier": OAuthUtils.codeVerifier,
-      "client_id": clientId
-    }; // make POST request
-
-    Response response = await post(url, body: json);
-    int statusCode = response.statusCode;
-    String body = response.body;
-    return response;
   }
 
   selectingCalibreLibrary(key, val, update) {
@@ -194,11 +138,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     storeStringInSharedPrefs('selected_calibre_lib_name', val);
     MetadataCacher().downloadAndCacheMetadata(token: token).then((val) {
       if (val == 1) {
-//        print("storing token");
-        storeStringInSharedPrefs('token', token);
-//        print("stored token");
         update.changeTokenState(true);
-        update.updateFlagState(true);
       }
       Navigator.of(context).pop();
       Navigator.of(context).pop();
@@ -222,68 +162,35 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
     return errorMsg;
   }
 
-  void onConnectDropBox() async{
+  void onConnectDropBox() async {
     OAuth2Client dropboxClient = OAuth2Client(
         redirectUri: DropboxDropdown.redirectUriCode,
         authorizeUrl: 'https://www.dropbox.com/oauth2/authorize',
         tokenUrl: 'https://api.dropbox.com/oauth2/token',
-        customUriScheme: 'calibrecarte'
-    );
+        customUriScheme: 'calibrecarte');
 
-    OAuth2Helper oauth2Helper = OAuth2Helper(client: dropboxClient, clientID: clientId);
+    OAuth2Helper oauth2Helper =
+        OAuth2Helper(client: dropboxClient, clientID: clientId);
 
     var tokenResponse = await oauth2Helper.fetchToken();
 
     var token = tokenResponse.accessToken;
     Update update = Provider.of(context, listen: false);
 
-    Map<String, String> pathNameMap = Map();
-    _makePostRequest(oauth2Helper).then((response) {
+    DropboxLibraryHelper libHelper =
+        DropboxLibraryHelper(oauth2Helper: oauth2Helper);
+
+    libHelper.searchLibraries().then((List<Library> libList) {
 //      Navigator.of(context).pop();
       //Make a map Map<String, String> First value is the base path in lower case
       // Second Value is the name of the Folder(Library)
       // I have to convert string response.body to json
-      Map<String, dynamic> responseJson = jsonDecode(response.body);
-      if (responseJson['matches'].length != 0) {
-        responseJson['matches'].forEach((element) {
-          if (element["metadata"]["metadata"]["name"] ==
-              "metadata.db") {
-            String libPath =
-            element["metadata"]["metadata"]["path_display"];
-            libPath = libPath.replaceAll('metadata.db', "");
-            List<String> directories = element["metadata"]["metadata"]
-            ["path_display"]
-                .split('/');
-            String libName =
-            directories.elementAt(directories.length - 2);
-            pathNameMap.putIfAbsent(libPath, () => libName);
-//                        print(pathNameMap);
-          }
-        });
-        storeIntInSharedPrefs('noOfCalibreLibs', pathNameMap.length);
 
-        pathNameMap.keys.toList().asMap().forEach((index, path) {
-          String keyName = 'calibre_lib_path_$index';
-          String libName = 'calibre_lib_name_$index';
-          storeStringInSharedPrefs(keyName, path);
-          storeStringInSharedPrefs(libName, pathNameMap[path]);
-        });
-
-        // TODO: Default selection
-        storeStringInSharedPrefs(
-          'selected_calibre_lib_path',
-          pathNameMap.keys.first,
-        );
-        storeStringInSharedPrefs(
-          'selected_calibre_lib_name',
-          pathNameMap.values.first,
-        );
-        if (pathNameMap.length > 1) {
+        if (libList.length > 1) {
           // First set the no of libraries in shared prefs
           // Show a pop up which displays the list of libraries
-//                      print('I have come inside the popup dispaly htingy');
           List<Widget> columnChildren =
-          pathNameMap.keys.toList().map((element) {
+              libList.map((element) {
             return InkWell(
                 onTap: () {
                   _showLoading(context);
@@ -341,12 +248,12 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
                         children: <Widget>[
                           Container(
                               child: Text(
-                                'Select Library',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontFamily: 'Montserrat',
-                                    color: Color(0xff002242)),
-                              )),
+                            'Select Library',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontFamily: 'Montserrat',
+                                color: Color(0xff002242)),
+                          )),
                           SizedBox(
                             height: 20,
                           ),
@@ -363,9 +270,7 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
               'selected_calibre_lib_path', pathNameMap.keys.first);
           storeStringInSharedPrefs(
               'selected_calibre_lib_name', pathNameMap.values.first);
-          MetadataCacher()
-              .downloadAndCacheMetadata(token: token)
-              .then((val) {
+          MetadataCacher().downloadAndCacheMetadata(token: token).then((val) {
             if (val == 1) {
 //                          print("storing token");
               storeStringInSharedPrefs('token', token);
@@ -387,7 +292,6 @@ class _DropboxDropdownState extends State<DropboxDropdown> {
         // Show the bottom snack bar that no libraries found and Pop out of this context
       }
     });
-
   }
 
   @override

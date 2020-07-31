@@ -5,8 +5,9 @@ class Library {
   String id;
   String name;
   String path;
+  String type;
 
-  Library(this.id, this.name, this.path);
+  Library(this.id, this.name, this.path, this.type);
 
   Library.fromMap(Map<String, dynamic> map){
     id = map['id'];
